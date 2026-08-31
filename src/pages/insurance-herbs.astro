@@ -1,0 +1,23 @@
+---
+import Base from '../layouts/Base.astro';
+import { insuranceHerbs } from '../data/insurance-herbs';
+const desc = '시호한의원에서 처방하는 건강보험 적용 한약(보험한약) 목록과 각 처방의 쓰임을 안내합니다.';
+---
+<Base title="보험한약 안내" description={desc}>
+  <h1>보험한약 안내</h1>
+  <p class="lead">
+    시호한의원에서는 건강보험이 적용되는 다양한 보험한약을 처방하고 있습니다.
+    아래는 보험 적용이 가능한 한약의 일부 예시입니다.
+  </p>
+  <p class="lead">
+    ※ 원장의 진찰을 통해 환자분의 증상과 체질에 맞는, 아래와 다른 한약이 처방될 수도 있습니다.
+  </p>
+  <dl class="herbs">
+    {insuranceHerbs.map((h) => (
+      <>
+        <dt>{h.name}</dt>
+        <dd>{h.uses}</dd>
+      </>
+    ))}
+  </dl>
+</Base>
