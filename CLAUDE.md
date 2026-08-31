@@ -17,6 +17,12 @@ Astro 기반 정적 사이트. Cloudflare Pages에 연결되어 main 브랜치�
 - **의료광고법 주의**: 치료 효과 보장("완치", "특효"), 환자 후기, 비교 광고 표현 금지. "~에 사용합니다", "~을 목표로 합니다" 수준으로 작성
 - 새 페이지를 만들면 `public/llms.txt`에도 링크 추가
 
+## 배포 (Cloudflare Pages)
+
+- 빌드 명령 `npm run build`, 출력 디렉터리 `dist`, 프로덕션 브랜치 `main`
+- Node 22.12 이상 필요 (Astro 7). 빌드 환경의 버전은 `.nvmrc`로 고정되어 있음
+- main에 push하면 프로덕션 배포, 다른 브랜치는 `<브랜치>.<프로젝트>.pages.dev` 미리보기 배포
+
 ## 명령어
 
 - `npm run dev` — 로컬 개발 서버
