@@ -1,0 +1,613 @@
+---
+import Base from '../layouts/Base.astro';
+import { clinic } from '../data/clinic';
+
+// Base 레이아웃이 `{title} | 시호한의원`으로 조합하므로 뒤쪽 브랜드명은 넣지 않습니다.
+const title = '동탄 수험생 한의원 | 비염·소화·수면·체력·통증 맞춤진료';
+const description =
+  '수험생 보약에 정해진 하나의 처방은 없습니다. 비염, 소화불량, 수면저하, 목·허리 통증, 월경통 등 공부를 방해하는 몸의 문제를 먼저 찾고 학생별로 필요한 치료를 연결합니다. 동탄 시호한의원 수험생 클리닉.';
+
+// 카드 → 같은 페이지 안의 상세 섹션 anchor. 상세 페이지는 아직 만들지 않습니다.
+const problems = [
+  { id: 'rhinitis', title: '비염·코막힘', desc: '코막힘 · 콧물 · 후비루' },
+  { id: 'digestion', title: '소화불량', desc: '식후 졸림 · 더부룩함 · 가스' },
+  { id: 'sleep', title: '수면·체력', desc: '피로 · 불면 · 아침 기상 어려움' },
+  { id: 'pain', title: '목·허리 통증', desc: '목 · 어깨 · 허리 불편' },
+  { id: 'menstrual', title: '월경통·PMS', desc: '생리 때마다 떨어지는 컨디션' },
+  { id: 'skin', title: '여드름·피부', desc: '시험기간 심해지는 피부 트러블' },
+];
+
+// 상세 영역. body는 증상 설명, care는 시호한의원의 진료 방식.
+const details = [
+  {
+    id: 'rhinitis',
+    title: '비염·코막힘',
+    body: [
+      '코가 막히고 콧물이 나거나 자꾸 훌쩍이는 증상은 수업과 자습시간 내내 학생을 불편하게 만들 수 있습니다.',
+      '특히 밤에도 코막힘이 지속된다면 수면 상태까지 함께 살펴볼 필요가 있습니다.',
+    ],
+    care: [
+      '시호한의원에서는 비염 증상만 듣는 데 그치지 않고 비내시경을 이용하여 비강 점막의 상태를 직접 확인합니다.',
+      '점막의 부종과 분비물 등 현재 코 상태를 확인하고, 학생의 증상과 전반적인 몸 상태를 함께 고려하여 필요한 치료 방향을 결정합니다.',
+    ],
+  },
+  {
+    id: 'digestion',
+    title: '소화불량·과민한 장',
+    body: [
+      '수험생 진료에서 의외로 자주 만나는 것이 소화 문제입니다.',
+      '조금만 먹어도 더부룩하거나 가스가 차고, 식후마다 졸리거나, 시험기간만 되면 복통과 설사가 반복되는 학생들이 있습니다.',
+      '이런 경우 단순히 체력을 보충하는 것보다 편하게 먹고 소화할 수 있는 상태를 만드는 것이 먼저 필요한 경우도 있습니다.',
+    ],
+    care: [
+      '평소 식사량, 식후 증상, 배변 상태와 스트레스에 따른 변화를 함께 확인하여 치료 방향을 결정합니다.',
+    ],
+  },
+  {
+    id: 'sleep',
+    title: '수면·체력저하',
+    body: [
+      '충분한 시간 책상 앞에 앉아 있는 것만큼 그 시간 동안 좋은 컨디션을 유지하는 것도 중요합니다.',
+      '잠드는 데 오래 걸리는지, 자주 깨는지, 충분히 자도 아침에 일어나기 힘든지, 오후가 되면 급격히 체력이 떨어지는지에 따라 접근은 달라질 수 있습니다.',
+    ],
+    care: [
+      '시호한의원에서는 수면, 소화, 스트레스 반응과 평소 체력 등을 함께 살펴 현재 학생에게 부족한 부분과 컨디션을 방해하는 요인을 구분하여 한약을 처방합니다.',
+    ],
+  },
+  {
+    id: 'pain',
+    title: '목·어깨·허리 통증',
+    body: [
+      '하루 대부분을 책상 앞에서 보내는 학생에게 목과 허리의 불편함은 수험생활 내내 반복되는 문제가 될 수 있습니다.',
+      '통증 때문에 자꾸 자세를 바꾸거나 오래 앉아 있기 힘들다면 통증 자체를 함께 관리할 필요가 있습니다.',
+    ],
+    care: [
+      '시호한의원에서는 침 치료뿐 아니라 추나치료를 통한 근골격계 진료를 함께 시행합니다.',
+      '증상과 진찰 결과에 따라 필요한 경우 초음파를 활용하여 병변 부위를 확인하고, 도침이나 초음파 유도하 약침치료 등 보다 적극적인 통증치료를 고려할 수 있습니다.',
+    ],
+  },
+  {
+    id: 'menstrual',
+    title: '월경통·PMS',
+    body: [
+      '한 달에 한 번씩 반복되는 월경통은 여학생의 수험생활에서 생각보다 큰 변수가 될 수 있습니다.',
+      '통증으로 공부하기 힘들거나, 월경 전후로 두통, 부종, 소화불량, 피로와 같은 증상이 함께 나타난다면 매달 일정 기간 컨디션이 흔들릴 수 있습니다.',
+    ],
+    care: [
+      '시호한의원에서는 월경 양상과 동반 증상을 자세히 확인하고, 필요한 경우 초음파를 활용하여 자궁과 골반 내 상태를 함께 살펴봅니다.',
+      '단순히 월경통이라는 하나의 증상만 보는 것이 아니라 현재 학생의 월경 상태와 전반적인 컨디션을 함께 고려하여 진료합니다.',
+    ],
+  },
+  {
+    id: 'skin',
+    title: '여드름·피부',
+    body: [
+      '시험기간이 되면서 수면시간이 줄고 생활패턴이 바뀌면서 여드름이나 피부 트러블이 심해지는 학생도 있습니다.',
+      '피부 문제가 스트레스가 될 정도라면 수험생활 중 함께 관리할 수 있습니다.',
+    ],
+    care: [
+      '시호한의원에서는 피부 상태에 따라 한약치료와 함께 레이저, 필링, 압출 등의 피부 시술을 선택적으로 시행할 수 있습니다.',
+      '학생의 피부 상태와 수험생활 일정을 고려하여 필요한 치료를 결정합니다.',
+    ],
+  },
+];
+
+const checklist = [
+  '충분히 자도 아침에 일어나기가 힘들다',
+  '오후가 되면 체력이 급격히 떨어진다',
+  '환절기마다 코막힘, 콧물, 재채기가 심해진다',
+  '코가 막히고 머리가 무겁다고 자주 말한다',
+  '식후에 유난히 졸리다',
+  '조금만 먹어도 더부룩하거나 가스가 잘 찬다',
+  '시험기간만 되면 복통이나 설사가 생긴다',
+  '잠드는 데 오래 걸리거나 자주 깬다',
+  '목, 어깨, 허리가 자주 아프다',
+  '오래 앉아 있기가 힘들다',
+  '생리통 때문에 공부하기 힘든 날이 있다',
+  '생리 전후로 컨디션 변화가 크다',
+  '시험기간이 되면 여드름이나 피부 트러블이 심해진다',
+];
+
+// 답변은 아직 작성하지 않습니다. FAQPage JSON-LD도 답변 완성 후 판단합니다.
+const faqs = [
+  '수험생 보약은 언제부터 먹는 것이 좋나요?',
+  '총명탕은 모든 수험생에게 좋은가요?',
+  '공진단과 맞춤 한약은 어떤 차이가 있나요?',
+  '비염과 체력저하를 같이 치료할 수 있나요?',
+  '시험기간 소화불량이나 설사도 같이 볼 수 있나요?',
+  '목이나 허리가 아픈 수험생도 함께 치료할 수 있나요?',
+  '여학생의 생리통도 수험생 진료에서 함께 볼 수 있나요?',
+  '시험 직전에 한약을 시작해도 되나요?',
+  '한약을 먹으면 졸리지는 않나요?',
+  '중학생이나 고1·고2 학생도 수험생 진료를 받을 수 있나요?',
+];
+---
+
+<Base title={title} description={description} noindex={true}>
+  <section class="hero">
+    <p class="eyebrow">수험생 클리닉</p>
+    <h1>공부를 방해하는 몸의 문제부터 찾습니다.</h1>
+    <p class="lead">
+      수험생 보약에 정해진 하나의 처방은 없습니다. <br class="mb" />
+      학생마다 체질도, 힘든 부분도 다르기 때문입니다.
+    </p>
+    <p class="lead">
+      채우는 것보다 먼저, <br class="mb" />
+      공부를 방해하는 몸의 문제부터 덜어냅니다.
+    </p>
+    <p class="cta-row">
+      <a class="cta" href={clinic.links.naverBooking}>수험생 진료 상담하기</a>
+    </p>
+    <p class="cta-sub">
+      전화 <a href={`tel:${clinic.phone}`}>{clinic.phone}</a> ·
+      <a href={clinic.links.kakaoChannel}>카카오톡 문의</a>
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>우리 아이의 공부를 방해하는 것은 무엇인가요?</h2>
+    <ul class="problem-grid">
+      {problems.map((p) => (
+        <li>
+          <a class="problem" href={`#${p.id}`}>
+            <span class="problem-title">{p.title}</span>
+            <span class="problem-desc">{p.desc}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- SECTION 1 -->
+  <section class="sec band">
+    <h2>채우는 것보다 먼저, <br class="mb" />공부를 방해하는 몸의 문제부터 덜어냅니다.</h2>
+    <p>체력이 떨어진 학생에게 체력을 보충하는 것은 중요합니다.</p>
+    <ul class="asks">
+      <li>하지만 밤새 코가 막혀 제대로 자지 못하고 있다면?</li>
+      <li>식사할 때마다 속이 불편하고 졸리다면?</li>
+      <li>목과 허리가 아파 오래 앉아 있기 힘들다면?</li>
+      <li>매달 생리통으로 공부의 흐름이 끊긴다면?</li>
+    </ul>
+    <p>그 상태에서 무조건 보약부터 더하는 것이 항상 첫 번째 답은 아닐 수 있습니다.</p>
+    <ul class="cascade">
+      <li>비염이 문제라면 비염부터.</li>
+      <li>소화가 문제라면 소화부터.</li>
+      <li>수면이 문제라면 수면부터.</li>
+      <li>통증이 문제라면 통증부터.</li>
+    </ul>
+    <p>
+      그리고 정말 체력이 부족한 학생에게는 그 학생의 상태에 맞게 필요한 만큼
+      보충합니다.
+    </p>
+    <p class="statement">이것이 시호한의원이 생각하는 수험생 진료의 시작입니다.</p>
+  </section>
+
+  <!-- SECTION 2 -->
+  <section class="sec">
+    <h2>학생마다 다르니까, <br class="mb" />진료도 달라야 합니다.</h2>
+    <p>같은 수험생이라도 몸의 상태는 모두 다릅니다.</p>
+    <p>
+      쉽게 긴장하고 잠을 설치는 학생이 있는 반면, 잠은 잘 자지만 하루 종일
+      무기력한 학생도 있습니다.
+    </p>
+    <ul class="cases">
+      <li>시험만 다가오면 배가 아프거나 설사를 하는 학생</li>
+      <li>식사 후 유난히 졸리고 더부룩한 학생</li>
+      <li>환절기마다 비염과 코막힘 때문에 힘들어하는 학생</li>
+      <li>오래 앉아 있어 목과 허리 통증을 달고 사는 학생</li>
+    </ul>
+    <p>
+      여학생이라면 월경통이나 PMS로 매달 컨디션이 크게 떨어지기도 합니다.
+    </p>
+    <p class="statement">
+      똑같이 “피곤하다”고 말하더라도 그 이유가 다르다면 치료의 방향도 달라야
+      합니다.
+    </p>
+    <p>
+      시호한의원에서는 학생의 체질과 체력, 수면, 소화, 비염, 통증, 스트레스, 월경
+      상태 등을 함께 살펴봅니다. 그리고 그중 지금 이 학생의 수험생활을 가장 많이
+      방해하고 있는 문제가 무엇인지 판단하여 치료의 우선순위를 정합니다.
+    </p>
+    <p>
+      한약 역시 정해진 ‘수험생 보약’을 일률적으로 처방하기보다 현재 학생에게
+      필요한 방향을 고려하여 개별적으로 처방합니다.
+    </p>
+  </section>
+
+  <!-- SECTION 3 -->
+  <section class="sec">
+    <h2>수험생활을 방해하는 여러 문제를 <br class="mb" />한 곳에서 함께 봅니다.</h2>
+    <p>
+      수험생활에서 생기는 몸의 문제는 한 가지로 끝나지 않는 경우가 많습니다.
+      비염이 있으면서 소화도 좋지 않을 수 있고, 수면이 부족한 상태에서 목과 허리
+      통증까지 겹칠 수 있습니다.
+    </p>
+    <p>
+      여학생이라면 월경통이나 PMS가 함께 나타나기도 하고, 시험기간 스트레스와
+      생활패턴 변화로 피부 트러블이 심해지기도 합니다.
+    </p>
+    <p>
+      그럴 때마다 코는 이곳, 허리는 저곳, 피부는 또 다른 곳을 찾아다니는 것도
+      학생과 보호자에게는 부담이 될 수 있습니다.
+    </p>
+    <p>
+      시호한의원에서는 한약 처방뿐 아니라 비염, 소화, 수면과 체력, 근골격계 통증,
+      추나, 월경통, 피부 문제 등 수험생활 중 흔히 마주치는 여러 문제를 함께
+      살펴볼 수 있습니다.
+    </p>
+    <p class="statement">
+      학생에게 지금 무엇이 가장 필요한지 판단하고, 필요한 진료를 한 곳에서
+      연결하는 것이 시호한의원 수험생 클리닉의 특징입니다.
+    </p>
+
+    <div class="details">
+      {details.map((d) => (
+        <article class="detail" id={d.id}>
+          <h3>{d.title}</h3>
+          {d.body.map((t) => <p>{t}</p>)}
+          <div class="care">
+            <p class="care-label">진료 방식</p>
+            {d.care.map((t) => <p>{t}</p>)}
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- SECTION 4 -->
+  <section class="sec band">
+    <h2>수험생 한약, <br class="mb" />모두에게 같을 필요는 없습니다.</h2>
+    <p>
+      ‘수험생에게 좋은 한약’을 찾다 보면 총명탕이나 공진단 같은 이름을 먼저
+      접하게 됩니다. 물론 체력과 컨디션을 보충하는 치료가 필요한 학생도 있습니다.
+    </p>
+    <p>
+      하지만 잠을 제대로 자지 못해서 피곤한 학생과, 소화가 좋지 않아 식후마다
+      처지는 학생, 비염과 코막힘 때문에 불편한 학생, 긴장과 스트레스가 심한
+      학생에게 모두 같은 처방이 필요하지는 않습니다.
+    </p>
+    <p class="statement">
+      시호한의원은 ‘수험생’이라는 이름보다 그 학생의 현재 몸 상태를 먼저 봅니다.
+    </p>
+    <p>
+      체질, 체력, 수면, 소화, 스트레스 반응과 동반 증상을 함께 살펴 현재 학생에게
+      필요한 방향으로 한약을 처방합니다.
+    </p>
+  </section>
+
+  <!-- SECTION 5 -->
+  <section class="sec">
+    <h2>이런 학생이라면 <br class="mb" />몸의 컨디션을 한번 살펴보세요.</h2>
+    <ul class="checklist">
+      {checklist.map((item) => <li>{item}</li>)}
+    </ul>
+  </section>
+
+  <!-- SECTION 6 -->
+  <section class="sec">
+    <h2>자주 묻는 질문</h2>
+    <div class="faq">
+      {faqs.map((q) => (
+        <details>
+          <summary>{q}</summary>
+          {/* TODO: 답변 작성 필요. 답변 완성 후 FAQPage JSON-LD 필요 여부 판단. */}
+          <p class="placeholder">답변 준비 중입니다.</p>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <!-- 마지막 SECTION -->
+  <section class="sec band closing">
+    <h2>수험생활을 하나의 몸으로 봅니다.</h2>
+    <ul class="cascade">
+      <li>비염 따로,</li>
+      <li>소화 따로,</li>
+      <li>통증 따로,</li>
+      <li>수면 따로 보지 않습니다.</li>
+    </ul>
+    <p>한 학생의 몸에서 함께 일어나는 문제이기 때문입니다.</p>
+    <p>
+      수험생활을 방해하는 문제는 덜어내고, 부족한 것은 필요한 만큼 채웁니다.
+      학생마다 다른 몸을 보고, 그 학생에게 가장 필요한 치료부터.
+    </p>
+    <p class="statement statement--last">
+      잘 공부하기 위해서는 <br class="mb" />먼저, 잘 버틸 수 있는 몸이 필요합니다.
+    </p>
+    <p class="cta-row">
+      <a class="cta" href={clinic.links.naverBooking}>수험생 진료 상담하기</a>
+    </p>
+    <p class="cta-sub">
+      전화 <a href={`tel:${clinic.phone}`}>{clinic.phone}</a> ·
+      <a href={clinic.links.kakaoChannel}>카카오톡 문의</a>
+    </p>
+  </section>
+
+  <style>
+    /*
+     * 전역 토큰(--paper, --ink, --ink-soft, --line, --accent, --serif)을 그대로 쓰고,
+     * 배경 리듬에 필요한 두 단계 표면색만 이 페이지 안에서 파생시킵니다.
+     */
+    .hero,
+    .sec {
+      --surface: #fbfcfa; /* paper보다 한 단계 밝은 면 — 카드 */
+      --sunk: #edf0e9; /* paper보다 한 단계 가라앉은 면 — 띠 배경 */
+    }
+
+    /* ── 공통 리듬 ── */
+    .sec { margin-top: 4rem; }
+    .sec > p {
+      max-width: 34rem;
+      margin: 0 0 1rem;
+    }
+    .sec > p:last-child { margin-bottom: 0; }
+
+    /* 읽기 열의 좌우 여백(1.25rem)만큼 넓혀 띠처럼 보이게 합니다.
+       main이 border-box라 가로 오버플로가 생기지 않습니다. */
+    .band {
+      margin-inline: -1.25rem;
+      padding: 2.25rem 1.25rem 2.5rem;
+      background: var(--sunk);
+    }
+    .band > h2:first-child { margin-top: 0; }
+
+    /* ── 히어로 ── */
+    .hero { margin-bottom: 1rem; }
+    .eyebrow {
+      margin: 0 0 0.75rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+    }
+    .hero .lead { margin: 0 0 1rem; }
+
+    .cta-row { margin: 1.75rem 0 0.75rem; }
+    .cta {
+      display: inline-block;
+      padding: 0.75rem 1.6rem;
+      background: var(--accent);
+      color: var(--paper);
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: background-color 0.15s ease;
+    }
+    .cta:hover { background: #7d561a; color: var(--paper); }
+    .cta-sub { margin: 0; font-size: 0.92rem; color: var(--ink-soft); }
+    .cta-sub a { color: var(--ink-soft); }
+    .cta-sub a:hover { color: var(--accent); }
+
+    /* ── 진료영역 카드: 모바일 1열 → 2열 → PC 3열 2행 ── */
+    .problem-grid {
+      list-style: none;
+      margin: 1.25rem 0 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+    @media (min-width: 30rem) {
+      .problem-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    /* main이 최대 44rem이므로, 그 폭을 온전히 쓸 수 있을 때부터 3열 */
+    @media (min-width: 52rem) {
+      .problem-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .problem {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      height: 100%;
+      padding: 1.1rem 1.15rem;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 2px;
+      text-decoration: none;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+    .problem:hover {
+      border-color: var(--accent);
+      background: rgba(154, 107, 31, 0.05);
+    }
+    .problem-title {
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--ink);
+    }
+    .problem-desc {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--ink-soft);
+    }
+
+    /* ── 질문 나열 ── */
+    .asks {
+      list-style: none;
+      margin: 1.25rem 0 1.5rem;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      max-width: 34rem;
+    }
+    .asks li {
+      padding-left: 1rem;
+      border-left: 2px solid var(--line);
+      color: var(--ink-soft);
+    }
+
+    /* ── 짧은 대구 문장 ── */
+    .cascade {
+      list-style: none;
+      margin: 1.5rem 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      line-height: 1.5;
+    }
+
+    /* ── 학생 유형 나열 ── */
+    .cases {
+      list-style: none;
+      margin: 1.25rem 0 1.5rem;
+      padding: 0;
+      max-width: 34rem;
+    }
+    .cases li {
+      padding: 0.7rem 0 0.7rem 1.2rem;
+      border-bottom: 1px solid var(--line);
+      position: relative;
+    }
+    .cases li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 1.45rem;
+      width: 5px;
+      height: 5px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+
+    /* ── 핵심 문장 ── */
+    .statement {
+      max-width: 34rem;
+      margin: 1.75rem 0;
+      padding-left: 1.1rem;
+      border-left: 3px solid var(--accent);
+      font-family: var(--serif);
+      font-size: 1.12rem;
+      line-height: 1.65;
+    }
+    .statement--last {
+      border-left: 0;
+      padding-left: 0;
+      margin: 2rem 0 0;
+      font-size: 1.3rem;
+    }
+
+    /* ── 6개 상세 영역 ── */
+    .details {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .detail {
+      padding: 1.5rem 1.35rem;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 2px;
+      scroll-margin-top: 1.5rem;
+    }
+    .detail h3 {
+      margin: 0 0 0.75rem;
+      padding-bottom: 0.6rem;
+      font-size: 1.15rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .detail p { margin: 0 0 0.75rem; }
+    .detail p:last-child { margin-bottom: 0; }
+
+    .care {
+      margin-top: 1.1rem;
+      padding: 1rem 1.1rem;
+      background: var(--paper);
+      border-radius: 2px;
+    }
+    .care-label {
+      margin: 0 0 0.4rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+    }
+    .care p:not(.care-label) { font-size: 0.96rem; }
+
+    /* ── 체크리스트 ── */
+    .checklist {
+      list-style: none;
+      margin: 1.5rem 0 0;
+      padding: 1.5rem 1.35rem;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 2px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.15rem 2rem;
+    }
+    @media (min-width: 40rem) {
+      .checklist { grid-template-columns: 1fr 1fr; }
+    }
+    .checklist li {
+      position: relative;
+      padding: 0.55rem 0 0.55rem 1.9rem;
+      font-size: 0.98rem;
+    }
+    .checklist li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.95rem;
+      width: 0.85rem;
+      height: 0.85rem;
+      border: 1px solid var(--accent);
+      border-radius: 2px;
+    }
+
+    /* ── FAQ 아코디언 (JS 없이 details/summary) ── */
+    .faq {
+      margin-top: 1.5rem;
+      border-top: 1px solid var(--line);
+    }
+    .faq details { border-bottom: 1px solid var(--line); }
+    .faq summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 1rem 0;
+      font-weight: 600;
+      cursor: pointer;
+      list-style: none;
+    }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after {
+      content: "+";
+      flex: none;
+      color: var(--accent);
+      font-weight: 400;
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+    .faq details[open] summary::after { content: "−"; }
+    .faq summary:hover { color: var(--accent); }
+    .faq .placeholder { margin: 0 0 1.1rem; }
+
+    /* 답변을 채우면 삭제할 자리표시 스타일 */
+    .placeholder {
+      padding: 0.85rem 1.1rem;
+      border: 1px dashed var(--line);
+      border-radius: 2px;
+      color: var(--ink-soft);
+      font-size: 0.95rem;
+    }
+
+    .closing { margin-top: 4.5rem; }
+
+    /* 좁은 화면에서는 수동 줄바꿈을 없애 자연스럽게 흐르게 합니다. */
+    @media (max-width: 34rem) {
+      br.mb { display: none; }
+      .cascade { font-size: 1.05rem; }
+      .statement--last { font-size: 1.18rem; }
+      .detail { padding: 1.25rem 1.1rem; }
+      .checklist { padding: 1.25rem 1.1rem; }
+    }
+  </style>
+</Base>

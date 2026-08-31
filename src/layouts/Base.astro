@@ -6,8 +6,10 @@ interface Props {
   description: string;
   /** 페이지별 추가 JSON-LD (예: FAQPage) */
   jsonLd?: object[];
+  /** 작성 중인 페이지의 임시 색인 차단. 완성되면 제거합니다. */
+  noindex?: boolean;
 }
-const { title, description, jsonLd = [] } = Astro.props;
+const { title, description, jsonLd = [], noindex = false } = Astro.props;
 
 const clinicLd = {
   '@context': 'https://schema.org',
@@ -39,6 +41,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title} | {clinic.name}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="canonical" href={canonical} />
     <meta property="og:title" content={`${title} | ${clinic.name}`} />
     <meta property="og:description" content={description} />
