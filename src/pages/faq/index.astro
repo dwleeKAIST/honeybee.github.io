@@ -10,6 +10,21 @@ const items = await Promise.all(
   })
 );
 
+// FAQPage의 answer는 순수 텍스트여야 하므로 마크다운 기호를 제거합니다.
+// (제목의 ###, 굵게의 **, 링크 문법이 그대로 들어가면 구조화 데이터가 지저분해집니다)
+const toPlainText = (md: string) =>
+  md
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/(?<!\*)\*(?!\*)([^*]+)\*(?!\*)/g, '$1')
+    .replace(/^\s*[-*+]\s+/gm, '')
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .join(' ')
+    .trim();
+
 const faqLd = [{
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
@@ -18,7 +33,7 @@ const faqLd = [{
     name: f.question,
     acceptedAnswer: {
       '@type': 'Answer',
-      text: f.body.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').trim(),
+      text: toPlainText(f.body),
     },
   })),
 }];
@@ -32,4 +47,19 @@ const desc = '시호한의원에 자주 묻는 질문 — 보험 적용, 첫 방
       <Content />
     </section>
   ))}
+
+  <style>
+    /* 답변 안의 소제목 — 질문(h2)보다 한 단계 작게 */
+    .prose h3 {
+      margin: 1.75rem 0 0.5rem;
+      font-size: 1.02rem;
+      color: var(--ink);
+    }
+    .prose > :last-child { margin-bottom: 0; }
+    section.prose + section.prose {
+      margin-top: 2.5rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid var(--line);
+    }
+  </style>
 </Base>
