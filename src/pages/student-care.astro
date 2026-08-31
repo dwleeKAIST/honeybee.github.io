@@ -194,9 +194,22 @@ const faqs = [
     link: { href: pages.pediatrics, label: '소아 진료 안내 자세히 보기' },
   },
 ];
+
+// FAQPage 구조화 데이터. 답변이 모두 순수 텍스트라 그대로 사용합니다.
+const faqLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a.join(' ') },
+    })),
+  },
+];
 ---
 
-<Base title={title} description={description} noindex={true}>
+<Base title={title} description={description} jsonLd={faqLd}>
   <section class="hero">
     <p class="eyebrow">수험생 클리닉</p>
     <h1>공부를 방해하는 몸의 문제부터 찾습니다.</h1>
