@@ -1,0 +1,51 @@
+---
+import Base from '../layouts/Base.astro';
+import { clinic } from '../data/clinic';
+import { getCollection } from 'astro:content';
+const treatments = (await getCollection('treatments')).sort((a, b) => a.data.order - b.data.order);
+---
+<Base title={clinic.slogan} description={clinic.description}>
+  <h1>{clinic.slogan},<br />시호한의원입니다.</h1>
+  <p class="lead">{clinic.address.full}로 소중한 분들을 모십니다.</p>
+  <p class="lead">
+    추나·도침·약침·매선 치료와 소화불량·불면·피로·스트레스 진료,
+    수험생·갱년기·다이어트·소아한약 클리닉을 운영합니다.
+  </p>
+
+  <h2>진료 안내</h2>
+  <ul class="plain">
+    {treatments.map((t) => (
+      <li>
+        <a href={`/treatments/${t.id}/`}>{t.data.title}</a>
+        <span class="summary">{t.data.summary}</span>
+      </li>
+    ))}
+  </ul>
+
+  <h2>진료시간은 어떻게 되나요?</h2>
+  <ul class="plain hours-brief">
+    {clinic.hours.map((h) => (
+      <li>
+        <strong>{h.days}</strong> {h.open}–{h.close}
+        {h.lunch && <span class="summary">점심 {h.lunch}</span>}
+        {h.note && <span class="summary">{h.note}</span>}
+      </li>
+    ))}
+    <li><strong>일요일</strong> 휴진</li>
+  </ul>
+  <p class="lead">{clinic.closedDays}. {clinic.lastReception}</p>
+
+  <h2>예약과 문의</h2>
+  <p>
+    전화 <a href={`tel:${clinic.phone}`}>{clinic.phone}</a> ·
+    <a href={clinic.links.naverBooking}>네이버 예약</a> ·
+    <a href={clinic.links.kakaoChannel}>카카오톡 문의</a>
+  </p>
+  <p><a href="/contact/">오시는 길 보기</a></p>
+
+  <style>
+    .hours-brief li { display: flex; flex-wrap: wrap; gap: 0 0.6rem; align-items: baseline; }
+    .hours-brief strong { min-width: 5.5rem; }
+    .hours-brief .summary { display: inline; }
+  </style>
+</Base>

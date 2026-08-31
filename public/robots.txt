@@ -1,0 +1,26 @@
+User-agent: *
+Allow: /
+
+# AI 검색/어시스턴트 크롤러 명시적 허용
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://thesiho.kr/sitemap-index.xml

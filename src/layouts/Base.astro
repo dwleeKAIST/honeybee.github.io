@@ -1,0 +1,152 @@
+---
+import { clinic } from '../data/clinic';
+
+interface Props {
+  title: string;
+  description: string;
+  /** 페이지별 추가 JSON-LD (예: FAQPage) */
+  jsonLd?: object[];
+}
+const { title, description, jsonLd = [] } = Astro.props;
+
+const clinicLd = {
+  '@context': 'https://schema.org',
+  '@type': 'MedicalClinic',
+  name: clinic.name,
+  alternateName: clinic.nameEn,
+  description: clinic.description,
+  telephone: clinic.phoneIntl,
+  url: Astro.site?.toString(),
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: clinic.address.street,
+    addressLocality: clinic.address.city,
+    addressRegion: clinic.address.region,
+    addressCountry: clinic.address.country,
+  },
+  medicalSpecialty: '한방의학 (Traditional Korean Medicine)',
+  ...(clinic.hours.length
+    ? { openingHours: clinic.hours.flatMap((h) => h.schema) }
+    : {}),
+};
+const allLd = [clinicLd, ...jsonLd];
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} | {clinic.name}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={`${title} | ${clinic.name}`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap"
+    />
+    {allLd.map((ld) => (
+      <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+    ))}
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">
+        <span class="brand-ko">시호한의원</span>
+        <span class="brand-en">SIHO Korean Medicine Clinic</span>
+      </a>
+      <nav aria-label="주 메뉴">
+        <a href="/treatments/">진료 안내</a>
+        <a href="/faq/">자주 묻는 질문</a>
+        <a href="/insurance-herbs/">보험한약</a>
+        <a href="/doctors/">의료진</a>
+        <a href="/contact/">오시는 길</a>
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <p class="footer-name">{clinic.name} · {clinic.address.full}</p>
+      <p class="footer-actions">
+        <a href={`tel:${clinic.phone}`}>전화 {clinic.phone}</a>
+        <a href={clinic.links.naverBooking}>네이버 예약</a>
+        <a href={clinic.links.kakaoChannel}>카카오톡 문의</a>
+      </p>
+    </footer>
+
+    <style is:global>
+      :root {
+        --paper: #f5f7f3;
+        --ink: #24352b;
+        --ink-soft: #55655c;
+        --line: #d7ddd5;
+        --accent: #9a6b1f; /* 시호 꽃의 짙은 황금빛 */
+        --serif: 'Noto Serif KR', serif;
+        --sans: 'Pretendard Variable', Pretendard, sans-serif;
+      }
+      * { box-sizing: border-box; }
+      html { font-size: 17px; }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: var(--sans);
+        line-height: 1.75;
+        -webkit-font-smoothing: antialiased;
+      }
+      main { max-width: 44rem; margin: 0 auto; padding: 3rem 1.25rem 5rem; }
+      h1, h2, h3 { font-family: var(--serif); line-height: 1.35; }
+      h1 { font-size: 1.9rem; margin: 0 0 1rem; }
+      h2 { font-size: 1.35rem; margin: 2.5rem 0 0.75rem; }
+      a { color: var(--ink); text-decoration-color: var(--accent); text-underline-offset: 3px; }
+      a:hover { color: var(--accent); }
+      a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+      .site-header {
+        display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem;
+        align-items: baseline; justify-content: space-between;
+        max-width: 60rem; margin: 0 auto; padding: 1.5rem 1.25rem;
+        border-bottom: 1px solid var(--line);
+      }
+      .brand { text-decoration: none; }
+      .brand-ko { font-family: var(--serif); font-weight: 700; font-size: 1.3rem; }
+      .brand-en { display: block; font-size: 0.72rem; color: var(--ink-soft); letter-spacing: 0.04em; }
+      nav { display: flex; flex-wrap: wrap; gap: 1rem; font-size: 0.92rem; }
+      nav a { text-decoration: none; color: var(--ink-soft); }
+      nav a:hover { color: var(--ink); }
+
+      .lead { font-size: 1.05rem; color: var(--ink-soft); max-width: 38rem; }
+      .rule { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
+      ul.plain { list-style: none; padding: 0; }
+      ul.plain li { padding: 1rem 0; border-bottom: 1px solid var(--line); }
+      ul.plain li a { text-decoration: none; font-weight: 600; }
+      ul.plain .summary { display: block; color: var(--ink-soft); font-size: 0.95rem; font-weight: 400; }
+      dl.herbs dt { font-family: var(--serif); font-weight: 700; margin-top: 1.5rem; }
+      dl.herbs dd { margin: 0.25rem 0 0; color: var(--ink-soft); }
+
+      article.prose h2 { border-bottom: 1px solid var(--line); padding-bottom: 0.4rem; }
+      article.prose blockquote { margin: 1.5rem 0; padding-left: 1rem; border-left: 3px solid var(--accent); color: var(--ink-soft); }
+
+      .site-footer {
+        border-top: 1px solid var(--line);
+        max-width: 60rem; margin: 0 auto; padding: 1.75rem 1.25rem 3rem;
+        font-size: 0.9rem; color: var(--ink-soft);
+      }
+      .footer-actions { display: flex; gap: 1.25rem; flex-wrap: wrap; }
+      .footer-actions a { font-weight: 600; }
+      @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+    </style>
+  </body>
+</html>

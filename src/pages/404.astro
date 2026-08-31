@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import { clinic } from '../data/clinic';
+---
+<Base
+  title="페이지를 찾을 수 없습니다"
+  description={`요청하신 페이지를 찾을 수 없습니다. 시호한의원 진료 안내와 예약은 전화 ${clinic.phone}로 문의해 주세요.`}
+>
+  <h1>페이지를 찾을 수 없습니다</h1>
+  <p class="lead">주소가 바뀌었거나 삭제된 페이지입니다.</p>
+
+  <h2>찾으시는 내용이 여기 있을 수 있습니다</h2>
+  <ul class="plain">
+    <li><a href="/treatments/">진료 안내</a><span class="summary">추나, 도침, 약침, 매선, 맞춤 클리닉</span></li>
+    <li><a href="/faq/">자주 묻는 질문</a><span class="summary">진료시간, 보험 적용, 첫 방문 안내</span></li>
+    <li><a href="/insurance-herbs/">보험한약 안내</a><span class="summary">건강보험이 적용되는 한약 목록</span></li>
+    <li><a href="/contact/">오시는 길 · 예약</a><span class="summary">{clinic.address.full}</span></li>
+  </ul>
+
+  <h2>바로 문의하시려면</h2>
+  <p>
+    전화 <a href={`tel:${clinic.phone}`}>{clinic.phone}</a> ·
+    <a href={clinic.links.naverBooking}>네이버 예약</a> ·
+    <a href={clinic.links.kakaoChannel}>카카오톡 문의</a>
+  </p>
+</Base>

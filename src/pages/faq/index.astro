@@ -1,0 +1,35 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+
+const faqs = (await getCollection('faq')).sort((a, b) => a.data.order - b.data.order);
+const items = await Promise.all(
+  faqs.map(async (f) => {
+    const { Content } = await render(f);
+    return { question: f.data.question, body: f.body ?? '', Content };
+  })
+);
+
+const faqLd = [{
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: items.map((f) => ({
+    '@type': 'Question',
+    name: f.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: f.body.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').trim(),
+    },
+  })),
+}];
+const desc = '시호한의원에 자주 묻는 질문 — 보험 적용, 첫 방문 준비물, 치료별 안내.';
+---
+<Base title="자주 묻는 질문" description={desc} jsonLd={faqLd}>
+  <h1>자주 묻는 질문</h1>
+  {items.map(({ question, Content }) => (
+    <section class="prose">
+      <h2>{question}</h2>
+      <Content />
+    </section>
+  ))}
+</Base>

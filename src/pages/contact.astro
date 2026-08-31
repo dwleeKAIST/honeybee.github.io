@@ -1,0 +1,62 @@
+---
+import Base from '../layouts/Base.astro';
+import { clinic } from '../data/clinic';
+const desc = `시호한의원 오시는 길, 주소, 전화번호, 예약 방법 안내. ${clinic.address.full}`;
+---
+<Base title="오시는 길 · 예약" description={desc}>
+  <h1>오시는 길 · 예약</h1>
+
+  <h2>주소</h2>
+  <p>{clinic.address.full}</p>
+  <p>
+    <a href={clinic.links.kakaoMap}>카카오맵</a> ·
+    <a href={clinic.links.naverMap}>네이버맵</a> ·
+    <a href={clinic.links.tMap}>T맵</a> ·
+    <a href={clinic.links.googleMap}>구글맵</a>
+  </p>
+
+  <h2>연락처 · 예약</h2>
+  <p>
+    전화 <a href={`tel:${clinic.phone}`}>{clinic.phone}</a><br />
+    <a href={clinic.links.kakaoChannel}>카카오톡 문의 (플러스친구)</a><br />
+    <a href={clinic.links.naverBooking}>네이버 예약</a>
+  </p>
+
+  {clinic.hours.length > 0 && (
+    <>
+      <h2>진료시간은 어떻게 되나요?</h2>
+      <table class="hours">
+        <tbody>
+          {clinic.hours.map((h) => (
+            <tr>
+              <th scope="row">{h.days}</th>
+              <td>
+                {h.open}–{h.close}
+                {h.lunch && <span class="lunch">점심 {h.lunch}</span>}
+                {h.note && <span class="note">{h.note}</span>}
+              </td>
+            </tr>
+          ))}
+          <tr>
+            <th scope="row">일요일</th>
+            <td>휴진</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="lead">{clinic.closedDays}. {clinic.lastReception}</p>
+      <p>
+        수요일은 21:00까지 야간진료를 운영합니다. 진료시간 변경이나 임시 휴진은
+        전화 <a href={`tel:${clinic.phone}`}>{clinic.phone}</a>로 확인해 주세요.
+      </p>
+    </>
+  )}
+
+  <style>
+    table.hours { border-collapse: collapse; width: 100%; max-width: 32rem; }
+    table.hours th { text-align: left; font-weight: 600; white-space: nowrap; padding: 0.6rem 1rem 0.6rem 0; vertical-align: top; }
+    table.hours td { padding: 0.6rem 0; }
+    table.hours tr + tr th, table.hours tr + tr td { border-top: 1px solid var(--line); }
+    .lunch, .note { display: block; font-size: 0.9rem; color: var(--ink-soft); }
+  </style>
+
+</Base>
