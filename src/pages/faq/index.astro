@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { getCollection, render } from 'astro:content';
+import { clinic } from '../../data/clinic';
 
 const faqs = (await getCollection('faq')).sort((a, b) => a.data.order - b.data.order);
 const items = await Promise.all(
@@ -48,6 +49,19 @@ const desc = '시호한의원에 자주 묻는 질문 — 보험 적용, 첫 방
     </section>
   ))}
 
+  <!-- 문의 방법은 답변마다 반복하지 않고 이 자리에서 한 번에 안내합니다. -->
+  <section class="ask">
+    <h2>더 궁금한 점이 있으신가요?</h2>
+    <p>
+      여기에서 다루지 않은 내용은 진료 예약이나 문의를 통해 안내해 드립니다.
+    </p>
+    <p class="ask-links">
+      <a href={`tel:${clinic.phone}`}>전화 {clinic.phone}</a>
+      <a href={clinic.links.naverBooking}>네이버 예약</a>
+      <a href={clinic.links.kakaoChannel}>카카오톡 문의</a>
+    </p>
+  </section>
+
   <style>
     /* 답변 안의 소제목 — 질문(h2)보다 한 단계 작게 */
     .prose h3 {
@@ -61,5 +75,31 @@ const desc = '시호한의원에 자주 묻는 질문 — 보험 적용, 첫 방
       padding-top: 2.5rem;
       border-top: 1px solid var(--line);
     }
+
+    .ask {
+      margin-top: 3.5rem;
+      padding: 1.75rem 1.35rem;
+      background: #fbfcfa;
+      border: 1px solid var(--line);
+      border-radius: 2px;
+    }
+    .ask h2 { margin: 0 0 0.5rem; font-size: 1.15rem; }
+    .ask p { margin: 0 0 1rem; color: var(--ink-soft); }
+    .ask-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin: 0 !important;
+    }
+    .ask-links a {
+      padding: 0.55rem 1.1rem;
+      border: 1px solid var(--accent);
+      border-radius: 2px;
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+    }
+    .ask-links a:hover { background: var(--accent); color: var(--paper); }
   </style>
 </Base>

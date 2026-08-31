@@ -45,8 +45,8 @@ const desc = `시호한의원 오시는 길, 주소, 전화번호, 예약 방법
       </table>
       <p class="lead">{clinic.closedDays}. {clinic.lastReception}</p>
       <p>
-        수요일은 21:00까지 야간진료를 운영합니다. 진료시간 변경이나 임시 휴진은
-        전화 <a href={`tel:${clinic.phone}`}>{clinic.phone}</a>로 확인해 주세요.
+        수요일은 21:00까지 야간진료를 운영합니다. 공휴일 휴진과 임시 휴진 일정은
+        <a href={clinic.links.naverBooking}>네이버 예약</a>에서 확인하실 수 있습니다.
       </p>
     </>
   )}
