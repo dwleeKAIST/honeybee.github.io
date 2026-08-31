@@ -16,5 +16,6 @@
 - [진료 안내](https://thesiho.kr/treatments/): 추나, 도침, 약침, 매선, 맞춤 클리닉
 - [자주 묻는 질문](https://thesiho.kr/faq/): 보험 적용, 첫 방문 안내
 - [보험한약 안내](https://thesiho.kr/insurance-herbs/): 건강보험 적용 한약 목록
+- [수험생 클리닉](https://thesiho.kr/student-care/): 비염, 소화불량, 수면·체력, 목·허리 통증, 월경통, 피부 등 공부를 방해하는 문제별 맞춤진료
 - [의료진 소개](https://thesiho.kr/doctors/)
 - [오시는 길 · 예약](https://thesiho.kr/contact/)

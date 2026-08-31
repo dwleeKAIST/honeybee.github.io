@@ -1,0 +1,188 @@
+---
+import Base from '../layouts/Base.astro';
+import { clinic } from '../data/clinic';
+
+// Base 레이아웃이 `{title} | 시호한의원`으로 조합하므로 뒤쪽 브랜드명은 넣지 않습니다.
+const title = '동탄 수험생 한의원 | 비염·소화·수면·체력·통증 맞춤진료';
+const description =
+  '수험생 보약에 정해진 하나의 처방은 없습니다. 비염, 소화불량, 수면저하, 목·허리 통증, 월경통 등 공부를 방해하는 몸의 문제를 먼저 찾고 학생별로 필요한 치료를 연결합니다. 동탄 시호한의원 수험생 클리닉.';
+
+// 카드 → 같은 페이지 안의 상세 섹션 anchor. 상세 페이지는 아직 만들지 않습니다.
+const problems = [
+  { id: 'rhinitis', title: '비염·코막힘', desc: '코막힘 · 콧물 · 후비루' },
+  { id: 'digestion', title: '소화불량', desc: '식후 졸림 · 더부룩함 · 가스' },
+  { id: 'sleep', title: '수면·체력', desc: '피로 · 불면 · 아침 기상 어려움' },
+  { id: 'pain', title: '목·허리 통증', desc: '목 · 어깨 · 허리 불편' },
+  { id: 'menstrual', title: '월경통·PMS', desc: '생리 때마다 떨어지는 컨디션' },
+  { id: 'skin', title: '여드름·피부', desc: '시험기간 심해지는 피부 트러블' },
+];
+
+// 상세 섹션 제목 — 카드 라벨과 표기가 조금씩 다릅니다.
+const details = [
+  { id: 'rhinitis', title: '비염·코막힘' },
+  { id: 'digestion', title: '소화불량·과민한 장' },
+  { id: 'sleep', title: '수면·체력저하' },
+  { id: 'pain', title: '목·어깨·허리 통증' },
+  { id: 'menstrual', title: '월경통·PMS' },
+  { id: 'skin', title: '여드름·피부' },
+];
+---
+
+<Base title={title} description={description}>
+  <section class="hero">
+    <p class="eyebrow">수험생 클리닉</p>
+    <h1>공부를 방해하는 몸의 문제부터 찾습니다.</h1>
+    <p class="lead">
+      수험생 보약에 정해진 하나의 처방은 없습니다.<br />
+      학생마다 체질도, 힘든 부분도 다르기 때문입니다.
+    </p>
+    <p class="lead">
+      채우는 것보다 먼저,<br />
+      공부를 방해하는 몸의 문제부터 덜어냅니다.
+    </p>
+    <p class="cta-row">
+      <a class="cta" href={clinic.links.naverBooking}>수험생 진료 상담하기</a>
+    </p>
+    <p class="cta-sub">
+      전화 <a href={`tel:${clinic.phone}`}>{clinic.phone}</a> ·
+      <a href={clinic.links.kakaoChannel}>카카오톡 문의</a>
+    </p>
+  </section>
+
+  <h2>우리 아이의 공부를 방해하는 것은 무엇인가요?</h2>
+  <ul class="problem-grid">
+    {problems.map((p) => (
+      <li>
+        <a class="problem" href={`#${p.id}`}>
+          <span class="problem-title">{p.title}</span>
+          <span class="problem-desc">{p.desc}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+
+  <hr class="rule" />
+
+  {/* TODO: 본문 작성 필요 */}
+  <h2>채우는 것보다 먼저, 공부를 방해하는 몸의 문제부터 덜어냅니다.</h2>
+  <p class="placeholder">내용 준비 중입니다.</p>
+
+  {/* TODO: 본문 작성 필요 */}
+  <h2>학생마다 다르니까, 진료도 달라야 합니다.</h2>
+  <p class="placeholder">내용 준비 중입니다.</p>
+
+  <h2>수험생활을 방해하는 여러 문제를 한 곳에서 함께 봅니다.</h2>
+  {details.map((d) => (
+    <div class="detail">
+      {/* TODO: 본문 작성 필요 */}
+      <h3 id={d.id}>{d.title}</h3>
+      <p class="placeholder">내용 준비 중입니다.</p>
+    </div>
+  ))}
+
+  {/* TODO: 본문 작성 필요 */}
+  <h2>수험생 한약, 모두에게 같을 필요는 없습니다.</h2>
+  <p class="placeholder">내용 준비 중입니다.</p>
+
+  {/* TODO: 본문 작성 필요 */}
+  <h2>이런 학생에게 수험생 진료를 권합니다.</h2>
+  <p class="placeholder">내용 준비 중입니다.</p>
+
+  {/* TODO: 본문 작성 필요. FAQPage 구조화 데이터는 내용을 채운 뒤 붙입니다. */}
+  <h2>자주 묻는 질문</h2>
+  <p class="placeholder">내용 준비 중입니다.</p>
+
+  {/* TODO: 본문 작성 필요 */}
+  <h2>수험생활을 하나의 몸으로 봅니다.</h2>
+  <p class="placeholder">내용 준비 중입니다.</p>
+
+  <style>
+    /* 전역 토큰(--paper, --ink, --ink-soft, --line, --accent, --serif)만 사용합니다. */
+    .hero { margin-bottom: 3rem; }
+    .eyebrow {
+      margin: 0 0 0.75rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+    }
+    .hero .lead { margin: 0 0 1rem; }
+
+    .cta-row { margin: 1.75rem 0 0.75rem; }
+    .cta {
+      display: inline-block;
+      padding: 0.75rem 1.6rem;
+      background: var(--accent);
+      color: var(--paper);
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: background-color 0.15s ease;
+    }
+    .cta:hover { background: #7d561a; color: var(--paper); }
+    .cta-sub { margin: 0; font-size: 0.92rem; color: var(--ink-soft); }
+    .cta-sub a { color: var(--ink-soft); }
+    .cta-sub a:hover { color: var(--accent); }
+
+    /* 모바일 1열 → 2열 → PC 3열 2행 */
+    .problem-grid {
+      list-style: none;
+      margin: 1.25rem 0 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+    @media (min-width: 30rem) {
+      .problem-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    /* main이 최대 44rem이므로, 그 폭을 온전히 쓸 수 있을 때부터 3열 */
+    @media (min-width: 52rem) {
+      .problem-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    /* 카드 전체 영역이 클릭 대상 */
+    .problem {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      height: 100%;
+      padding: 1.1rem 1.15rem;
+      border: 1px solid var(--line);
+      border-radius: 2px;
+      text-decoration: none;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+    .problem:hover {
+      border-color: var(--accent);
+      background: rgba(154, 107, 31, 0.04);
+    }
+    .problem-title {
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--ink);
+    }
+    .problem-desc {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--ink-soft);
+    }
+
+    .detail h3 {
+      margin: 2rem 0 0.5rem;
+      font-size: 1.1rem;
+      scroll-margin-top: 1.5rem;
+    }
+
+    /* 본문을 채우면 삭제할 자리표시 스타일 */
+    .placeholder {
+      margin: 0;
+      padding: 1rem 1.15rem;
+      border: 1px dashed var(--line);
+      border-radius: 2px;
+      color: var(--ink-soft);
+      font-size: 0.95rem;
+    }
+  </style>
+</Base>
