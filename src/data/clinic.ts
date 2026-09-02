@@ -3,8 +3,12 @@ export const clinic = {
   name: '시호한의원',
   nameEn: 'SIHO Korean Medicine Clinic',
   slogan: '더 건강한 내일을 만드는 치유의 공간',
+  // 구조화 데이터(JSON-LD)와 llms.txt용. 길어도 무방하며 정보가 많은 편이 유리합니다.
   description:
     '경기 화성시 동탄에 위치한 시호한의원입니다. 추나, 도침, 약침, 매선 치료와 소화불량·불면·피로·스트레스 진료, 수험생·갱년기·다이어트·소아한약 클리닉을 운영합니다.',
+  // 검색결과에 표시되는 meta description용. 네이버가 80자 이내를 권고합니다.
+  metaDescription:
+    '경기 화성시 동탄 시호한의원. 추나·도침·약침·매선과 소화·불면·피로 진료, 수험생·갱년기 클리닉을 운영합니다.',
   phone: '031-376-1505',
   phoneIntl: '+82-31-376-1505',
   address: {

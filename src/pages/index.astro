@@ -4,7 +4,7 @@ import { clinic } from '../data/clinic';
 import { getCollection } from 'astro:content';
 const treatments = (await getCollection('treatments')).sort((a, b) => a.data.order - b.data.order);
 ---
-<Base title={clinic.slogan} description={clinic.description}>
+<Base title={clinic.slogan} description={clinic.metaDescription}>
   <h1>{clinic.slogan},<br />시호한의원입니다.</h1>
   <p class="lead">{clinic.address.full}로 소중한 분들을 모십니다.</p>
   <p class="lead">
