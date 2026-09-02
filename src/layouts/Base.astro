@@ -43,6 +43,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="canonical" href={canonical} />
+    {/* 네이버 서치어드바이저 사이트 소유확인. 검색 등록 유지에 필요하므로 지우지 마세요. */}
+    <meta
+      name="naver-site-verification"
+      content="3a5ba32cf6c0ac8e23042b733930b988dd447ff3"
+    />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/images/logo-mark.png" type="image/png" />
     <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
