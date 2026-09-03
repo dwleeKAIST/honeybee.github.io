@@ -1,0 +1,427 @@
+---
+import Base from '../layouts/Base.astro';
+import { clinic } from '../data/clinic';
+
+const title = '동탄 체형교정 | 거북목·골반 불균형 추나 진료';
+const description =
+  '동탄 시호한의원 체형교정 안내. 자세와 관절 정렬을 확인하고 추나요법으로 접근하는 진료 과정을 정리했습니다.';
+
+// ⚠ 원장 검수 대기. 확인이 필요한 항목:
+//   1) 체형 분석 장비(체형분석기·족저압 측정기 등)를 갖추고 있는지
+//   2) 턱관절 진료를 실제로 운영하는지 (박종규 원장 TBT 수료 이력 기준으로 작성)
+//   3) 운동·생활 지도를 어느 범위까지 하는지
+//   4) 체형교정 패키지가 별도로 있는지, 있다면 회차와 비용
+//   5) X-ray 보유 여부 (현재 원고에서는 언급하지 않았습니다)
+//
+// 체형교정은 의료광고 심의에서 지적이 잦은 분야입니다. 아래는 쓰지 않았습니다.
+//   - 자세 전후 비교 사진, 체형 측정 수치를 효과 근거로 제시하는 서술
+//   - '교정됩니다', '똑바로 펴집니다', '키가 커집니다' 등 결과 보장
+//   - '○회에', '○주 만에' 등 기간 보장
+//   - 환자 후기
+// 미용적 변화보다 통증과 기능 제한을 중심으로 서술했습니다.
+// 검수 전까지 noindex + sitemap 제외 상태입니다.
+
+const faqs = [
+  {
+    q: '몇 번 정도 받아야 하나요?',
+    a: [
+      '자세와 관련된 불편은 오랜 기간 쌓여 생기는 경우가 많아, 몇 회에 정리된다고 말씀드리기 어렵습니다.',
+      '진찰 후 대략적인 계획을 말씀드리고, 치료마다 움직임이 어떻게 달라졌는지 확인하면서 조정합니다.',
+    ],
+  },
+  {
+    q: '자세가 나쁘긴 한데 아프지는 않습니다. 그래도 봐야 할까요?',
+    a: [
+      '통증이 없다면 급하게 치료를 시작할 필요는 없습니다. 다만 어느 방향으로 움직임이 제한되어 있는지 확인해 두는 것은 도움이 됩니다.',
+      '확인해 보고 지금 치료가 필요하지 않다고 판단되면 그렇게 말씀드립니다. 생활에서 무엇을 조심하면 되는지만 안내드리는 경우도 있습니다.',
+    ],
+  },
+  {
+    q: '치료를 받으면 자세가 바로 달라지나요?',
+    a: [
+      '치료 직후에 움직임의 범위가 달라지는 것은 확인할 수 있습니다. 다만 그 상태가 유지되는지는 다른 문제입니다.',
+      '오래 앉아 있는 습관이나 일하는 자세가 그대로면 같은 부담이 다시 쌓입니다. 그래서 치료와 함께 생활에서 무엇을 조정하면 좋을지 안내합니다.',
+    ],
+  },
+  {
+    q: '추나요법은 건강보험이 적용되나요?',
+    a: [
+      '추나요법은 조건에 따라 건강보험이 적용됩니다.',
+      '적용 범위와 횟수는 진료 시 안내해 드립니다. 자세한 내용은 전화로 문의해 주세요.',
+    ],
+  },
+  {
+    q: '아이 자세도 봐주시나요?',
+    a: [
+      '성장기 아이의 자세를 상담하시는 경우가 있습니다. 앉는 자세, 가방을 메는 습관, 통증이 있는지를 함께 확인합니다.',
+      '아이의 경우 성장 과정에서 달라지는 부분이 있어, 지금 치료가 필요한 상태인지부터 확인한 뒤 말씀드립니다.',
+    ],
+  },
+  {
+    q: '운동을 따로 해야 하나요?',
+    a: [
+      '치료만으로 끝내지 않고, 어떤 움직임을 늘리고 어떤 자세를 줄이면 좋을지 안내합니다.',
+      '거창한 운동을 새로 시작하시라는 뜻은 아닙니다. 지금 하고 계신 일과 자세에서 바꿀 수 있는 부분을 먼저 찾습니다.',
+    ],
+  },
+];
+
+const faqLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a.join(' ') },
+    })),
+  },
+];
+
+const cases = [
+  { t: '거북목 · 라운드 숄더', d: '목이 앞으로 나오거나 어깨가 안쪽으로 말린 자세' },
+  { t: '골반 불균형', d: '한쪽으로 체중이 실리거나 다리 길이가 달라 보이는 경우' },
+  { t: '좌우 비대칭', d: '한쪽 어깨가 올라가 있거나 옷이 한쪽으로 돌아가는 경우' },
+  { t: '앉은 자세 부담', d: '오래 앉아 일하며 등·허리가 뻐근해지는 경우' },
+  { t: '움직임 제한', d: '목을 돌리거나 허리를 젖힐 때 한쪽만 걸리는 경우' },
+  { t: '턱의 불편', d: '입을 벌릴 때 소리가 나거나 한쪽으로 씹는 습관이 있는 경우' },
+];
+
+const care = [
+  {
+    t: '추나요법',
+    d: '관절의 움직임과 정렬 상태를 확인하고 손으로 조정하는 치료입니다. 체형교정 진료의 중심이 됩니다.',
+    href: '/treatments/chuna/',
+  },
+  {
+    t: '침 · 약침',
+    d: '긴장된 근육과 통증이 있는 부위를 함께 다룹니다. 부위가 깊으면 초음파를 보면서 진행합니다.',
+    href: '/treatments/yakchim/',
+  },
+  {
+    t: '도침',
+    d: '오래 굳어 움직임을 제한하는 조직이 있을 때 사용합니다.',
+    href: '/treatments/dochim/',
+  },
+  {
+    t: '매선',
+    d: '같은 부위가 반복해서 불편한 경우, 자극이 이어지도록 활용합니다.',
+    href: '/treatments/maeseon/',
+  },
+];
+---
+
+<Base title={title} description={description} jsonLd={faqLd} noindex={true}>
+  <section class="hero">
+    <p class="eyebrow">체형교정 · 추나</p>
+    <h1>체형교정, 무엇을 확인하고 시작하나요?</h1>
+    <p class="lead">
+      체형은 겉으로 보이는 모양만의 문제가 아닙니다. 어느 방향으로 움직임이
+      제한되어 있고 어디에 부담이 쌓이고 있는지를 함께 봐야 합니다.
+    </p>
+    <p>
+      시호한의원은 자세와 관절의 정렬 상태를 확인한 뒤 추나요법을 중심으로
+      진료합니다. 지금 불편한 곳이 있다면 그 부위부터 다룹니다.
+    </p>
+    <p class="cta-row">
+      <a class="cta" href={clinic.links.naverBooking}>체형 상담하기</a>
+    </p>
+  </section>
+
+  <section class="sec band">
+    <h2>체형교정은 어떤 진료인가요?</h2>
+    <p>
+      자세가 한쪽으로 치우치면 그 자세를 유지하기 위해 특정 근육이 계속 일하게
+      됩니다. 시간이 지나면 그 부위가 뻐근해지고, 관절이 움직이는 범위도 좁아집니다.
+    </p>
+    <p>
+      체형교정 진료는 이 과정을 거꾸로 살펴보는 일입니다. 지금 어느 방향이 막혀
+      있는지 확인하고, 그 부위의 움직임을 다루면서 통증과 기능 제한에 접근합니다.
+    </p>
+    <p class="statement">
+      모양을 바꾸는 것이 목표가 아니라, 지금 불편한 부위의 움직임을 다루는
+      진료입니다.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>어떤 경우에 상담하시나요?</h2>
+    <div class="cards">
+      {cases.map((c) => (
+        <div class="card">
+          <strong>{c.t}</strong>
+          <span>{c.d}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>무엇을 어떻게 확인하나요?</h2>
+    <ol class="steps">
+      <li>
+        <strong>자세와 움직임 확인</strong>
+        <span
+          >서 있는 자세와 앉은 자세를 보고, 목·어깨·허리·골반이 각 방향으로 얼마나
+          움직이는지 확인합니다. 좌우 차이가 있는지도 함께 봅니다.</span
+        >
+      </li>
+      <li>
+        <strong>불편한 부위 확인</strong>
+        <span
+          >아픈 부위를 직접 눌러 확인하고, 필요하면 초음파로 해당 부위의 상태를
+          살펴봅니다.</span
+        >
+      </li>
+      <li>
+        <strong>우선순위 판단</strong>
+        <span
+          >여러 곳이 함께 불편한 경우, 지금 가장 부담이 큰 곳부터 다룹니다. 어떤
+          순서로 진행할지 말씀드립니다.</span
+        >
+      </li>
+      <li>
+        <strong>치료와 생활 안내</strong>
+        <span
+          >치료를 진행하고, 일하는 자세나 생활에서 조정할 수 있는 부분을 함께
+          안내합니다.</span
+        >
+      </li>
+    </ol>
+  </section>
+
+  <section class="sec band">
+    <h2>어떤 치료를 받게 되나요?</h2>
+    <p>
+      상태에 따라 필요한 치료를 정합니다. 한 가지만 진행하기보다 함께 진행하는
+      경우가 많습니다.
+    </p>
+    <div class="cards">
+      {care.map((c) => (
+        <div class="card">
+          <strong>{c.t}</strong>
+          <span>{c.d}</span>
+          {c.href && <a href={c.href}>자세히 보기</a>}
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>턱의 상태도 함께 확인하나요?</h2>
+    <p>
+      턱을 쓰는 습관은 목과 어깨의 긴장과 함께 나타나는 경우가 있습니다. 한쪽으로만
+      씹거나 입을 벌릴 때 소리가 나는 경우가 여기에 해당합니다.
+    </p>
+    <p>
+      박종규 진료원장은 TBT 턱관절균형요법 전문과정을 수료했습니다. 목·어깨의
+      불편과 함께 턱의 불편이 있으시면 상담 때 말씀해 주세요. 함께 확인해 드립니다.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>누가 진료하나요?</h2>
+    <p>
+      박종규 진료원장은 척추신경추나의학회 정회원이며, 시리악스 정형의학회 KMD
+      과정과 미국근골격계초음파사(RMSK) 자격을 취득했습니다. 대한스포츠한의학회
+      팀닥터 과정도 수료했습니다.
+    </p>
+    <p class="note">
+      두 원장의 이력과 진료 요일은 <a href="/doctors/">의료진 소개</a>에 정리해
+      두었습니다. 교통사고 후 목·허리 불편으로 오시는 경우는
+      <a href="/car-accident/">교통사고 한방치료 안내</a>를 참고해 주세요.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>체형교정 자주 묻는 질문</h2>
+    <div class="faq">
+      {faqs.map((f) => (
+        <details>
+          <summary>{f.q}</summary>
+          <div class="answer">{f.a.map((t) => <p>{t}</p>)}</div>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <section class="sec band closing">
+    <h2>상담과 예약</h2>
+    <p>
+      시호한의원은 경기 화성시 동탄신리천로 407 동탄리더스타워 2층에 있습니다.
+      자세와 움직임을 먼저 확인한 뒤 지금 필요한 진료를 말씀드립니다. 수요일은
+      21:00까지 야간진료를 운영하여 퇴근 후에도 내원하실 수 있습니다.
+    </p>
+    <p class="cta-row">
+      <a class="cta" href={clinic.links.naverBooking}>체형 상담하기</a>
+    </p>
+    <p class="cta-sub">
+      전화 <a href={`tel:${clinic.phone}`}>{clinic.phone}</a> ·
+      <a href={clinic.links.kakaoChannel}>카카오톡 문의</a>
+    </p>
+  </section>
+
+  <style>
+    .hero,
+    .sec {
+      --surface: #fbfcfa;
+      --sunk: #edf0e9;
+    }
+    .sec { margin-top: 3.5rem; }
+    .sec > p { max-width: 34rem; margin: 0 0 1rem; }
+    .sec > p:last-child { margin-bottom: 0; }
+    .sec h2 + p { margin-top: 0; }
+
+    .band {
+      margin-inline: -1.25rem;
+      padding: 2.25rem 1.25rem 2.5rem;
+      background: var(--sunk);
+    }
+    .band > h2:first-child { margin-top: 0; }
+
+    .hero { margin-bottom: 1rem; }
+    .hero p { max-width: 34rem; margin: 0 0 1rem; }
+    .eyebrow {
+      margin: 0 0 0.75rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+    }
+    .hero h1 { line-height: 1.35; }
+    .hero .lead { font-size: 1.08rem; }
+
+    .cta-row { margin: 1.75rem 0 0.75rem; }
+    .cta {
+      display: inline-block;
+      padding: 0.75rem 1.6rem;
+      background: var(--accent);
+      color: var(--paper);
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: background-color 0.15s ease;
+    }
+    .cta:hover { background: #7d561a; color: var(--paper); }
+    .cta-sub { margin: 0; font-size: 0.92rem; color: var(--ink-soft); }
+    .cta-sub a { color: var(--ink-soft); }
+    .cta-sub a:hover { color: var(--accent); }
+
+    .statement {
+      max-width: 34rem;
+      margin: 1.75rem 0 0;
+      padding-left: 1.1rem;
+      border-left: 3px solid var(--accent);
+      font-family: var(--serif);
+      font-size: 1.12rem;
+      line-height: 1.65;
+    }
+
+    .note { font-size: 0.94rem; color: var(--ink-soft); }
+
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+      margin: 1.5rem 0 0;
+      max-width: 34rem;
+    }
+    .card {
+      padding: 1.1rem 1.15rem;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 2px;
+    }
+    .card strong {
+      display: block;
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      color: var(--accent);
+      margin-bottom: 0.25rem;
+    }
+    .card span {
+      display: block;
+      color: var(--ink-soft);
+      font-size: 0.96rem;
+    }
+    .card a { display: inline-block; margin-top: 0.5rem; font-size: 0.9rem; }
+    @media (min-width: 34rem) {
+      .cards { grid-template-columns: 1fr 1fr; }
+    }
+
+    .steps {
+      list-style: none;
+      counter-reset: step;
+      margin: 1.5rem 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      max-width: 34rem;
+    }
+    .steps li {
+      counter-increment: step;
+      position: relative;
+      padding: 1.1rem 1.15rem 1.1rem 3rem;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 2px;
+    }
+    .steps li::before {
+      content: counter(step);
+      position: absolute;
+      left: 1.15rem;
+      top: 1.05rem;
+      font-family: var(--serif);
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .steps strong {
+      display: block;
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      margin-bottom: 0.2rem;
+    }
+    .steps span { color: var(--ink-soft); font-size: 0.96rem; }
+
+    /* FAQ 아코디언 — JS 없이 details/summary */
+    .faq { margin-top: 1.5rem; border-top: 1px solid var(--line); }
+    .faq details { border-bottom: 1px solid var(--line); }
+    .faq summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 1rem 0;
+      font-weight: 600;
+      cursor: pointer;
+      list-style: none;
+    }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after {
+      content: '+';
+      flex: none;
+      color: var(--accent);
+      font-weight: 400;
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+    .faq details[open] summary::after { content: '−'; }
+    .faq summary:hover { color: var(--accent); }
+    .faq .answer { padding: 0 0 1.1rem; max-width: 34rem; }
+    .faq .answer p {
+      margin: 0 0 0.7rem;
+      font-size: 0.96rem;
+      color: var(--ink-soft);
+    }
+    .faq .answer p:last-child { margin-bottom: 0; }
+
+    .closing { margin-top: 4rem; }
+
+    @media (max-width: 34rem) {
+      .hero h1 { font-size: 1.5rem; }
+      .statement { font-size: 1.05rem; }
+      .steps li { padding: 1rem 1rem 1rem 2.7rem; }
+    }
+  </style>
+</Base>
