@@ -1,5 +1,23 @@
 ---
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import Base from '../layouts/Base.astro';
+
+// public/images/ 에 파일을 올리면 자동으로 표시됩니다. 없으면 그 자리는 비워둡니다.
+// 빌드는 프로젝트 루트에서 실행되므로 cwd 기준으로 확인합니다.
+const img = (file: string) =>
+  existsSync(join(process.cwd(), 'public/images', file)) ? `/images/${file}` : null;
+
+const photoTogether = img('doctors-together.jpg');
+const photoSchedule = img('schedule.jpg');
+
+// 원장별 진료 요일 — 원장 확인 완료
+const days = ['월', '화', '수', '목', '금', '토'];
+const shifts = [
+  { label: '오전', kim: ['화', '수', '금', '토'], park: ['월', '목', '금', '토'] },
+  { label: '오후', kim: ['월', '화', '수', '금', '토'], park: ['월', '수', '목', '금', '토'] },
+  { label: '야간', kim: ['월', '화', '수', '금'], park: ['월', '수', '목', '금'] },
+];
 
 const desc =
   '한방내과 전문의 김은미 대표원장과 박종규 진료원장, 한의사 2인이 진료합니다. 이력과 학회 활동, 임상연구를 소개합니다.';
@@ -16,7 +34,7 @@ const doctors = [
     name: '김은미',
     role: '대표원장',
     credential: '한방내과 전문의 (보건복지부)',
-    photo: '/images/doctor-kim-eunmi.jpg',
+    photo: img('doctor-kim-eunmi.jpg'),
     career: [
       '대전대학교 한의예과 · 한의학과 졸업',
       '청연한방병원 일반수련의 / 전문수련의',
@@ -56,7 +74,7 @@ const doctors = [
     name: '박종규',
     role: '진료원장',
     credential: null,
-    photo: null,
+    photo: img('doctor-park-jonggyu.jpg'),
     career: [
       '대전대학교 청주한방병원 일반수련의 수료',
       '前 명작한의원 진료원장',
@@ -69,7 +87,7 @@ const doctors = [
       { t: '미국근골격계초음파사 (RMSK)', href: '/treatments/yakchim/' },
       { t: '시리악스 정형의학회 KMD 과정 수료', href: null },
       { t: 'TBT 턱관절균형요법 전문과정 수료', href: null },
-      { t: '대한스포츠의학회 팀닥터 수료', href: null },
+      { t: '대한스포츠한의학회 팀닥터 수료', href: null },
     ],
     papers: [],
     greeting: [
@@ -117,9 +135,67 @@ const jsonLd = [
     진료하며, 한 분의 환자를 두 의료진이 함께 살펴보는 협진 방식으로 진료의 연속성을
     유지합니다.
   </p>
-  <p class="lead">
-    진료시간은 <a href="/contact/">오시는 길 · 예약</a>에서 확인하실 수 있습니다.
-  </p>
+  {photoTogether && (
+    <img
+      class="together"
+      src={photoTogether}
+      alt="시호한의원 박종규 진료원장과 김은미 대표원장 — 한의사 2인 진료, 통증·자율신경·비염"
+      loading="lazy"
+    />
+  )}
+
+  <section class="sec" id="schedule">
+    <h2>원장별로 진료하는 요일이 어떻게 되나요?</h2>
+    <p>
+      두 원장의 진료 요일이 다릅니다. 특정 원장의 진료를 원하시면 아래 표를 확인하고
+      내원해 주세요.
+    </p>
+    <div class="table-wrap">
+      <table class="grid">
+        <thead>
+          <tr>
+            <th scope="col"><span class="sr-only">구분</span></th>
+            {days.map((d) => <th scope="col">{d}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {shifts.map((sh) => (
+            <>
+              <tr>
+                <th scope="row">김은미 · {sh.label}</th>
+                {days.map((d) => (
+                  <td class={sh.kim.includes(d) ? 'on' : ''}>
+                    {sh.kim.includes(d) ? <span aria-label="진료">●</span> : <span aria-label="휴진">–</span>}
+                  </td>
+                ))}
+              </tr>
+              <tr class="park">
+                <th scope="row">박종규 · {sh.label}</th>
+                {days.map((d) => (
+                  <td class={sh.park.includes(d) ? 'on' : ''}>
+                    {sh.park.includes(d) ? <span aria-label="진료">●</span> : <span aria-label="휴진">–</span>}
+                  </td>
+                ))}
+              </tr>
+            </>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="note">
+      김은미 대표원장은 목요일, 박종규 진료원장은 화요일에 진료하지 않습니다.
+      토요일은 야간진료가 없습니다. 진료시간과 점심시간은
+      <a href="/contact/">오시는 길 · 예약</a>에 정리해 두었습니다.
+    </p>
+    {photoSchedule && (
+      <img
+        class="schedule-img"
+        src={photoSchedule}
+        alt="시호한의원 진료시간표 — 평일 09:30~20:00, 수요일 09:30~21:00, 토요일 09:30~14:00, 점심시간 12:30~14:00"
+        loading="lazy"
+      />
+    )}
+  </section>
 
   {doctors.map((d) => (
     <section class="doc" id={d.id}>
@@ -158,6 +234,73 @@ const jsonLd = [
 
   <style>
     .lead { max-width: 34rem; }
+
+    .together {
+      display: block;
+      width: 100%;
+      max-width: 34rem;
+      height: auto;
+      margin: 2rem 0 0;
+      border-radius: 2px;
+    }
+
+    .sec { margin-top: 3rem; }
+    .sec > p { max-width: 34rem; }
+    .note { font-size: 0.94rem; color: var(--ink-soft); }
+
+    /* 원장별 진료 요일 — 좁은 화면에서는 가로 스크롤 */
+    .table-wrap {
+      margin: 1.5rem 0;
+      max-width: 34rem;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    table.grid {
+      width: 100%;
+      min-width: 24rem;
+      border-collapse: collapse;
+      font-size: 0.94rem;
+      background: #fbfcfa;
+    }
+    table.grid th,
+    table.grid td {
+      padding: 0.55rem 0.5rem;
+      border: 1px solid var(--line);
+      text-align: center;
+    }
+    table.grid thead th {
+      background: var(--paper);
+      font-family: var(--serif);
+      color: var(--accent);
+    }
+    table.grid tbody th {
+      text-align: left;
+      white-space: nowrap;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--ink-soft);
+    }
+    table.grid td { color: var(--line); }
+    table.grid td.on { color: var(--accent); }
+    table.grid tr.park tbody th { color: var(--ink-soft); }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    .schedule-img {
+      display: block;
+      width: 100%;
+      max-width: 34rem;
+      height: auto;
+      margin: 1.5rem 0 0;
+      border: 1px solid var(--line);
+      border-radius: 2px;
+    }
 
     .doc {
       margin-top: 3.5rem;
