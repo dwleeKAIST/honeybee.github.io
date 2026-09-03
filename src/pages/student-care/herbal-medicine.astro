@@ -1,0 +1,392 @@
+---
+import Base from '../../layouts/Base.astro';
+import { clinic } from '../../data/clinic';
+
+const title = '동탄 수험생 보약 | 총명탕·공진단 차이와 복용 시기';
+const description =
+  '수험생 보약에 정해진 하나의 처방은 없습니다. 복용 시기와 처방 선택 기준을 안내하는 동탄 시호한의원.';
+
+// 앞서 검수받은 FAQ와 겹치지 않는 질문으로 구성했습니다.
+// 진료 안내 페이지의 FAQ는 진료 범위, 이 페이지는 한약 복용에 관한 것입니다.
+const faqs = [
+  {
+    q: '수험생 보약은 꼭 먹여야 하나요?',
+    a: [
+      '모든 학생에게 한약이 필요한 것은 아닙니다. 잘 자고 잘 먹고 있으며 특별히 불편한 증상이 없다면 굳이 복용하지 않아도 됩니다.',
+      '반대로 비염이나 소화 문제, 수면 부족, 통증처럼 공부를 방해하는 증상이 있다면 그 부분을 먼저 살펴보는 편이 도움이 됩니다.',
+      '필요 여부는 진찰을 통해 판단하며, 필요하지 않다고 보이면 그렇게 말씀드립니다.',
+    ],
+  },
+  {
+    q: '한 번 처방받으면 얼마나 복용하나요?',
+    a: [
+      '학생의 상태와 목적에 따라 다릅니다. 특정 증상을 다루는 경우와 전반적인 컨디션을 보충하는 경우의 기간이 같지 않습니다.',
+      '복용 기간은 진찰 후 정하며, 복용 중 경과를 확인해 조정합니다.',
+    ],
+  },
+  {
+    q: '학기 중에도 복용할 수 있나요?',
+    a: [
+      '네. 오히려 학기 중에 불편한 증상이 나타나는 경우가 많아 그 시기에 진료를 시작하는 학생도 있습니다.',
+      '복용 시간은 학교와 학원 일정을 고려해 정합니다. 하루 두 번으로 조정하거나 아침과 저녁으로 나누는 등 일정에 맞출 수 있으니 상담 시 말씀해 주세요.',
+    ],
+  },
+  {
+    q: '복용 중인 영양제나 다른 약이 있어도 괜찮나요?',
+    a: [
+      '복용 중인 약과 영양제가 있다면 이름을 알려주시거나 처방전을 가져와 주세요. 함께 확인한 뒤 복용 방법을 안내해 드립니다.',
+      '알레르기 비염약이나 피부과 약을 함께 복용하는 학생도 있습니다. 무엇을 어떻게 먹고 있는지 알아야 판단할 수 있으므로 빠짐없이 알려주시는 편이 좋습니다.',
+    ],
+  },
+  {
+    q: '아이가 한약을 잘 못 먹는데 방법이 있나요?',
+    a: [
+      '복용을 힘들어하는 학생이 적지 않습니다. 제형과 복용 시간을 조정할 수 있으니 미리 말씀해 주세요.',
+      '복용을 시작한 뒤에도 어려워한다면 알려주세요. 확인 후 조정합니다.',
+    ],
+  },
+];
+
+const faqLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a.join(' ') },
+    })),
+  },
+];
+---
+
+<Base title={title} description={description} jsonLd={faqLd} noindex={true}>
+  <section class="hero">
+    <p class="eyebrow">수험생 클리닉 · 한약</p>
+    <h1>수험생 보약, 무엇부터 정해야 할까요?</h1>
+    <p class="lead">
+      수험생 보약에 정해진 하나의 처방은 없습니다. 학생마다 체질도, 힘든 부분도
+      다르기 때문입니다.
+    </p>
+    <p class="lead">
+      동탄에서 수험생 한약을 고민하고 계신다면, 무엇을 채울지보다 지금 무엇이
+      공부를 방해하고 있는지부터 함께 살펴봅니다.
+    </p>
+    <p class="cta-row">
+      <a class="cta" href={clinic.links.naverBooking}>수험생 한약 상담하기</a>
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>수험생 보약이란 무엇을 말하나요?</h2>
+    <p>
+      ‘보약’은 부족한 것을 채우는 방향의 한약을 가리키는 말로 널리 쓰입니다.
+      체력이 떨어진 학생에게 필요한 치료인 것은 맞습니다.
+    </p>
+    <p>
+      다만 수험생에게 필요한 것이 늘 채우는 쪽만은 아닙니다. 밤새 코가 막혀
+      제대로 자지 못하는 학생, 식사할 때마다 속이 불편한 학생에게는 채우는 것보다
+      그 문제를 먼저 다루는 편이 나은 경우가 있습니다.
+    </p>
+    <p class="statement">
+      그래서 시호한의원에서는 ‘수험생 보약’이라는 이름보다 그 학생의 현재 몸 상태를
+      먼저 봅니다.
+    </p>
+  </section>
+
+  <section class="sec band">
+    <h2>언제부터 먹이는 것이 좋을까요?</h2>
+    <p>
+      정해진 시기는 없습니다. 지금 학생을 가장 불편하게 하는 문제가 무엇인지에
+      따라 달라집니다.
+    </p>
+    <p>
+      비염, 소화불량, 수면 문제처럼 증상이 있는 경우에는 그 증상이 나타나는 시기에
+      맞춰 진료를 시작하는 편입니다. 체력 보충이 주된 목적이라면 학습량이 늘어나는
+      시기 이전에 상담하시는 경우가 많습니다.
+    </p>
+    <p>복용 기간과 시작 시점은 학생의 상태와 시험 일정을 함께 고려하여 정합니다.</p>
+
+    <h2>시험이 임박했는데 지금 시작해도 될까요?</h2>
+    <p>가능합니다. 다만 시작 시점에 따라 진료의 목표를 다르게 잡습니다.</p>
+    <p>
+      시간에 여유가 있으면 불편한 증상을 먼저 다루고 체력을 보충하는 순서로 진행할
+      수 있지만, 시험이 임박한 시기에는 현재 컨디션을 유지하는 데 초점을 두는
+      편입니다.
+    </p>
+    <p>
+      복용 중 몸에 맞지 않는 점이 있을 때 조정할 시간이 필요하므로, 가능하면 시험
+      일정에 여유를 두고 상담해 주시기를 권해 드립니다.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>총명탕이면 되나요?</h2>
+    <p>
+      총명탕은 한의학에서 오래 사용되어 온 처방 중 하나입니다. 다만 모든 학생에게
+      같은 처방이 필요한 것은 아닙니다.
+    </p>
+    <p>
+      잠을 제대로 자지 못해 피곤한 학생과, 소화가 좋지 않아 처지는 학생, 비염 때문에
+      불편한 학생은 각각 필요한 방향이 다릅니다.
+    </p>
+    <p>
+      시호한의원에서는 처방 이름을 먼저 정하기보다, 진찰을 통해 학생의 현재 상태를
+      확인한 뒤 필요한 처방을 결정합니다.
+    </p>
+
+    <h2>공진단과 탕약은 어떻게 다른가요?</h2>
+    <p>
+      공진단은 일정한 처방 구성을 바탕으로 제형화하여 복용하는 방식이고, 탕약은
+      개별 상태에 따라 약재 구성과 용량을 보다 세밀하게 조절하는 방식입니다.
+    </p>
+    <p>
+      공진단도 진찰 없이 정해지는 것은 아닙니다. 진찰 후 학생의 상태와 복용 목적
+      등을 고려하여, 사향이 들어간 원방 공진단과 목향을 활용한 공진단 가운데 어느
+      쪽이 적합한지 판단합니다.
+    </p>
+    <p>
+      두 가지 모두 원내에서 직접 손으로 빚어 조제합니다. 목향 공진단은 사향이
+      들어가지 않는 대신 녹용 함량을 두 배로 넣은 녹용두배공진단으로도 처방하고
+      있습니다.
+    </p>
+
+    <h2>한약을 먹으면 졸리지 않나요?</h2>
+    <p>수험생 한약은 낮 시간의 학습을 방해하지 않도록 구성을 고려하여 처방합니다.</p>
+    <p>
+      수면을 돕는 방향의 처방이 필요한 경우에는 복용 시간을 저녁으로 조정하는 등
+      복용 방법을 함께 안내해 드립니다. 복용 중 졸음이나 그 밖에 불편한 점이 있으면
+      알려주세요. 확인 후 조정합니다.
+    </p>
+  </section>
+
+  <section class="sec band">
+    <h2>이런 경우에는 보약보다 먼저 살펴봅니다</h2>
+    <p>
+      아래에 해당한다면 채우는 것보다 그 문제를 먼저 다루는 편이 나을 수 있습니다.
+    </p>
+    <ul class="cases">
+      <li>밤에 코가 막혀 자주 깨거나 아침에 개운하지 않다</li>
+      <li>식후에 유난히 졸리고 더부룩하다</li>
+      <li>시험기간만 되면 복통이나 설사가 생긴다</li>
+      <li>목·어깨·허리가 아파 오래 앉아 있기 힘들다</li>
+      <li>매달 월경통으로 공부의 흐름이 끊긴다</li>
+    </ul>
+    <p>
+      각 문제를 어떻게 살펴보는지는
+      <a href="/student-care/">수험생 클리닉 안내</a>에 정리해 두었습니다.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>시호한의원은 이렇게 처방합니다</h2>
+    <ol class="steps">
+      <li>
+        <strong>진찰</strong>
+        <span
+          >체질과 체력, 수면, 소화, 비염, 통증, 스트레스, 월경 상태를 함께
+          살펴봅니다.</span
+        >
+      </li>
+      <li>
+        <strong>우선순위 판단</strong>
+        <span
+          >그중 지금 이 학생의 수험생활을 가장 많이 방해하고 있는 문제가 무엇인지
+          정합니다.</span
+        >
+      </li>
+      <li>
+        <strong>처방</strong>
+        <span
+          >정해진 ‘수험생 보약’을 일률적으로 처방하기보다 현재 학생에게 필요한
+          방향을 고려하여 개별적으로 처방합니다.</span
+        >
+      </li>
+    </ol>
+    <p>
+      필요한 경우 비내시경으로 코 상태를 확인하거나 초음파로 통증 부위를 살펴본 뒤
+      침·추나 치료를 함께 진행하기도 합니다.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>자주 묻는 질문</h2>
+    <div class="faq">
+      {faqs.map((f) => (
+        <details>
+          <summary>{f.q}</summary>
+          <div class="answer">{f.a.map((t) => <p>{t}</p>)}</div>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <section class="sec band closing">
+    <h2>상담과 예약</h2>
+    <p>
+      시호한의원은 경기 화성시 동탄신리천로 407 동탄리더스타워 2층에 있습니다.
+      학생의 상태를 먼저 살펴본 뒤 한약이 필요한지, 필요하다면 어떤 방향이 맞는지
+      말씀드립니다. 수요일은 21:00까지 야간진료를 운영하여 학원 일정 뒤에도
+      내원하실 수 있습니다.
+    </p>
+    <p class="cta-row">
+      <a class="cta" href={clinic.links.naverBooking}>수험생 한약 상담하기</a>
+    </p>
+    <p class="cta-sub">
+      전화 <a href={`tel:${clinic.phone}`}>{clinic.phone}</a> ·
+      <a href={clinic.links.kakaoChannel}>카카오톡 문의</a>
+    </p>
+  </section>
+
+  <style>
+    /* 수험생 클리닉 페이지와 같은 토큰·리듬을 씁니다. */
+    .hero,
+    .sec {
+      --surface: #fbfcfa;
+      --sunk: #edf0e9;
+    }
+    .sec { margin-top: 3.5rem; }
+    .sec > p { max-width: 34rem; margin: 0 0 1rem; }
+    .sec > p:last-child { margin-bottom: 0; }
+    .sec h2 + p { margin-top: 0; }
+
+    .band {
+      margin-inline: -1.25rem;
+      padding: 2.25rem 1.25rem 2.5rem;
+      background: var(--sunk);
+    }
+    .band > h2:first-child { margin-top: 0; }
+
+    .hero { margin-bottom: 1rem; }
+    .eyebrow {
+      margin: 0 0 0.75rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+    }
+    .hero .lead { margin: 0 0 1rem; }
+
+    .cta-row { margin: 1.75rem 0 0.75rem; }
+    .cta {
+      display: inline-block;
+      padding: 0.75rem 1.6rem;
+      background: var(--accent);
+      color: var(--paper);
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: background-color 0.15s ease;
+    }
+    .cta:hover { background: #7d561a; color: var(--paper); }
+    .cta-sub { margin: 0; font-size: 0.92rem; color: var(--ink-soft); }
+    .cta-sub a { color: var(--ink-soft); }
+    .cta-sub a:hover { color: var(--accent); }
+
+    .statement {
+      max-width: 34rem;
+      margin: 1.75rem 0 0;
+      padding-left: 1.1rem;
+      border-left: 3px solid var(--accent);
+      font-family: var(--serif);
+      font-size: 1.12rem;
+      line-height: 1.65;
+    }
+
+    .cases {
+      list-style: none;
+      margin: 1.25rem 0 1.5rem;
+      padding: 0;
+      max-width: 34rem;
+    }
+    .cases li {
+      position: relative;
+      padding: 0.7rem 0 0.7rem 1.2rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .cases li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 1.45rem;
+      width: 5px;
+      height: 5px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+
+    .steps {
+      list-style: none;
+      counter-reset: step;
+      margin: 1.5rem 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      max-width: 34rem;
+    }
+    .steps li {
+      counter-increment: step;
+      position: relative;
+      padding: 1.1rem 1.15rem 1.1rem 3rem;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 2px;
+    }
+    .steps li::before {
+      content: counter(step);
+      position: absolute;
+      left: 1.15rem;
+      top: 1.05rem;
+      font-family: var(--serif);
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .steps strong {
+      display: block;
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      margin-bottom: 0.2rem;
+    }
+    .steps span { color: var(--ink-soft); font-size: 0.96rem; }
+
+    /* FAQ 아코디언 — JS 없이 details/summary */
+    .faq { margin-top: 1.5rem; border-top: 1px solid var(--line); }
+    .faq details { border-bottom: 1px solid var(--line); }
+    .faq summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 1rem 0;
+      font-weight: 600;
+      cursor: pointer;
+      list-style: none;
+    }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after {
+      content: '+';
+      flex: none;
+      color: var(--accent);
+      font-weight: 400;
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+    .faq details[open] summary::after { content: '−'; }
+    .faq summary:hover { color: var(--accent); }
+    .faq .answer { padding: 0 0 1.1rem; max-width: 34rem; }
+    .faq .answer p {
+      margin: 0 0 0.7rem;
+      font-size: 0.96rem;
+      color: var(--ink-soft);
+    }
+    .faq .answer p:last-child { margin-bottom: 0; }
+
+    .closing { margin-top: 4rem; }
+
+    @media (max-width: 34rem) {
+      .statement { font-size: 1.05rem; }
+      .steps li { padding: 1rem 1rem 1rem 2.7rem; }
+    }
+  </style>
+</Base>
