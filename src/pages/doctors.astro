@@ -1,55 +1,247 @@
 ---
 import Base from '../layouts/Base.astro';
-const desc = '한방내과 전문의 김은미 원장의 이력, 수련 과정, 임상연구·논문을 소개합니다.';
-const doctorLd = [{
-  '@context': 'https://schema.org',
-  '@type': 'Physician',
-  name: '김은미',
-  jobTitle: '대표원장',
-  worksFor: { '@type': 'MedicalClinic', name: '시호한의원' },
-  medicalSpecialty: '한방내과',
-  hasCredential: {
-    '@type': 'EducationalOccupationalCredential',
-    credentialCategory: '전문의',
-    name: '한방내과 전문의',
-    recognizedBy: { '@type': 'GovernmentOrganization', name: '보건복지부' },
+
+const desc =
+  '한방내과 전문의 김은미 대표원장과 박종규 진료원장, 한의사 2인이 진료합니다. 이력과 학회 활동, 임상연구를 소개합니다.';
+
+// 이력·학회·논문은 원장 확인 자료 기준입니다.
+// ⚠ 원장별 진료시간표는 별도 확인 후 추가합니다.
+// ⚠ 박종규 원장 사진 파일이 아직 없습니다. public/images/doctor-park-jonggyu.jpg 로
+//    올려주시면 카드에 표시됩니다. (public/images/doctor-2.png 은 이전 사이트의
+//    다른 의료진 사진이므로 사용하지 않습니다.)
+
+const doctors = [
+  {
+    id: 'kim-eunmi',
+    name: '김은미',
+    role: '대표원장',
+    credential: '한방내과 전문의 (보건복지부)',
+    photo: '/images/doctor-kim-eunmi.jpg',
+    career: [
+      '대전대학교 한의예과 · 한의학과 졸업',
+      '청연한방병원 일반수련의 / 전문수련의',
+      '세명대학교 부속 제천한방병원 한방내과 전문수련의',
+      '한국방송통신대학교 경영대학원 석사 (테크노경영 전공)',
+      '前 대구 이웃집한의원 진료원장',
+      '前 부산 경희림다한의원 진료원장',
+      '네이버 지식iN 상담 한의사',
+      '통증치료사관학교 8기 수료',
+      '맞춤형 화장품 조제관리사',
+    ],
+    societies: [
+      { t: '대한한방내과학회 회원', href: null },
+      { t: '대한약침학회 회원', href: '/treatments/yakchim/' },
+      { t: '대한통합레이저의학회 회원', href: '/skin-care/' },
+      { t: '대한여한의사회 기획이사', href: null },
+      { t: '부산광역시 한의사회 홍보위원', href: null },
+      { t: '화성시한의사회 교의위원', href: null },
+    ],
+    papers: [
+      '상기도기침증후군으로 의심되는 만성기침 환자에 대한 인후부 근위취혈 침치료 및 한약 온열크림 도포 경과: 증례보고',
+      'Whiplash Disability Questionnaire의 한국어 번역 및 문화적 개작: 예비 연구',
+      'Acute Concussion Evaluation의 한국어 번역 및 문화적 개작: 예비 연구',
+      '일시적 혈압상승에 대한 황련해독탕 과립제의 효과: 증례 보고',
+      '경추성 현훈 환자의 복합 한의진료 경과 및 삶의 질 변화: CARE 가이드라인에 따른 증례보고',
+      '관상동맥질환으로 진단된 만성 비정형 흉통의 한의진료 경과: 증례보고',
+      'Integrative traditional Korean medicine management, including acupuncture and Chuna-manual therapy, for stroke-related central facial palsy: A study of three case reports',
+      '뇌동맥류 파열로 인한 지주막하 출혈 환자에서 중재적 치료 후 조절되지 않은 두통 치험 1례',
+      '양격산화탕 투여와 식이요법을 병행하여 호전된 공복혈당장애 증례 보고',
+      '수술 후 한의진료 환자등록 연구 — 전향적 다기관 등록연구 시험담당자',
+      '입원환자 대상 한약의 안정성 평가: 다기관 전향적 관찰 임상연구 시험담당자',
+    ],
+    greeting: null,
   },
-}];
+  {
+    id: 'park-jonggyu',
+    name: '박종규',
+    role: '진료원장',
+    credential: null,
+    photo: null,
+    career: [
+      '대전대학교 청주한방병원 일반수련의 수료',
+      '前 명작한의원 진료원장',
+      '前 분당삼성한의원 진료원장',
+      '前 이현한방병원 진료원장',
+    ],
+    societies: [
+      { t: '척추신경추나의학회 정회원', href: '/treatments/chuna/' },
+      { t: '대한한방비만학회 인증 한의사', href: null },
+      { t: '미국근골격계초음파사 (RMSK)', href: '/treatments/yakchim/' },
+      { t: '시리악스 정형의학회 KMD 과정 수료', href: null },
+      { t: 'TBT 턱관절균형요법 전문과정 수료', href: null },
+      { t: '대한스포츠의학회 팀닥터 수료', href: null },
+    ],
+    papers: [],
+    greeting: [
+      '저에게 한의원이란, 사람의 몸과 마음을 동시에 치유하는 무한한 발전 가능성을 가진 공간입니다.',
+      '환자분들이 시호한의원을 통해 보다 건강한 내일을 맞이하실 수 있도록 항상 고민하고 노력하겠습니다.',
+      '제가 만나는 환자분들을 닮은 따뜻한 이 공간에 방문해 주셔서 감사합니다.',
+    ],
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Physician',
+    name: '김은미',
+    jobTitle: '대표원장',
+    worksFor: { '@type': 'MedicalClinic', name: '시호한의원' },
+    medicalSpecialty: '한방내과',
+    hasCredential: {
+      '@type': 'EducationalOccupationalCredential',
+      credentialCategory: '전문의',
+      name: '한방내과 전문의',
+      recognizedBy: { '@type': 'GovernmentOrganization', name: '보건복지부' },
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Physician',
+    name: '박종규',
+    jobTitle: '진료원장',
+    worksFor: { '@type': 'MedicalClinic', name: '시호한의원' },
+    hasCredential: {
+      '@type': 'EducationalOccupationalCredential',
+      credentialCategory: '자격',
+      name: '미국근골격계초음파사 (RMSK)',
+    },
+  },
+];
 ---
-<Base title="의료진 소개" description={desc} jsonLd={doctorLd}>
+
+<Base title="의료진 소개" description={desc} jsonLd={jsonLd}>
   <h1>의료진 소개</h1>
-  <p class="lead">환자의 몸과 마음까지 치유하는 의료진을 소개합니다.</p>
+  <p class="lead">
+    시호한의원은 한의사 2인이 진료합니다. 통증, 자율신경 관련 증상, 비염을 중심으로
+    진료하며, 한 분의 환자를 두 의료진이 함께 살펴보는 협진 방식으로 진료의 연속성을
+    유지합니다.
+  </p>
+  <p class="lead">
+    진료시간은 <a href="/contact/">오시는 길 · 예약</a>에서 확인하실 수 있습니다.
+  </p>
 
-  <h2>김은미 대표원장</h2>
-  <p class="lead">한방내과 전문의 (보건복지부)</p>
-  <h3>이력</h3>
-  <ul>
-    <li><strong>한방내과 전문의</strong> (보건복지부)</li>
-    <li>대전대학교 한의예과/한의학과</li>
-    <li>청연한방병원 일반수련의 수료</li>
-    <li>청연한방병원 전문수련의 / 세명대학교 부속 제천한방병원 한방내과 전문수련의</li>
-    <li>한국방송통신대학교 경영대학원 석사 (테크노경영 전공)</li>
-    <li>대한한방내과학회 회원</li>
-    <li>대한여한의사회 기획이사</li>
-    <li>부산광역시 한의사회 홍보위원</li>
-    <li>맞춤형 화장품 조제관리사 자격 취득</li>
-    <li>통증치료사관학교 8기 수료</li>
-    <li>前 네이버 지식인 상담 한의사</li>
-    <li>前 이웃집한의원 원장 · 前 경희림다한의원 원장</li>
-  </ul>
+  {doctors.map((d) => (
+    <section class="doc" id={d.id}>
+      <div class="head">
+        {d.photo && <img src={d.photo} alt={`${d.name} ${d.role}`} width="200" height="267" loading="lazy" />}
+        <div class="name">
+          <h2>{d.name} <span>{d.role}</span></h2>
+          {d.credential && <p class="cred">{d.credential}</p>}
+        </div>
+      </div>
 
-  <h3>임상연구 및 논문</h3>
-  <ul>
-    <li>상기도기침증후군으로 의심되는 만성기침 환자에 대한 인후부 근위취혈 침치료 및 한약 온열크림 도포 경과: 증례보고</li>
-    <li>Whiplash Disability Questionnaire의 한국어 번역 및 문화적 개작: 예비 연구</li>
-    <li>Acute Concussion Evaluation의 한국어 번역 및 문화적 개작: 예비 연구</li>
-    <li>일시적 혈압상승에 대한 황련해독탕 과립제의 효과: 증례 보고</li>
-    <li>경추성 현훈 환자의 복합 한의진료 경과 및 삶의 질 변화: CARE 가이드라인에 따른 증례보고</li>
-    <li>관상동맥질환으로 진단된 만성 비정형 흉통의 한의진료 경과: 증례보고</li>
-    <li>Integrative traditional Korean medicine management, including acupuncture and Chuna-manual therapy, for stroke-related central facial palsy: A study of three case reports</li>
-    <li>뇌동맥류 파열로 인한 지주막하 출혈 환자에서 중재적 치료 후 조절되지 않은 두통 치험 1례</li>
-    <li>양격산화탕 투여와 식이요법을 병행하여 호전된 공복혈당장애 증례 보고</li>
-    <li>수술 후 한의진료 환자등록 연구 — 전향적 다기관 등록연구 시험담당자</li>
-    <li>입원환자 대상 한약의 안전성 평가: 다기관 전향적 관찰 임상연구 시험담당자</li>
-  </ul>
+      {d.greeting && (
+        <blockquote class="greeting">
+          {d.greeting.map((g) => <p>{g}</p>)}
+        </blockquote>
+      )}
+
+      <h3>이력</h3>
+      <ul class="plain">{d.career.map((c) => <li>{c}</li>)}</ul>
+
+      <h3>학회 활동 · 수련</h3>
+      <ul class="plain">
+        {d.societies.map((s) => (
+          <li>{s.href ? <a href={s.href}>{s.t}</a> : s.t}</li>
+        ))}
+      </ul>
+
+      {d.papers.length > 0 && (
+        <>
+          <h3>임상연구 및 논문</h3>
+          <ul class="papers">{d.papers.map((p) => <li>{p}</li>)}</ul>
+        </>
+      )}
+    </section>
+  ))}
+
+  <style>
+    .lead { max-width: 34rem; }
+
+    .doc {
+      margin-top: 3.5rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid var(--line);
+    }
+    .doc:first-of-type { border-top: none; }
+
+    .head {
+      display: flex;
+      align-items: flex-end;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    .head img {
+      width: 8.5rem;
+      height: auto;
+      border-radius: 2px;
+      background: #edf0e9;
+    }
+    .name { flex: 1 1 12rem; }
+    .doc h2 { margin: 0; }
+    .doc h2 span {
+      font-family: var(--sans);
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--ink-soft);
+      margin-left: 0.4rem;
+    }
+    .cred {
+      margin: 0.5rem 0 0;
+      display: inline-block;
+      padding: 0.25rem 0.7rem;
+      background: var(--accent);
+      color: var(--paper);
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 2px;
+    }
+
+    .greeting {
+      margin: 0 0 1.75rem;
+      padding: 1.25rem 1.25rem 1.25rem 1.4rem;
+      max-width: 34rem;
+      background: #f0f2ec;
+      border-left: 3px solid var(--accent);
+    }
+    .greeting p {
+      margin: 0 0 0.6rem;
+      font-family: var(--serif);
+      line-height: 1.7;
+    }
+    .greeting p:last-child { margin-bottom: 0; }
+
+    .doc h3 { margin-top: 2rem; }
+    .doc ul { max-width: 34rem; }
+    .papers {
+      list-style: none;
+      padding: 0;
+      margin: 1rem 0 0;
+    }
+    .papers li {
+      position: relative;
+      padding: 0.65rem 0 0.65rem 1.2rem;
+      border-bottom: 1px solid var(--line);
+      font-size: 0.94rem;
+      line-height: 1.6;
+      color: var(--ink-soft);
+    }
+    .papers li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 1.35rem;
+      width: 5px;
+      height: 5px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+
+    @media (max-width: 34rem) {
+      .head { gap: 1rem; }
+      .head img { width: 6.5rem; }
+    }
+  </style>
 </Base>
