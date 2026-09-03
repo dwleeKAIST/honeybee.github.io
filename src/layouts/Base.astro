@@ -33,6 +33,21 @@ const clinicLd = {
 };
 const allLd = [clinicLd, ...jsonLd];
 const canonical = new URL(Astro.url.pathname, Astro.site);
+
+// 주 메뉴. 현재 경로로 시작하면 활성 표시합니다.
+const nav = [
+  { href: '/treatments/', label: '진료 안내' },
+  { href: '/autonomic/', label: '자율신경' },
+  { href: '/digestion/', label: '소화' },
+  { href: '/rhinitis/', label: '비염' },
+  { href: '/student-care/', label: '수험생' },
+  { href: '/skin-care/', label: '피부미용' },
+  { href: '/doctors/', label: '의료진' },
+  { href: '/contact/', label: '오시는 길' },
+];
+const path = Astro.url.pathname;
+const isCurrent = (href: string) =>
+  href === '/' ? path === '/' : path === href || path.startsWith(href);
 ---
 <!doctype html>
 <html lang="ko">
@@ -76,97 +91,467 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     ))}
   </head>
   <body>
+    <a class="skip" href="#main">본문으로 건너뛰기</a>
     <header class="site-header">
-      <a class="brand" href="/">
-        <span class="brand-ko">시호한의원</span>
-        <span class="brand-en">SIHO Korean Medicine Clinic</span>
-      </a>
+      <div class="header-inner">
+        <a class="brand" href="/">
+          <span class="brand-ko">시호한의원</span>
+          <span class="brand-en">SIHO Korean Medicine Clinic</span>
+        </a>
+        <a class="header-cta" href={clinic.links.naverBooking}>예약하기</a>
+      </div>
       <nav aria-label="주 메뉴">
-        <a href="/treatments/">진료 안내</a>
-        <a href="/autonomic/">자율신경</a>
-        <a href="/student-care/">수험생 클리닉</a>
-        <a href="/skin-care/">피부미용</a>
-        <a href="/faq/">자주 묻는 질문</a>
-        <a href="/insurance-herbs/">보험한약</a>
-        <a href="/doctors/">의료진</a>
-        <a href="/contact/">오시는 길</a>
+        <ul>
+          {nav.map((n) => (
+            <li>
+              <a href={n.href} aria-current={isCurrent(n.href) ? 'page' : undefined}>
+                {n.label}
+              </a>
+            </li>
+          ))}
+        </ul>
       </nav>
     </header>
 
-    <main>
+    <main id="main">
       <slot />
     </main>
 
     <footer class="site-footer">
-      <p class="footer-name">{clinic.name} · {clinic.address.full}</p>
-      <p class="footer-actions">
-        <a href={`tel:${clinic.phone}`}>전화 {clinic.phone}</a>
-        <a href={clinic.links.naverBooking}>네이버 예약</a>
-        <a href={clinic.links.kakaoChannel}>카카오톡 문의</a>
-      </p>
+      <div class="footer-grid">
+        <div class="footer-col">
+          <p class="footer-h">진료</p>
+          <ul>
+            <li><a href="/autonomic/">자율신경 · 번아웃</a></li>
+            <li><a href="/digestion/">소화 · 속편안 클리닉</a></li>
+            <li><a href="/rhinitis/">비염 · 코편안 클리닉</a></li>
+            <li><a href="/menopause/">갱년기</a></li>
+            <li><a href="/car-accident/">교통사고</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <p class="footer-h">클리닉</p>
+          <ul>
+            <li><a href="/student-care/">수험생 클리닉</a></li>
+            <li><a href="/posture/">체형교정</a></li>
+            <li><a href="/skin-care/">피부미용</a></li>
+            <li><a href="/diet/">한방 다이어트</a></li>
+            <li><a href="/gongjindan/">공진단 · 경옥고</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <p class="footer-h">안내</p>
+          <ul>
+            <li><a href="/treatments/">진료 안내</a></li>
+            <li><a href="/insurance-herbs/">보험한약</a></li>
+            <li><a href="/faq/">자주 묻는 질문</a></li>
+            <li><a href="/doctors/">의료진 소개</a></li>
+            <li><a href="/contact/">오시는 길 · 예약</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-base">
+        <p class="footer-name">{clinic.name}</p>
+        <p>{clinic.address.full}</p>
+        <p class="footer-actions">
+          <a href={`tel:${clinic.phone}`}>전화 {clinic.phone}</a>
+          <a href={clinic.links.naverBooking}>네이버 예약</a>
+          <a href={clinic.links.kakaoChannel}>카카오톡 문의</a>
+        </p>
+      </div>
     </footer>
 
     <style is:global>
       :root {
-        --paper: #f5f7f3;
-        --ink: #24352b;
-        --ink-soft: #55655c;
-        --line: #d7ddd5;
-        --accent: #9a6b1f; /* 시호 꽃의 짙은 황금빛 */
+        /* 색 */
+        --paper: #f6f8f4;
+        --surface: #ffffff;
+        --sunk: #edf1e9;
+        --ink: #22322a;
+        --ink-soft: #59685f;
+        --line: #dde3da;
+        --line-soft: #e8ece5;
+        --accent: #8a6018; /* 시호 꽃의 짙은 황금빛 */
+        --accent-ink: #6d4a10;
+
+        /* 폰트 */
         --serif: 'Noto Serif KR', serif;
-        --sans: 'Pretendard Variable', Pretendard, sans-serif;
+        --sans: 'Pretendard Variable', Pretendard, -apple-system, sans-serif;
+
+        /* 레이아웃 — 헤더·본문·푸터가 같은 폭과 여백을 씁니다 */
+        --w: 52rem;
+        --pad: 1.25rem;
+        --read: 34rem; /* 본문 문단 최대 폭 */
+        --header-h: 7.5rem;
       }
+
       * { box-sizing: border-box; }
-      html { font-size: 17px; }
+      html {
+        font-size: 17px;
+        scroll-behavior: smooth;
+        -webkit-text-size-adjust: 100%;
+      }
       body {
         margin: 0;
         background: var(--paper);
         color: var(--ink);
         font-family: var(--sans);
         line-height: 1.75;
+        word-break: keep-all;
+        overflow-wrap: break-word;
         -webkit-font-smoothing: antialiased;
       }
-      main { max-width: 44rem; margin: 0 auto; padding: 3rem 1.25rem 5rem; }
-      h1, h2, h3 { font-family: var(--serif); line-height: 1.35; }
-      h1 { font-size: 1.9rem; margin: 0 0 1rem; }
-      h2 { font-size: 1.35rem; margin: 2.5rem 0 0.75rem; }
-      a { color: var(--ink); text-decoration-color: var(--accent); text-underline-offset: 3px; }
-      a:hover { color: var(--accent); }
-      a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+      :target { scroll-margin-top: calc(var(--header-h) + 1rem); }
 
+      h1, h2, h3 { font-family: var(--serif); line-height: 1.4; }
+      h1 { font-size: 1.95rem; margin: 0 0 1rem; letter-spacing: -0.01em; }
+      h2 { font-size: 1.32rem; margin: 2.5rem 0 0.75rem; }
+      h3 { font-size: 1.08rem; }
+      p { overflow-wrap: break-word; }
+
+      a { color: var(--ink); text-decoration-color: var(--line); text-underline-offset: 3px; }
+      a:hover { color: var(--accent); text-decoration-color: currentColor; }
+      a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+      .skip {
+        position: absolute; left: -9999px;
+        background: var(--accent); color: #fff;
+        padding: 0.6rem 1rem; z-index: 100; text-decoration: none;
+      }
+      .skip:focus { left: 1rem; top: 1rem; }
+
+      /* ── 헤더 ─────────────────────────────────────────────── */
       .site-header {
-        display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem;
-        align-items: baseline; justify-content: space-between;
-        max-width: 60rem; margin: 0 auto; padding: 1.5rem 1.25rem;
+        position: sticky; top: 0; z-index: 20;
+        background: var(--paper); /* color-mix 미지원 브라우저 대비 */
+        background: color-mix(in srgb, var(--paper) 88%, transparent);
+        backdrop-filter: saturate(1.4) blur(10px);
         border-bottom: 1px solid var(--line);
       }
-      .brand { text-decoration: none; }
-      .brand-ko { font-family: var(--serif); font-weight: 700; font-size: 1.3rem; }
-      .brand-en { display: block; font-size: 0.72rem; color: var(--ink-soft); letter-spacing: 0.04em; }
-      nav { display: flex; flex-wrap: wrap; gap: 1rem; font-size: 0.92rem; }
-      nav a { text-decoration: none; color: var(--ink-soft); }
-      nav a:hover { color: var(--ink); }
+      @supports not (backdrop-filter: blur(1px)) {
+        .site-header { background: var(--paper); }
+      }
+      .header-inner {
+        max-width: var(--w); margin: 0 auto;
+        padding: 1rem var(--pad) 0.75rem;
+        display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      }
+      .brand { text-decoration: none; line-height: 1.25; }
+      .brand-ko {
+        display: block;
+        font-family: var(--serif); font-weight: 700; font-size: 1.28rem;
+        letter-spacing: -0.01em;
+      }
+      .brand-en {
+        display: block; font-size: 0.68rem; color: var(--ink-soft);
+        letter-spacing: 0.06em; text-transform: uppercase;
+      }
+      .header-cta {
+        flex: none;
+        padding: 0.5rem 1.05rem;
+        background: var(--accent); color: #fff;
+        font-size: 0.9rem; font-weight: 600; text-decoration: none;
+        border-radius: 999px;
+        transition: background-color 0.15s ease;
+      }
+      .header-cta:hover { background: var(--accent-ink); color: #fff; }
 
-      .lead { font-size: 1.05rem; color: var(--ink-soft); max-width: 38rem; }
+      .site-header nav {
+        max-width: var(--w); margin: 0 auto;
+        padding: 0 var(--pad) 0.7rem;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+      }
+      .site-header nav::-webkit-scrollbar { display: none; }
+      .site-header nav {
+        mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 1.5rem), transparent 100%);
+      }
+      @media (min-width: 46rem) {
+        .site-header nav { mask-image: none; }
+      }
+      .site-header nav ul {
+        display: flex; gap: 1.15rem;
+        margin: 0; padding: 0; list-style: none;
+        white-space: nowrap;
+      }
+      .site-header nav a {
+        display: block; padding: 0.3rem 0;
+        font-size: 0.92rem; color: var(--ink-soft); text-decoration: none;
+        border-bottom: 2px solid transparent;
+      }
+      .site-header nav a:hover { color: var(--ink); }
+      .site-header nav a[aria-current='page'] {
+        color: var(--ink); font-weight: 600;
+        border-bottom-color: var(--accent);
+      }
+
+      main {
+        max-width: var(--w); margin: 0 auto;
+        padding: 2.75rem var(--pad) 5rem;
+        overflow-x: clip; /* .band 풀블리드가 가로 스크롤을 만들지 않도록 */
+      }
+
+      /* ── 공용 텍스트 ──────────────────────────────────────── */
+      .lead { font-size: 1.06rem; color: var(--ink-soft); max-width: var(--read); }
+      .note { font-size: 0.94rem; color: var(--ink-soft); max-width: var(--read); }
       .rule { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
+      .eyebrow {
+        margin: 0 0 0.7rem;
+        font-size: 0.78rem; font-weight: 700;
+        letter-spacing: 0.14em; color: var(--accent);
+        text-transform: none;
+      }
+      .statement {
+        max-width: var(--read);
+        margin: 1.75rem 0 0;
+        padding: 0.1rem 0 0.1rem 1.15rem;
+        border-left: 3px solid var(--accent);
+        font-family: var(--serif); font-size: 1.1rem; line-height: 1.7;
+      }
+
+      /* ── 랜딩 페이지 공통 구조 ────────────────────────────── */
+      .hero { margin-bottom: 1rem; }
+      .hero h1 { line-height: 1.35; }
+      .hero p { max-width: var(--read); margin: 0 0 1rem; }
+      .hero .lead { font-size: 1.1rem; color: var(--ink); }
+
+      .sec { margin-top: 3.5rem; }
+      .sec > p { max-width: var(--read); margin: 0 0 1rem; }
+      .sec > p:last-child { margin-bottom: 0; }
+      .sec h2 + p { margin-top: 0; }
+      .sec.closing { margin-top: 4rem; }
+
+      .band {
+        margin-inline: calc(50% - 50vw);
+        padding: 2.5rem calc(50vw - 50% + var(--pad)) 2.75rem;
+        background: var(--sunk);
+      }
+      .band > h2:first-child { margin-top: 0; }
+
+      /* ── 버튼 ─────────────────────────────────────────────── */
+      .cta-row { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.75rem 0 0.75rem; }
+      .cta {
+        display: inline-block;
+        padding: 0.8rem 1.65rem;
+        background: var(--accent); color: #fff;
+        font-weight: 600; text-decoration: none;
+        border-radius: 999px;
+        transition: background-color 0.15s ease, transform 0.15s ease;
+      }
+      .cta:hover { background: var(--accent-ink); color: #fff; transform: translateY(-1px); }
+      .cta.ghost {
+        background: transparent; color: var(--accent);
+        border: 1px solid var(--accent);
+      }
+      .cta.ghost:hover { background: var(--accent); color: #fff; }
+      .cta-sub { margin: 0; font-size: 0.92rem; color: var(--ink-soft); }
+      .cta-sub a { color: var(--ink-soft); }
+      .cta-sub a:hover { color: var(--accent); }
+
+      /* ── 카드 ─────────────────────────────────────────────── */
+      .cards {
+        display: grid; grid-template-columns: 1fr; gap: 0.7rem;
+        margin: 1.5rem 0; max-width: var(--read);
+      }
+      .card {
+        padding: 1.1rem 1.15rem;
+        background: var(--surface);
+        border: 1px solid var(--line-soft);
+        border-radius: 6px;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      }
+      .card:has(a):hover {
+        border-color: var(--line);
+        box-shadow: 0 1px 3px rgb(34 50 42 / 0.06);
+      }
+      .card strong {
+        display: block;
+        font-family: var(--serif); font-size: 1.05rem;
+        color: var(--accent); margin-bottom: 0.2rem;
+      }
+      .card em {
+        display: inline-block; margin-left: 0.4rem;
+        padding: 0.08rem 0.5rem;
+        font-style: normal; font-size: 0.76rem; letter-spacing: 0.02em;
+        color: var(--ink-soft); background: var(--sunk); border-radius: 999px;
+        vertical-align: 0.1em;
+      }
+      .card > span { display: block; color: var(--ink-soft); font-size: 0.96rem; }
+      .card a { display: inline-block; margin-top: 0.5rem; font-size: 0.9rem; }
+      @media (min-width: 34rem) {
+        .cards { grid-template-columns: 1fr 1fr; max-width: none; }
+      }
+
+      /* ── 목록 ─────────────────────────────────────────────── */
+      .cases { list-style: none; margin: 1.25rem 0 1.5rem; padding: 0; max-width: var(--read); }
+      .cases li {
+        position: relative; padding: 0.7rem 0 0.7rem 1.2rem;
+        border-bottom: 1px solid var(--line-soft);
+      }
+      .cases li::before {
+        content: ''; position: absolute; left: 0; top: 1.45rem;
+        width: 5px; height: 5px; background: var(--accent); border-radius: 50%;
+      }
+      .cases strong { color: var(--accent); }
+
       ul.plain { list-style: none; padding: 0; }
-      ul.plain li { padding: 1rem 0; border-bottom: 1px solid var(--line); }
+      ul.plain li { padding: 1rem 0; border-bottom: 1px solid var(--line-soft); }
       ul.plain li a { text-decoration: none; font-weight: 600; }
-      ul.plain .summary { display: block; color: var(--ink-soft); font-size: 0.95rem; font-weight: 400; }
+      ul.plain .summary {
+        display: block; color: var(--ink-soft);
+        font-size: 0.95rem; font-weight: 400;
+      }
+
+      .papers { list-style: none; padding: 0; margin: 1rem 0 1.5rem; max-width: var(--read); }
+      .papers li {
+        position: relative; padding: 0.65rem 0 0.65rem 1.2rem;
+        border-bottom: 1px solid var(--line-soft);
+        font-size: 0.94rem; line-height: 1.6; color: var(--ink-soft);
+      }
+      .papers li::before {
+        content: ''; position: absolute; left: 0; top: 1.35rem;
+        width: 5px; height: 5px; background: var(--accent); border-radius: 50%;
+      }
+
+      /* ── 단계 ─────────────────────────────────────────────── */
+      .steps {
+        list-style: none; counter-reset: step;
+        margin: 1.5rem 0; padding: 0;
+        display: flex; flex-direction: column; gap: 0.7rem;
+        max-width: var(--read);
+      }
+      .steps li {
+        counter-increment: step; position: relative;
+        padding: 1.1rem 1.15rem 1.1rem 3rem;
+        background: var(--surface);
+        border: 1px solid var(--line-soft); border-radius: 6px;
+      }
+      .steps li::before {
+        content: counter(step);
+        position: absolute; left: 1.15rem; top: 1.05rem;
+        font-family: var(--serif); font-weight: 700; color: var(--accent);
+      }
+      .steps strong {
+        display: block; font-family: var(--serif);
+        font-size: 1.05rem; margin-bottom: 0.15rem;
+      }
+      .steps span { color: var(--ink-soft); font-size: 0.96rem; }
+
+      /* ── 표 ───────────────────────────────────────────────── */
+      .table-wrap {
+        margin: 1.5rem 0; max-width: var(--read);
+        overflow-x: auto; -webkit-overflow-scrolling: touch;
+      }
+      .table-wrap table {
+        width: 100%; min-width: 20rem;
+        border-collapse: collapse; font-size: 0.94rem;
+        background: var(--surface);
+      }
+      .table-wrap th, .table-wrap td {
+        padding: 0.65rem 0.8rem;
+        border: 1px solid var(--line-soft);
+        text-align: left; vertical-align: top;
+      }
+      .table-wrap thead th {
+        background: var(--sunk); font-family: var(--serif);
+        color: var(--accent); white-space: nowrap;
+      }
+      .table-wrap tbody th {
+        font-weight: 600; color: var(--ink-soft);
+        white-space: nowrap; width: 1%;
+      }
+      .sr-only {
+        position: absolute; width: 1px; height: 1px;
+        overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+      }
+
+      /* ── FAQ 아코디언 (JS 없이 details/summary) ───────────── */
+      .faq { margin-top: 1.5rem; border-top: 1px solid var(--line); }
+      .faq details { border-bottom: 1px solid var(--line); }
+      .faq summary {
+        display: flex; justify-content: space-between; align-items: baseline;
+        gap: 1rem; padding: 1rem 0;
+        font-weight: 600; cursor: pointer; list-style: none;
+      }
+      .faq summary::-webkit-details-marker { display: none; }
+      .faq summary::after {
+        content: '+'; flex: none;
+        color: var(--accent); font-weight: 400; font-size: 1.2rem; line-height: 1;
+      }
+      .faq details[open] summary::after { content: '−'; }
+      .faq summary:hover { color: var(--accent); }
+      .faq .answer { padding: 0 0 1.1rem; max-width: var(--read); }
+      .faq .answer p {
+        margin: 0 0 0.7rem; font-size: 0.96rem; color: var(--ink-soft);
+      }
+      .faq .answer p:last-child { margin-bottom: 0; }
+
+      /* ── 콘텐츠 문서(진료 항목 상세) ──────────────────────── */
+      article.prose { max-width: var(--read); }
+      article.prose h2 {
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 0.4rem;
+      }
+      article.prose blockquote {
+        margin: 1.5rem 0; padding-left: 1rem;
+        border-left: 3px solid var(--accent); color: var(--ink-soft);
+      }
       dl.herbs dt { font-family: var(--serif); font-weight: 700; margin-top: 1.5rem; }
       dl.herbs dd { margin: 0.25rem 0 0; color: var(--ink-soft); }
 
-      article.prose h2 { border-bottom: 1px solid var(--line); padding-bottom: 0.4rem; }
-      article.prose blockquote { margin: 1.5rem 0; padding-left: 1rem; border-left: 3px solid var(--accent); color: var(--ink-soft); }
-
+      /* ── 푸터 ─────────────────────────────────────────────── */
       .site-footer {
         border-top: 1px solid var(--line);
-        max-width: 60rem; margin: 0 auto; padding: 1.75rem 1.25rem 3rem;
+        background: var(--sunk);
+      }
+      .footer-grid {
+        max-width: var(--w); margin: 0 auto;
+        padding: 2.5rem var(--pad) 1.75rem;
+        display: grid; grid-template-columns: 1fr 1fr; gap: 1.75rem 1.5rem;
+      }
+      @media (min-width: 34rem) {
+        .footer-grid { grid-template-columns: repeat(3, 1fr); }
+      }
+      .footer-h {
+        margin: 0 0 0.6rem;
+        font-family: var(--serif); font-size: 0.95rem; font-weight: 700;
+        color: var(--accent);
+      }
+      .footer-col ul { list-style: none; margin: 0; padding: 0; }
+      .footer-col li { margin-bottom: 0.4rem; }
+      .footer-col a {
+        font-size: 0.92rem; color: var(--ink-soft); text-decoration: none;
+      }
+      .footer-col a:hover { color: var(--accent); }
+
+      .footer-base {
+        max-width: var(--w); margin: 0 auto;
+        padding: 1.5rem var(--pad) 3rem;
+        border-top: 1px solid var(--line);
         font-size: 0.9rem; color: var(--ink-soft);
       }
-      .footer-actions { display: flex; gap: 1.25rem; flex-wrap: wrap; }
-      .footer-actions a { font-weight: 600; }
-      @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+      .footer-base p { margin: 0 0 0.3rem; }
+      .footer-name { font-family: var(--serif); font-weight: 700; color: var(--ink); }
+      .footer-actions { display: flex; gap: 1.25rem; flex-wrap: wrap; margin-top: 0.9rem; }
+      .footer-actions a { font-weight: 600; color: var(--ink); }
+
+      @media (max-width: 34rem) {
+        html { font-size: 16.5px; }
+        h1 { font-size: 1.6rem; }
+        .hero h1 { font-size: 1.55rem; }
+        .statement { font-size: 1.04rem; }
+        .steps li { padding: 1rem 1rem 1rem 2.7rem; }
+        .table-wrap table { font-size: 0.88rem; }
+        .table-wrap th, .table-wrap td { padding: 0.55rem 0.6rem; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * { transition: none !important; animation: none !important; }
+        html { scroll-behavior: auto; }
+      }
     </style>
   </body>
 </html>

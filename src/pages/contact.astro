@@ -9,10 +9,7 @@ const desc = `시호한의원 오시는 길, 주소, 전화번호, 예약 방법
   <h2>주소</h2>
   <p>{clinic.address.full}</p>
   <p>
-    <a href={clinic.links.kakaoMap}>카카오맵</a> ·
-    <a href={clinic.links.naverMap}>네이버맵</a> ·
-    <a href={clinic.links.tMap}>T맵</a> ·
-    <a href={clinic.links.googleMap}>구글맵</a>
+    <a href={clinic.links.kakaoMap}>카카오맵</a> · <a href={clinic.links.naverMap}>네이버맵</a> · <a href={clinic.links.tMap}>T맵</a> · <a href={clinic.links.googleMap}>구글맵</a>
   </p>
 
   <h2>연락처 · 예약</h2>
@@ -46,7 +43,7 @@ const desc = `시호한의원 오시는 길, 주소, 전화번호, 예약 방법
       </table>
       <p class="lead">{clinic.closedDays}. {clinic.lastReception}</p>
       <p>
-        수요일은 21:00까지 야간진료를 운영합니다. 공휴일 휴진과 임시 휴진 일정은
+        수요일은 21:00까지 야간진료를 운영합니다. 공휴일 휴진과 임시 휴진 일정은{' '}
         <a href={clinic.links.naverBooking}>네이버 예약</a>에서 확인하실 수 있습니다.
       </p>
     </>
