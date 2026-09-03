@@ -4,7 +4,7 @@ Astro 기반 정적 사이트. Cloudflare Pages에 연결되어 main 브랜치�
 
 ## 자주 하는 작업
 
-- **진료 항목 추가/수정**: `src/content/treatments/*.md` — frontmatter는 `title`, `summary`(1–2문장, 메타 설명에 사용), `order`
+- **진료 항목 추가/수정**: `src/content/treatments/*.md` — frontmatter는 `title`, `summary`(1–2문장, 메타 설명에 사용), `order`, `faqs`(선택). `faqs`에 `q`/`a` 쌍을 넣으면 페이지 하단에 아코디언으로 표시되고 FAQPage 구조화 데이터가 자동 생성됨
 - **FAQ 추가**: `src/content/faq/*.md` — frontmatter는 `question`(환자가 실제 검색할 법한 질문형 문장), `category`, `order`. FAQPage 구조화 데이터는 자동 생성됨
 - **보험한약 목록 수정**: `src/data/insurance-herbs.ts`
 - **주소/전화/링크/진료시간 수정**: `src/data/clinic.ts` (전 페이지 + JSON-LD에 반영됨)
