@@ -1,0 +1,408 @@
+---
+import Base from '../layouts/Base.astro';
+import { clinic } from '../data/clinic';
+
+const title = '동탄 갱년기 한의원 | 안면홍조·불면·감정 기복 진료';
+const description =
+  '동탄 시호한의원 갱년기 클리닉. 안면홍조, 불면, 감정 기복을 한방내과 전문의가 원내 검사와 함께 진료합니다.';
+
+// ⚠ 원장 검수 대기. 확인이 필요한 항목:
+//   1) 남성 갱년기도 진료하는지 (현재 원고는 여성 중심으로 작성)
+//   2) 여성호르몬 검사(FSH, E2 등)가 원내 혈액검사 항목에 포함되는지
+//      — 확인 전이므로 호르몬 검사는 언급하지 않았습니다
+//   3) 갱년기 관련해 주로 쓰는 처방 (가미소요산은 보험한약 목록 근거로 기재)
+//   4) 질건조·요실금 등 비뇨생식기 증상까지 진료 범위에 포함하는지
+//      — 확인 전이므로 다루지 않았습니다
+//   5) 골밀도 관련 안내를 넣을지 (검사 장비 확인 전이므로 언급하지 않았습니다)
+//
+// 아래는 지키고 있습니다.
+//   - 호르몬 치료를 대체한다는 서술 없음. 기존 치료를 존중하는 문장을 명시
+//   - '갱년기를 치료합니다'가 아니라 '갱년기에 나타나는 증상을 진료합니다'
+//   - 노화·나이에 대한 부정적 서술이나 불안을 유발하는 표현 없음
+//   - 환자 후기, 치료 효과 보장, 다른 진료과와의 비교 없음
+// 검수 전까지 noindex + sitemap 제외 상태입니다.
+
+const symptoms = [
+  { t: '안면홍조 · 열감', d: '얼굴이나 상체로 갑자기 열이 오르고 땀이 난다' },
+  { t: '불면', d: '잠들기 어렵거나 새벽에 깨어 다시 잠들지 못한다' },
+  { t: '감정 기복', d: '작은 일에 예민해지고 마음이 잘 가라앉지 않는다' },
+  { t: '피로', d: '쉬어도 회복되지 않고 기운이 오래 처진다' },
+  { t: '두근거림', d: '가슴이 두근거리거나 답답한 느낌이 든다' },
+  { t: '관절 · 근육', d: '손목이나 어깨, 무릎이 시리고 뻐근하다' },
+  { t: '체중 · 소화', d: '같은 식사량에도 체중이 늘고 속이 편하지 않다' },
+  { t: '월경 변화', d: '주기가 불규칙해지거나 양이 달라졌다' },
+];
+
+const faqs = [
+  {
+    q: '호르몬 치료를 받고 있어도 진료받을 수 있나요?',
+    a: [
+      '가능합니다. 복용 중인 약과 진료받고 계신 내용을 알려주세요.',
+      '한약을 함께 복용해도 되는지 확인한 뒤 안내해 드립니다. 기존 치료를 임의로 중단하지 마시고, 담당 선생님과 상의하시는 것이 좋습니다.',
+    ],
+  },
+  {
+    q: '아직 폐경은 아닌데 증상이 있습니다. 지금 봐도 될까요?',
+    a: [
+      '네. 폐경 전 몇 년 동안 주기가 불규칙해지면서 증상이 먼저 나타나는 경우가 많습니다.',
+      '지금 어떤 상태인지 확인해 두면 이후 경과를 함께 볼 때 도움이 됩니다.',
+    ],
+  },
+  {
+    q: '한약을 얼마나 복용해야 하나요?',
+    a: [
+      '증상의 정도와 지속 기간에 따라 다릅니다. 진찰 후 대략적인 계획을 말씀드립니다.',
+      '복용 중 경과를 확인하면서 조정합니다. 계속 같은 처방을 이어가지 않고 상태에 따라 바꾸기도 합니다.',
+    ],
+  },
+  {
+    q: '건강보험이 적용되는 한약이 있나요?',
+    a: [
+      '갱년기 증후군을 포함한 여성질환에 사용하는 보험한약이 있습니다. 가미소요산이 그중 하나입니다.',
+      '어떤 처방이 맞는지는 진찰 후 정합니다. 목록은 보험한약 안내에 정리해 두었습니다.',
+    ],
+  },
+  {
+    q: '침 치료도 함께 받나요?',
+    a: [
+      '한약만으로 진행하는 경우도 있고, 침 치료를 함께 하는 경우도 있습니다.',
+      '어깨나 손목의 시린 느낌, 목·어깨의 긴장이 함께 있는 경우에는 그 부위를 같이 다루는 편이 낫습니다.',
+    ],
+  },
+  {
+    q: '검사를 따로 받아야 하나요?',
+    a: [
+      '초진 진찰 과정에서 스트레스 검사와 혈압 측정을 함께 진행합니다. 원하지 않으시면 하지 않아도 괜찮습니다.',
+      '필요한 경우 원내에서 기본 혈액검사를 진행할 수 있습니다. 다른 병원에서 받은 검사 결과가 있으면 가져오셔도 좋습니다.',
+    ],
+  },
+];
+
+const faqLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a.join(' ') },
+    })),
+  },
+];
+---
+
+<Base title={title} description={description} jsonLd={faqLd} noindex={true}>
+  <section class="hero">
+    <p class="eyebrow">갱년기 클리닉</p>
+    <h1>갱년기 증상, 무엇부터 다뤄야 할까요?</h1>
+    <p class="lead">
+      얼굴로 열이 오르고, 밤에 잠이 얕아지고, 작은 일에 마음이 흔들립니다. 지나가는
+      과정이라고 들으셨지만 매일이 불편하실 수 있습니다.
+    </p>
+    <p>
+      시호한의원 갱년기 클리닉은 여성질환 진료 경험이 있는 한방내과 전문의가
+      진료합니다. 증상을 하나로 묶어 보지 않고, 지금 가장 불편한 것부터 다룹니다.
+    </p>
+    <p class="cta-row">
+      <a class="cta" href={clinic.links.naverBooking}>갱년기 상담하기</a>
+    </p>
+  </section>
+
+  <section class="sec band">
+    <h2>언제부터 갱년기라고 하나요?</h2>
+    <p>
+      폐경을 기준으로 그 전후 몇 년을 갱년기라고 부릅니다. 월경이 완전히 멈춘 뒤에
+      시작되는 것이 아니라, 주기가 불규칙해지는 시기부터 증상이 나타나는 경우가
+      많습니다.
+    </p>
+    <p>
+      그래서 “아직 폐경은 아닌데 왜 이럴까” 싶은 시기에 오시는 분이 적지 않습니다.
+      시기보다 지금 어떤 증상이 있는지가 기준이 됩니다.
+    </p>
+    <p class="statement">
+      지나가는 과정이라는 말은 맞지만, 그 기간을 그냥 견뎌야 한다는 뜻은 아닙니다.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>어떤 증상으로 오시나요?</h2>
+    <div class="cards">
+      {symptoms.map((s) => (
+        <div class="card">
+          <strong>{s.t}</strong>
+          <span>{s.d}</span>
+        </div>
+      ))}
+    </div>
+    <p class="note">
+      한 가지만 있는 경우보다 여러 가지가 함께 나타나는 경우가 많습니다. 그중 어느
+      것이 가장 불편한지부터 말씀해 주세요.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>호르몬 치료를 받고 있어도 되나요?</h2>
+    <p>
+      네. 산부인과에서 호르몬 치료를 받고 계신 경우에도 상담하실 수 있습니다.
+      복용 중인 약과 진료받고 계신 내용을 알려주시면 한약을 함께 복용해도 되는지
+      확인한 뒤 안내해 드립니다.
+    </p>
+    <p class="statement">
+      기존 치료를 임의로 중단하지 마시고, 담당 선생님과 상의하시는 것이 좋습니다.
+    </p>
+  </section>
+
+  <section class="sec band">
+    <h2>원내에서 어떤 검사를 하나요?</h2>
+    <p>
+      말로 여쭤보는 것만으로는 지금 상태를 가늠하기 어려운 부분이 있습니다. 진료
+      과정에서 아래 검사를 함께 진행합니다.
+    </p>
+    <ul class="cases">
+      <li><strong>스트레스 검사</strong> — 초진 진찰 과정에서. 원하지 않으시면 하지 않아도 괜찮습니다</li>
+      <li><strong>혈압 측정</strong> — 진료 때마다 확인합니다</li>
+      <li><strong>혈액검사</strong> — 간기능, 신기능, 당화혈색소, 혈색소, 염증 수치 등 기본 항목을 원내에서 진행할 수 있습니다</li>
+    </ul>
+    <p class="note">
+      다른 병원에서 받은 검사 결과가 있으면 가져오셔도 좋습니다. 검사 결과를 함께
+      보면서 지금 상태를 설명해 드립니다. 원내 검사에 관한 자세한 내용은
+      <a href="/autonomic/">자율신경 진료 안내</a>에도 정리해 두었습니다.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>어떤 치료를 받게 되나요?</h2>
+    <div class="cards">
+      <div class="card">
+        <strong>맞춤 한약</strong>
+        <span>개별 상태에 따라 약재 구성과 용량을 조절해 처방합니다.</span>
+      </div>
+      <div class="card">
+        <strong>보험한약</strong>
+        <span
+          >가미소요산 등 갱년기 증후군을 포함한 여성질환에 사용하는 보험한약이
+          있습니다.</span
+        >
+        <a href="/insurance-herbs/">목록 보기</a>
+      </div>
+      <div class="card">
+        <strong>침 치료</strong>
+        <span>어깨·손목의 시린 느낌이나 목·어깨 긴장을 함께 다룹니다.</span>
+      </div>
+      <div class="card">
+        <strong>약침</strong>
+        <span>통증이 뚜렷한 부위가 있으면 그 부위에 직접 사용합니다.</span>
+        <a href="/treatments/yakchim/">자세히 보기</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>자율신경 증상과는 어떻게 다른가요?</h2>
+    <p>
+      불면, 두근거림, 열감, 피로처럼 겹치는 증상이 많습니다. 실제로 갱년기의 여러
+      증상은 자율신경의 조절이 함께 흐트러지면서 나타납니다.
+    </p>
+    <p>
+      다만 갱년기는 호르몬 변화라는 배경이 있고, 월경 주기의 변화가 함께
+      나타납니다. 그래서 같은 불면이라도 어느 시기에 시작되었는지, 월경 상태가
+      어떻게 변했는지를 함께 확인합니다.
+    </p>
+    <p class="note">
+      연령과 관계없이 나타나는 자율신경 관련 증상은
+      <a href="/autonomic/">자율신경 · 번아웃 진료 안내</a>에 정리해 두었습니다.
+    </p>
+  </section>
+
+  <section class="sec band">
+    <h2>누가 진료하나요?</h2>
+    <p>
+      김은미 대표원장은 한방내과 전문의로, 한방병원에서 4년 이상 근무했습니다.
+      대한여한의사회 기획이사로 활동하고 있으며, 여성질환 진료 경험을 바탕으로
+      갱년기 진료를 보고 있습니다.
+    </p>
+    <p class="note">
+      두 원장의 이력과 진료 요일은 <a href="/doctors/">의료진 소개</a>에 정리해
+      두었습니다.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>갱년기 진료 자주 묻는 질문</h2>
+    <div class="faq">
+      {faqs.map((f) => (
+        <details>
+          <summary>{f.q}</summary>
+          <div class="answer">{f.a.map((t) => <p>{t}</p>)}</div>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <section class="sec band closing">
+    <h2>상담과 예약</h2>
+    <p>
+      시호한의원은 경기 화성시 동탄신리천로 407 동탄리더스타워 2층에 있습니다.
+      지금 어떤 상태인지 먼저 확인한 뒤 무엇부터 다룰지 말씀드립니다. 초진 상담은
+      시간이 조금 더 필요하니 예약하고 오시는 편이 좋습니다.
+    </p>
+    <p class="cta-row">
+      <a class="cta" href={clinic.links.naverBooking}>갱년기 상담하기</a>
+    </p>
+    <p class="cta-sub">
+      전화 <a href={`tel:${clinic.phone}`}>{clinic.phone}</a> ·
+      <a href={clinic.links.kakaoChannel}>카카오톡 문의</a>
+    </p>
+  </section>
+
+  <style>
+    .hero,
+    .sec {
+      --surface: #fbfcfa;
+      --sunk: #edf0e9;
+    }
+    .sec { margin-top: 3.5rem; }
+    .sec > p { max-width: 34rem; margin: 0 0 1rem; }
+    .sec > p:last-child { margin-bottom: 0; }
+    .sec h2 + p { margin-top: 0; }
+
+    .band {
+      margin-inline: -1.25rem;
+      padding: 2.25rem 1.25rem 2.5rem;
+      background: var(--sunk);
+    }
+    .band > h2:first-child { margin-top: 0; }
+
+    .hero { margin-bottom: 1rem; }
+    .hero p { max-width: 34rem; margin: 0 0 1rem; }
+    .eyebrow {
+      margin: 0 0 0.75rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+    }
+    .hero h1 { line-height: 1.35; }
+    .hero .lead { font-size: 1.08rem; }
+
+    .cta-row { margin: 1.75rem 0 0.75rem; }
+    .cta {
+      display: inline-block;
+      padding: 0.75rem 1.6rem;
+      background: var(--accent);
+      color: var(--paper);
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: background-color 0.15s ease;
+    }
+    .cta:hover { background: #7d561a; color: var(--paper); }
+    .cta-sub { margin: 0; font-size: 0.92rem; color: var(--ink-soft); }
+    .cta-sub a { color: var(--ink-soft); }
+    .cta-sub a:hover { color: var(--accent); }
+
+    .statement {
+      max-width: 34rem;
+      margin: 1.75rem 0 0;
+      padding-left: 1.1rem;
+      border-left: 3px solid var(--accent);
+      font-family: var(--serif);
+      font-size: 1.12rem;
+      line-height: 1.65;
+    }
+
+    .note { font-size: 0.94rem; color: var(--ink-soft); }
+
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+      margin: 1.5rem 0;
+      max-width: 34rem;
+    }
+    .card {
+      padding: 1.1rem 1.15rem;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 2px;
+    }
+    .card strong {
+      display: block;
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      color: var(--accent);
+      margin-bottom: 0.25rem;
+    }
+    .card span {
+      display: block;
+      color: var(--ink-soft);
+      font-size: 0.96rem;
+    }
+    .card a { display: inline-block; margin-top: 0.5rem; font-size: 0.9rem; }
+    @media (min-width: 34rem) {
+      .cards { grid-template-columns: 1fr 1fr; }
+    }
+
+    .cases {
+      list-style: none;
+      margin: 1.25rem 0 1.5rem;
+      padding: 0;
+      max-width: 34rem;
+    }
+    .cases li {
+      position: relative;
+      padding: 0.7rem 0 0.7rem 1.2rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .cases li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 1.45rem;
+      width: 5px;
+      height: 5px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+    .cases strong { color: var(--accent); }
+
+    /* FAQ 아코디언 — JS 없이 details/summary */
+    .faq { margin-top: 1.5rem; border-top: 1px solid var(--line); }
+    .faq details { border-bottom: 1px solid var(--line); }
+    .faq summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 1rem 0;
+      font-weight: 600;
+      cursor: pointer;
+      list-style: none;
+    }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after {
+      content: '+';
+      flex: none;
+      color: var(--accent);
+      font-weight: 400;
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+    .faq details[open] summary::after { content: '−'; }
+    .faq summary:hover { color: var(--accent); }
+    .faq .answer { padding: 0 0 1.1rem; max-width: 34rem; }
+    .faq .answer p {
+      margin: 0 0 0.7rem;
+      font-size: 0.96rem;
+      color: var(--ink-soft);
+    }
+    .faq .answer p:last-child { margin-bottom: 0; }
+
+    .closing { margin-top: 4rem; }
+
+    @media (max-width: 34rem) {
+      .hero h1 { font-size: 1.5rem; }
+      .statement { font-size: 1.05rem; }
+    }
+  </style>
+</Base>
