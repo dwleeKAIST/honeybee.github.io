@@ -18,5 +18,6 @@
 - [보험한약 안내](https://thesiho.kr/insurance-herbs/): 건강보험 적용 한약 목록
 - [수험생 클리닉](https://thesiho.kr/student-care/): 비염, 소화불량, 수면·체력, 목·허리 통증, 월경통, 피부 등 공부를 방해하는 문제별 맞춤진료
 - [수험생 보약](https://thesiho.kr/student-care/herbal-medicine/): 복용 시기, 총명탕·공진단·맞춤 탕약의 차이, 처방 기준
+- [공진단 · 경옥고](https://thesiho.kr/gongjindan/): 녹용두배공진단(목향 공진단에 녹용 2배)의 약재 구성, 복용 방법, 공진단과 경옥고의 차이
 - [의료진 소개](https://thesiho.kr/doctors/)
 - [오시는 길 · 예약](https://thesiho.kr/contact/)
