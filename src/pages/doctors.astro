@@ -1,15 +1,10 @@
 ---
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
 import Base from '../layouts/Base.astro';
+import { img, photos } from '../lib/img';
 
-// public/images/ 에 파일을 올리면 자동으로 표시됩니다. 없으면 그 자리는 비워둡니다.
-// 빌드는 프로젝트 루트에서 실행되므로 cwd 기준으로 확인합니다.
-const img = (file: string) =>
-  existsSync(join(process.cwd(), 'public/images', file)) ? `/images/${file}` : null;
-
-const photoTogether = img('doctors-together.jpg');
-const photoSchedule = img('schedule.jpg');
+const photoTogether = img(photos.together);
+const photoSchedule = img(photos.schedule);
+const photoConsult = img(photos.consult);
 
 // 원장별 진료 요일 — 원장 확인 완료
 const days = ['월', '화', '수', '목', '금', '토'];
@@ -22,11 +17,9 @@ const shifts = [
 const desc =
   '한방내과 전문의 김은미 대표원장과 박종규 진료원장, 한의사 2인이 진료합니다. 이력과 학회 활동, 임상연구를 소개합니다.';
 
-// 이력·학회·논문은 원장 확인 자료 기준입니다.
-// ⚠ 원장별 진료시간표는 별도 확인 후 추가합니다.
-// ⚠ 박종규 원장 사진 파일이 아직 없습니다. public/images/doctor-park-jonggyu.jpg 로
-//    올려주시면 카드에 표시됩니다. (public/images/doctor-2.png 은 이전 사이트의
-//    다른 의료진 사진이므로 사용하지 않습니다.)
+// 이력·학회·논문·진료 요일은 원장 확인 자료 기준입니다.
+// 사진은 public/images/ 에 올리면 자동으로 표시됩니다. 파일명은 src/lib/img.ts 참고.
+// (public/images/doctor-2.png 은 이전 사이트의 다른 의료진 사진이므로 쓰지 않습니다.)
 
 const doctors = [
   {
@@ -34,7 +27,7 @@ const doctors = [
     name: '김은미',
     role: '대표원장',
     credential: '한방내과 전문의 (보건복지부)',
-    photo: img('doctor-kim-eunmi.jpg'),
+    photo: img(photos.kimEunmi),
     career: [
       '대전대학교 한의예과 · 한의학과 졸업',
       '청연한방병원 일반수련의 / 전문수련의',
@@ -74,7 +67,7 @@ const doctors = [
     name: '박종규',
     role: '진료원장',
     credential: null,
-    photo: img('doctor-park-jonggyu.jpg'),
+    photo: img(photos.parkJonggyu),
     career: [
       '대전대학교 청주한방병원 일반수련의 수료',
       '前 명작한의원 진료원장',
@@ -137,9 +130,18 @@ const jsonLd = [
   </p>
   {photoTogether && (
     <img
-      class="together"
+      class="place-photo"
       src={photoTogether}
       alt="시호한의원 박종규 진료원장과 김은미 대표원장 — 한의사 2인 진료, 통증·자율신경·비염"
+      loading="lazy"
+    />
+  )}
+
+  {photoConsult && (
+    <img
+      class="place-photo"
+      src={photoConsult}
+      alt="김은미 대표원장이 진료실에서 환자를 진찰하는 모습"
       loading="lazy"
     />
   )}
@@ -235,14 +237,6 @@ const jsonLd = [
   <style>
     .lead { max-width: 34rem; }
 
-    .together {
-      display: block;
-      width: 100%;
-      max-width: 34rem;
-      height: auto;
-      margin: 2rem 0 0;
-      border-radius: 2px;
-    }
 
     .sec { margin-top: 3rem; }
     .sec > p { max-width: 34rem; }

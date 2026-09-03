@@ -1,10 +1,21 @@
 ---
 import Base from '../layouts/Base.astro';
 import { clinic } from '../data/clinic';
+import { img, photos } from '../lib/img';
 const desc = `시호한의원 오시는 길, 주소, 전화번호, 예약 방법 안내. ${clinic.address.full}`;
+const reception = img(photos.reception);
 ---
 <Base title="오시는 길 · 예약" description={desc}>
   <h1>오시는 길 · 예약</h1>
+
+  {reception && (
+    <img
+      class="place-photo"
+      src={reception}
+      alt="시호한의원 접수 데스크"
+      loading="lazy"
+    />
+  )}
 
   <h2>주소</h2>
   <p>{clinic.address.full}</p>
