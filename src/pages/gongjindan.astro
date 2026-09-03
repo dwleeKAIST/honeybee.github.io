@@ -1,0 +1,456 @@
+---
+import Base from '../layouts/Base.astro';
+import { clinic } from '../data/clinic';
+
+const title = '동탄 공진단 | 녹용두배공진단·경옥고 안내';
+const description =
+  '동탄 시호한의원 공진단 안내. 녹용을 두 배로 담은 녹용두배공진단과 경옥고의 차이, 복용 방법을 정리했습니다.';
+
+// ⚠ 원장 검수 대기 — 원장 초안을 바탕으로 편집한 내용입니다.
+// 검수 전까지 noindex + sitemap 제외 상태로 둡니다.
+const faqs = [
+  {
+    q: '공진단은 꼭 아침 공복에 먹어야 하나요?',
+    a: [
+      '아침 공복 복용을 권장하지만 반드시 그래야 하는 것은 아닙니다.',
+      '위장이 예민하거나 공복 복용이 불편하다면 식후에 복용하도록 조절할 수 있습니다.',
+    ],
+  },
+  {
+    q: '수험생도 공진단을 먹을 수 있나요?',
+    a: [
+      '가능합니다. 학업량이 많아 체력 저하와 피로가 누적된 경우 상담 후 복용을 고려할 수 있습니다.',
+      '다만 집중력만을 목적으로 일률적으로 복용하기보다는 수면, 비염, 소화상태 등 공부를 방해하는 다른 문제가 있는지도 함께 살펴보는 것이 좋습니다.',
+    ],
+  },
+  {
+    q: '부모님 명절 선물로 공진단과 경옥고 중 무엇이 좋을까요?',
+    a: [
+      '평소 건강상태와 복용 목적에 따라 달라집니다.',
+      '단순 연령보다는 피로 양상, 소화기능, 기존 질환과 복용약 등을 확인한 뒤 선택하는 것을 권해 드립니다.',
+    ],
+  },
+  {
+    q: '공진단을 한 달 이상 먹어도 되나요?',
+    a: [
+      '건강상태와 복용 목적에 따라 일정 기간 지속해서 복용할 수 있습니다.',
+      '장기간 복용을 계획한다면 한의사와 상담해 복용 기간을 결정하는 것이 좋습니다.',
+    ],
+  },
+  {
+    q: '다른 약을 먹고 있어도 공진단이나 경옥고를 함께 먹을 수 있나요?',
+    a: [
+      '복용 중인 의약품이나 치료 중인 질환에 따라 확인이 필요합니다.',
+      '상담 시 현재 복용 중인 약을 알려주세요.',
+    ],
+  },
+];
+
+const faqLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a.join(' ') },
+    })),
+  },
+];
+
+// 공진단 · 경옥고 비교표
+const compare = [
+  {
+    label: '주로 고려하는 경우',
+    gong: '과로, 기력·체력 저하, 중요한 일정 전후',
+    gyeong: '허약, 만성적인 피로와 체력 관리',
+  },
+  { label: '복용 형태', gong: '환(丸)', gyeong: '고(膏)' },
+  {
+    label: '특징',
+    gong: '휴대와 1회 복용이 편리',
+    gyeong: '꾸준한 일상 건강관리에 편리',
+  },
+  {
+    label: '문의가 많은 경우',
+    gong: '시험·출장·과로·회복기 등',
+    gyeong: '장기간 체력관리 · 부모님 건강관리 등',
+  },
+];
+---
+
+<Base title={title} description={description} jsonLd={faqLd} noindex={true}>
+  <section class="hero">
+    <p class="eyebrow">한약 · 공진단</p>
+    <h1>동탄 공진단, 녹용을 두 배로 담은 시호한의원 녹용두배공진단</h1>
+    <p class="lead">
+      반복되는 피로와 체력 저하, 중요한 시기를 앞두고 있다면 공진단도 어떤 약재를
+      얼마나 담았는지 살펴보세요.
+    </p>
+    <p>
+      바쁜 일상 속에서 피로가 좀처럼 회복되지 않거나, 체력과 집중력이 예전 같지
+      않다고 느낄 때가 있습니다. 특히 업무와 학업으로 체력 소모가 많은 분,
+      수험생, 큰 병이나 수술 후 회복기에 있는 분, 부모님의 건강을 챙겨드리고 싶은
+      분들이 공진단을 찾곤 합니다.
+    </p>
+    <p>
+      시호한의원에서는 이러한 분들을 위해 녹용 함량을 높인
+      <strong>‘녹용두배공진단’</strong>을 조제하고 있습니다.
+    </p>
+    <p class="cta-row">
+      <a class="cta" href={clinic.links.naverBooking}>공진단 상담하기</a>
+    </p>
+  </section>
+
+  <section class="sec band">
+    <h2>왜 ‘녹용두배’ 공진단인가요?</h2>
+    <p>
+      같은 이름의 공진단이라도 어떤 약재를 얼마나 담는지에 따라 구성은 달라집니다.
+      시호한의원 녹용두배공진단은 녹용의 함량을 원내에서 조제하는 일반 공진단 대비
+      두 배로 높여, 원기와 체력 보강을 보다 중점적으로 고려한 처방입니다.
+    </p>
+    <p>주요 구성 약재는 다음과 같습니다.</p>
+    <ul class="herbs">
+      <li>
+        <strong>녹용 ×2</strong>
+        <span>기력과 원기 보강을 목적으로 사용합니다.</span>
+      </li>
+      <li>
+        <strong>당귀</strong>
+        <span>혈을 보하고 원활한 순환을 돕는 방향으로 배합합니다.</span>
+      </li>
+      <li>
+        <strong>산수유</strong>
+        <span
+          >간신(肝腎)을 보하는 대표적인 한약재로, 체력이 쉽게 소모되는 경우 함께
+          활용합니다.</span
+        >
+      </li>
+    </ul>
+    <p>
+      공진단은 이러한 약재들을 조화롭게 배합하여 기력·체력 저하, 과로 후 회복,
+      집중력 저하 등 몸 전체의 회복력이 떨어진 상태를 살펴 처방합니다.
+    </p>
+    <p>
+      시호한의원에서는 사향이 들어간 원방 공진단과 목향을 활용한 공진단을 모두
+      조제하며, 두 가지 모두 원내에서 직접 손으로 빚어 조제합니다.
+      녹용두배공진단은 사향이 들어가지 않는 대신 녹용 함량을 두 배로 넣은
+      처방입니다. 어느 쪽이 적합한지는 진찰 후 상태와 복용 목적을 고려하여
+      판단합니다.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>어떤 분들이 공진단을 많이 찾으시나요?</h2>
+    <ul class="cases">
+      <li>충분히 쉬어도 피로가 쉽게 회복되지 않는 분</li>
+      <li>업무와 스트레스로 체력 소모가 큰 직장인</li>
+      <li>중요한 시험을 앞두고 체력과 집중력 관리가 필요한 수험생</li>
+      <li>장기간 과로로 기력이 떨어진 분</li>
+      <li>질병이나 수술 후 회복기에 체력 관리가 필요한 분</li>
+      <li>노화와 함께 전반적인 체력 저하를 느끼는 분</li>
+      <li>명절을 맞아 부모님이나 가족의 건강을 챙기고 싶은 분</li>
+    </ul>
+    <p>
+      특히 추석이나 설 명절에는 부모님 건강 선물로 공진단을 문의하시는 경우가
+      많습니다.
+    </p>
+    <p class="statement">
+      다만 공진단 역시 한약이므로 누구에게나 똑같이 권하기보다는 현재의 건강
+      상태와 복용 중인 약, 소화기능 등을 확인한 뒤 선택하는 것이 좋습니다.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>공진단, 어떻게 복용하나요?</h2>
+    <p>
+      일반적으로 하루 1환 복용하며, 아침 공복에 복용하는 것을 권해 드립니다. 환을
+      입안에서 천천히 녹여 드시거나 충분히 씹어 복용한 뒤 따뜻한 물을 한 잔
+      마셔주세요.
+    </p>
+    <p>
+      단기간 중요한 일정을 앞두고 복용하기도 하지만, 만성적인 피로나 체력 저하를
+      관리하기 위해서는 몸 상태에 따라 일정 기간 꾸준히 복용하기도 합니다.
+    </p>
+    <p>
+      소화기능이 매우 약하거나 공복 복용 시 불편감이 있는 경우에는 식후 약 30분
+      뒤에 복용하도록 안내해 드릴 수 있습니다.
+    </p>
+  </section>
+
+  <section class="sec band">
+    <h2>공진단과 경옥고, 무엇이 다른가요?</h2>
+    <p>
+      시호한의원에서는 공진단과 함께 경옥고에 대한 문의도 많이 받습니다. 두 처방
+      모두 전통적으로 허약과 피로를 관리할 때 사용되어 왔지만, 실제 선택할 때는
+      조금 다르게 접근할 수 있습니다.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col"><span class="sr-only">구분</span></th>
+            <th scope="col">공진단</th>
+            <th scope="col">경옥고</th>
+          </tr>
+        </thead>
+        <tbody>
+          {compare.map((row) => (
+            <tr>
+              <th scope="row">{row.label}</th>
+              <td>{row.gong}</td>
+              <td>{row.gyeong}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p>
+      따라서 ‘공진단과 경옥고 중 어느 것이 더 좋은가요?’라고 비교하기보다는 현재
+      가장 불편한 증상과 체력 상태에 따라 선택하는 것이 좋습니다. 시호한의원에서는
+      상담을 통해 공진단과 경옥고 중 현재 상태에 보다 적합한 방향을 안내해
+      드립니다.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>동탄에서 공진단·경옥고를 찾고 있다면</h2>
+    <p>
+      공진단은 이름보다 어떤 원료와 구성으로 만들어졌는지, 그리고 현재 내 몸에
+      필요한 처방인지를 확인하는 것이 중요합니다.
+    </p>
+    <p>
+      시호한의원에서는 공진단을 처방하기 전에 한의사 상담을 통해 현재의 피로 정도,
+      체력, 소화상태, 수면, 스트레스와 복용 중인 약을 함께 확인합니다. 그중
+      녹용두배공진단은 원내에서 조제하는 일반 공진단 대비 녹용 함량을 두 배로 높여,
+      기력과 체력 보강을 보다 중점적으로 고려한 것이 특징입니다.
+    </p>
+    <p>
+      명절을 앞두고 부모님이나 가족에게 건강을 선물하고 싶다면, 공진단과 경옥고 중
+      어떤 것이 더 적합할지 먼저 상담받아 보셔도 좋습니다.
+    </p>
+    <p class="note">
+      수험생의 한약 복용 시기와 처방 선택 기준은
+      <a href="/student-care/herbal-medicine/">수험생 보약 안내</a>에, 그 밖의 진료
+      항목은 <a href="/treatments/">진료 안내</a>에 정리해 두었습니다.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>공진단·경옥고 자주 묻는 질문</h2>
+    <div class="faq">
+      {faqs.map((f) => (
+        <details>
+          <summary>{f.q}</summary>
+          <div class="answer">{f.a.map((t) => <p>{t}</p>)}</div>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <section class="sec band closing">
+    <h2>상담과 예약</h2>
+    <p>
+      시호한의원은 경기 화성시 동탄신리천로 407 동탄리더스타워 2층에 있습니다.
+      공진단이나 경옥고가 지금 필요한지, 필요하다면 어떤 방향이 맞는지 진찰 후
+      말씀드립니다. 수요일은 21:00까지 야간진료를 운영합니다.
+    </p>
+    <p class="cta-row">
+      <a class="cta" href={clinic.links.naverBooking}>공진단 상담하기</a>
+    </p>
+    <p class="cta-sub">
+      전화 <a href={`tel:${clinic.phone}`}>{clinic.phone}</a> ·
+      <a href={clinic.links.kakaoChannel}>카카오톡 문의</a>
+    </p>
+  </section>
+
+  <style>
+    /* 수험생 보약 페이지와 같은 토큰·리듬을 씁니다. */
+    .hero,
+    .sec {
+      --surface: #fbfcfa;
+      --sunk: #edf0e9;
+    }
+    .sec { margin-top: 3.5rem; }
+    .sec > p { max-width: 34rem; margin: 0 0 1rem; }
+    .sec > p:last-child { margin-bottom: 0; }
+    .sec h2 + p { margin-top: 0; }
+
+    .band {
+      margin-inline: -1.25rem;
+      padding: 2.25rem 1.25rem 2.5rem;
+      background: var(--sunk);
+    }
+    .band > h2:first-child { margin-top: 0; }
+
+    .hero { margin-bottom: 1rem; }
+    .hero p { max-width: 34rem; margin: 0 0 1rem; }
+    .eyebrow {
+      margin: 0 0 0.75rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+    }
+    .hero h1 { line-height: 1.35; }
+    .hero .lead { font-size: 1.08rem; }
+
+    .cta-row { margin: 1.75rem 0 0.75rem; }
+    .cta {
+      display: inline-block;
+      padding: 0.75rem 1.6rem;
+      background: var(--accent);
+      color: var(--paper);
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: background-color 0.15s ease;
+    }
+    .cta:hover { background: #7d561a; color: var(--paper); }
+    .cta-sub { margin: 0; font-size: 0.92rem; color: var(--ink-soft); }
+    .cta-sub a { color: var(--ink-soft); }
+    .cta-sub a:hover { color: var(--accent); }
+
+    .statement {
+      max-width: 34rem;
+      margin: 1.75rem 0 0;
+      padding-left: 1.1rem;
+      border-left: 3px solid var(--accent);
+      font-family: var(--serif);
+      font-size: 1.12rem;
+      line-height: 1.65;
+    }
+
+    .note { font-size: 0.94rem; color: var(--ink-soft); }
+
+    /* 약재 구성 카드 */
+    .herbs {
+      list-style: none;
+      margin: 1.25rem 0 1.5rem;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      max-width: 34rem;
+    }
+    .herbs li {
+      padding: 1rem 1.15rem;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 2px;
+    }
+    .herbs strong {
+      display: block;
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      color: var(--accent);
+      margin-bottom: 0.2rem;
+    }
+    .herbs span { color: var(--ink-soft); font-size: 0.96rem; }
+
+    .cases {
+      list-style: none;
+      margin: 1.25rem 0 1.5rem;
+      padding: 0;
+      max-width: 34rem;
+    }
+    .cases li {
+      position: relative;
+      padding: 0.7rem 0 0.7rem 1.2rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .cases li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 1.45rem;
+      width: 5px;
+      height: 5px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+
+    /* 비교표 — 좁은 화면에서는 가로 스크롤 */
+    .table-wrap {
+      margin: 1.5rem 0;
+      max-width: 34rem;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    table {
+      width: 100%;
+      min-width: 20rem;
+      border-collapse: collapse;
+      font-size: 0.94rem;
+      background: var(--surface);
+    }
+    th,
+    td {
+      padding: 0.7rem 0.8rem;
+      border: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+    thead th {
+      background: var(--paper);
+      font-family: var(--serif);
+      color: var(--accent);
+      white-space: nowrap;
+    }
+    tbody th {
+      font-weight: 600;
+      color: var(--ink-soft);
+      white-space: nowrap;
+      width: 1%;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    /* FAQ 아코디언 — JS 없이 details/summary */
+    .faq { margin-top: 1.5rem; border-top: 1px solid var(--line); }
+    .faq details { border-bottom: 1px solid var(--line); }
+    .faq summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 1rem 0;
+      font-weight: 600;
+      cursor: pointer;
+      list-style: none;
+    }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after {
+      content: '+';
+      flex: none;
+      color: var(--accent);
+      font-weight: 400;
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+    .faq details[open] summary::after { content: '−'; }
+    .faq summary:hover { color: var(--accent); }
+    .faq .answer { padding: 0 0 1.1rem; max-width: 34rem; }
+    .faq .answer p {
+      margin: 0 0 0.7rem;
+      font-size: 0.96rem;
+      color: var(--ink-soft);
+    }
+    .faq .answer p:last-child { margin-bottom: 0; }
+
+    .closing { margin-top: 4rem; }
+
+    @media (max-width: 34rem) {
+      .hero h1 { font-size: 1.55rem; }
+      .statement { font-size: 1.05rem; }
+      table { font-size: 0.88rem; }
+      th, td { padding: 0.6rem 0.65rem; }
+    }
+  </style>
+</Base>
