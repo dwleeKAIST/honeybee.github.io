@@ -1,0 +1,467 @@
+---
+import Base from '../layouts/Base.astro';
+import { clinic } from '../data/clinic';
+import { rhinitisPrices, chuppyakInsurance } from '../data/rhinitis-prices';
+
+const title = '동탄 비염 한의원 | 코편안 클리닉 · 알레르기비염 진료';
+const description =
+  '동탄 시호한의원 코편안 클리닉. 비내시경으로 코 안을 확인하고 비강 추나·비염침·한약으로 진료합니다.';
+
+// ⚠ 원장 검수 대기. 확인이 필요한 항목:
+//   1) 맞춤 한약 50/85/120, 녹용 한약 70/119/168의 각 복용 기간
+//      (src/data/rhinitis-prices.ts 의 period 값)
+//   2) 외용제 제품 표기 — '통비세븐', '비염고'가 정확한 표기인지.
+//      스프레이 제품명은 확인 전이라 적지 않았습니다.
+//   3) 비강 추나에 사용하는 기구 명칭('비강추나힐러')을 페이지에 적을지
+//   4) 소아 비염의 진료 가능 연령
+//
+// ⚠ 원장 자료에서 아래는 반영하지 않았습니다.
+//   - '한방내과전문의 2인 진료' → 의료진 이력상 한방내과 전문의는 김은미
+//     대표원장 한 분입니다. 박종규 진료원장은 일반수련의 수료 이력입니다.
+//     의료법 제77조에 저촉되므로 '한방내과 전문의를 포함한 한의사 2인
+//     진료'로 적었습니다. 박종규 원장도 전문의라면 알려주세요.
+//   - '양한방 협진 노하우가 풍부한' → '풍부한'은 과장 표현이며 협진 체계의
+//     실체 확인이 필요해, 한방병원 근무 경험이라는 사실 서술로 대체했습니다.
+//   - '한의학연, 임상효능 입증', 'MBC 비염고 효과 규명' 등 언론 보도 인용
+//     → 치료 효과가 입증되었다는 주장에 해당하여 넣지 않았습니다.
+//     경혈 이름(상성·인당·영향·사백)은 사실 서술이므로 그대로 적었습니다.
+//   - '실비적용 1만원' → 실손보험은 가입 상품에 따라 달라 단정할 수 없어,
+//     보장 범위에 따라 달라진다는 안내로 대체했습니다.
+// 검수 전까지 noindex + sitemap 제외 상태입니다.
+
+const symptoms = [
+  { t: '코막힘', d: '한쪽 또는 양쪽이 막혀 숨쉬기 답답하다' },
+  { t: '콧물', d: '맑은 콧물이 흐르거나, 누런 콧물이 이어진다' },
+  { t: '가려움 · 재채기', d: '코와 눈이 간지럽고 재채기가 이어진다' },
+  { t: '알레르기비염', d: '계절이나 특정 환경에서 증상이 반복된다' },
+  { t: '코골이', d: '코가 막혀 입으로 숨을 쉬고 코를 곤다' },
+  { t: '후비루 · 기침', d: '콧물이 목뒤로 넘어가고 기침이 오래간다' },
+  { t: '수면', d: '밤에 코가 막혀 자주 깨고 아침에 개운하지 않다' },
+  { t: '집중력', d: '코 때문에 오래 앉아 있기 힘들고 쉽게 지친다' },
+];
+
+const care = [
+  {
+    t: '비강 추나',
+    d: '비강 점막과 비중격 부위를 직접 다루는 시술입니다. 코 안의 공간을 확인하면서 진행합니다.',
+    href: null,
+  },
+  {
+    t: '교정 추나',
+    d: '경추의 균형을 함께 확인하고 조정합니다. 목의 상태가 코의 불편과 함께 나타나는 경우가 있습니다.',
+    href: '/posture/',
+  },
+  {
+    t: '비염침',
+    d: '상성(上星), 인당(印堂), 영향(迎香), 사백(四白) 등 코 주변의 경혈을 사용합니다. 건강보험이 적용됩니다.',
+    href: null,
+  },
+  {
+    t: '외용제',
+    d: '비강 점막과 콧물 상태에 따라 코에 직접 사용하는 외용제를 함께 씁니다.',
+    href: null,
+  },
+  {
+    t: '한약',
+    d: '진찰 후 개별 상태에 맞추어 처방합니다. 건강보험이 적용되는 보험한약도 있습니다.',
+    href: '/insurance-herbs/',
+  },
+];
+
+const faqs = [
+  {
+    q: '비내시경 검사는 아프지 않나요?',
+    a: [
+      '가는 내시경을 코 입구부터 천천히 넣어 확인합니다. 불편하시면 말씀해 주세요. 진행 방식을 조정합니다.',
+      '화면을 함께 보면서 지금 코 안이 어떤 상태인지 설명해 드립니다.',
+    ],
+  },
+  {
+    q: '이비인후과에서 이미 진료를 받고 있는데 함께 다녀도 되나요?',
+    a: [
+      '네. 검사 결과나 처방받은 약이 있으면 알려주세요. 함께 확인한 뒤 안내해 드립니다.',
+      '기존 치료를 임의로 중단하지 마시고, 담당 선생님과 상의하시는 것이 좋습니다.',
+    ],
+  },
+  {
+    q: '건강보험이 적용되나요?',
+    a: [
+      '비염침 치료와 보험한약에는 건강보험이 적용됩니다.',
+      '알레르기비염은 첩약 건강보험 적용이 가능한 상병에 해당하여, 맞춤 한약도 건강보험으로 처방받으실 수 있습니다.',
+    ],
+  },
+  {
+    q: '아이도 진료받을 수 있나요?',
+    a: [
+      '네. 코막힘이나 콧물로 아이와 함께 오시는 경우가 많습니다.',
+      '아이의 경우 코 상태와 함께 수면, 소화, 잦은 감기 여부를 같이 확인합니다. 복용 방식도 아이가 먹기 쉽도록 조정합니다.',
+    ],
+  },
+  {
+    q: '언제 시작하는 것이 좋을까요?',
+    a: [
+      '증상이 나타나는 시기에 맞춰 시작하는 편입니다. 계절에 따라 반복된다면 그 시기 이전에 상담하시는 경우도 있습니다.',
+      '지금 불편하시다면 시기와 관계없이 상태를 확인해 보시는 것이 좋습니다.',
+    ],
+  },
+  {
+    q: '코골이 때문에 왔는데도 봐주시나요?',
+    a: [
+      '코가 막혀 입으로 숨을 쉬면서 코를 고는 경우가 있어, 코 안의 상태를 먼저 확인합니다.',
+      '다만 코골이의 원인은 여러 가지이고 수면 중 호흡 문제가 의심되는 경우에는 관련 검사를 받아보시도록 안내해 드립니다.',
+    ],
+  },
+];
+
+const faqLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a.join(' ') },
+    })),
+  },
+];
+---
+
+<Base title={title} description={description} jsonLd={faqLd} noindex={true}>
+  <section class="hero">
+    <p class="eyebrow">코편안 클리닉</p>
+    <h1>비염, 코 안이 지금 어떤 상태인지 보고 시작합니다</h1>
+    <p class="lead">
+      코막힘, 가려움, 콧물, 알레르기비염, 코골이. 증상만 듣고 처방하지 않고
+      비내시경으로 코 안을 직접 확인한 뒤 무엇부터 다룰지 정합니다.
+    </p>
+    <p>
+      시호한의원 코편안 클리닉은 한방내과 전문의를 포함한 한의사 2인이 진료합니다.
+      한방병원에서 근무하며 코와 호흡기 증상을 함께 살펴 온 경험을 바탕으로
+      진료합니다.
+    </p>
+    <p class="cta-row">
+      <a class="cta" href={clinic.links.naverBooking}>비염 상담하기</a>
+    </p>
+  </section>
+
+  <section class="sec band">
+    <h2>비내시경으로 무엇을 확인하나요?</h2>
+    <p>
+      코의 불편은 겉으로 보이지 않습니다. 같은 코막힘이라도 점막이 부어 있는
+      경우와, 콧물이 고여 있는 경우, 구조적으로 공간이 좁은 경우가 다릅니다.
+    </p>
+    <p>
+      시호한의원에서는 증상만 듣는 데 그치지 않고 비내시경으로 비강 점막의 상태를
+      직접 확인합니다. 화면을 함께 보면서 지금 어떤 상태인지 설명해 드립니다.
+    </p>
+    <p class="statement">
+      무엇을 다뤄야 하는지는 코 안을 봐야 정해집니다.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>어떤 증상으로 오시나요?</h2>
+    <div class="cards">
+      {symptoms.map((s) => (
+        <div class="card">
+          <strong>{s.t}</strong>
+          <span>{s.d}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>어떤 치료를 받게 되나요?</h2>
+    <p>
+      한 가지만 진행하기보다 상태에 따라 함께 진행하는 경우가 많습니다.
+    </p>
+    <div class="cards">
+      {care.map((c) => (
+        <div class="card">
+          <strong>{c.t}</strong>
+          <span>{c.d}</span>
+          {c.href && <a href={c.href}>자세히 보기</a>}
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="sec band">
+    <h2>코를 보는데 왜 목도 함께 확인하나요?</h2>
+    <p>
+      코의 불편이 이어지면 입으로 숨을 쉬게 되고, 그 자세가 오래되면 목과 어깨에
+      부담이 쌓입니다. 반대로 목의 정렬이 흐트러진 상태가 코의 불편과 함께
+      나타나는 경우도 있습니다.
+    </p>
+    <p>
+      시호한의원 코편안 클리닉에서는 코 안의 상태와 함께 경추의 균형도 확인하고,
+      필요하면 교정 추나를 함께 진행합니다.
+    </p>
+    <p class="note">
+      자세와 관절 정렬에 관한 진료는 <a href="/posture/">체형교정 안내</a>에 정리해
+      두었습니다.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>건강보험이 적용되나요?</h2>
+    <p>
+      비염 진료에는 건강보험이 적용되는 항목이 여럿 있습니다.
+    </p>
+    <ul class="cases">
+      <li><strong>비염침</strong> — 코 주변 경혈을 사용하는 침 치료</li>
+      <li>
+        <strong>보험한약</strong> — 소청룡탕, 형개연교탕, 행소탕 등 코 증상에 사용하는
+        처방이 있습니다
+      </li>
+      <li>
+        <strong>첩약 건강보험</strong> — {chuppyakInsurance.disease}은 적용 가능
+        상병에 해당하여, 맞춤 한약도 건강보험으로 처방받으실 수 있습니다
+      </li>
+    </ul>
+    <p>
+      첩약 건강보험으로 처방받으시는 경우 {chuppyakInsurance.amount} 기준 본인부담은
+      약 {chuppyakInsurance.patientPay}입니다. {chuppyakInsurance.privateInsuranceNote}
+    </p>
+    <p class="note">
+      보험한약 전체 목록은 <a href="/insurance-herbs/">보험한약 안내</a>에 정리해
+      두었습니다.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>한약 비용은 어떻게 되나요?</h2>
+    <p>
+      건강보험이 적용되지 않는 맞춤 한약의 비용입니다. 복용 기간에 따라 세 가지로
+      구성되며, 어떤 기간이 맞는지는 진찰 후 안내해 드립니다.
+    </p>
+    <div class="cards">
+      {rhinitisPrices.map((p) => (
+        <div class="card">
+          <strong>{p.name}</strong>
+          <span>{p.note}</span>
+          <dl>
+            {p.tiers.map((t) => (
+              <>
+                <dt>{t.period || ' '}</dt>
+                <dd>{t.price}</dd>
+              </>
+            ))}
+          </dl>
+        </div>
+      ))}
+    </div>
+    <p class="note">
+      알레르기비염으로 첩약 건강보험 적용을 받으시는 경우에는 위 금액이 아니라
+      건강보험 기준이 적용됩니다. 어느 쪽이 맞는지 상담에서 안내해 드립니다.
+    </p>
+  </section>
+
+  <section class="sec band">
+    <h2>수험생이나 아이의 비염도 보나요?</h2>
+    <p>
+      네. 밤에 코가 막혀 자주 깨거나, 코 때문에 오래 앉아 있기 힘든 학생이 많습니다.
+      코 상태와 함께 수면과 체력을 같이 확인합니다.
+    </p>
+    <p>
+      아이의 경우 코 상태에 더해 수면, 소화, 잦은 감기 여부를 함께 봅니다. 복용
+      방식도 아이가 먹기 쉽도록 조정합니다.
+    </p>
+    <p class="note">
+      수험생 진료는 <a href="/student-care/">수험생 클리닉</a>에, 한약 복용 시기와
+      선택 기준은 <a href="/student-care/herbal-medicine/">수험생 보약 안내</a>에
+      정리해 두었습니다.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>비염 진료 자주 묻는 질문</h2>
+    <div class="faq">
+      {faqs.map((f) => (
+        <details>
+          <summary>{f.q}</summary>
+          <div class="answer">{f.a.map((t) => <p>{t}</p>)}</div>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <section class="sec band closing">
+    <h2>상담과 예약</h2>
+    <p>
+      시호한의원은 경기 화성시 동탄신리천로 407 동탄리더스타워 2층에 있습니다.
+      비내시경으로 코 안을 먼저 확인한 뒤 무엇부터 다룰지 말씀드립니다. 수요일은
+      21:00까지 야간진료를 운영합니다.
+    </p>
+    <p class="cta-row">
+      <a class="cta" href={clinic.links.naverBooking}>비염 상담하기</a>
+    </p>
+    <p class="cta-sub">
+      전화 <a href={`tel:${clinic.phone}`}>{clinic.phone}</a> ·
+      <a href={clinic.links.kakaoChannel}>카카오톡 문의</a>
+    </p>
+  </section>
+
+  <style>
+    .hero,
+    .sec {
+      --surface: #fbfcfa;
+      --sunk: #edf0e9;
+    }
+    .sec { margin-top: 3.5rem; }
+    .sec > p { max-width: 34rem; margin: 0 0 1rem; }
+    .sec > p:last-child { margin-bottom: 0; }
+    .sec h2 + p { margin-top: 0; }
+
+    .band {
+      margin-inline: -1.25rem;
+      padding: 2.25rem 1.25rem 2.5rem;
+      background: var(--sunk);
+    }
+    .band > h2:first-child { margin-top: 0; }
+
+    .hero { margin-bottom: 1rem; }
+    .hero p { max-width: 34rem; margin: 0 0 1rem; }
+    .eyebrow {
+      margin: 0 0 0.75rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+    }
+    .hero h1 { line-height: 1.35; }
+    .hero .lead { font-size: 1.08rem; }
+
+    .cta-row { margin: 1.75rem 0 0.75rem; }
+    .cta {
+      display: inline-block;
+      padding: 0.75rem 1.6rem;
+      background: var(--accent);
+      color: var(--paper);
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: background-color 0.15s ease;
+    }
+    .cta:hover { background: #7d561a; color: var(--paper); }
+    .cta-sub { margin: 0; font-size: 0.92rem; color: var(--ink-soft); }
+    .cta-sub a { color: var(--ink-soft); }
+    .cta-sub a:hover { color: var(--accent); }
+
+    .statement {
+      max-width: 34rem;
+      margin: 1.75rem 0 0;
+      padding-left: 1.1rem;
+      border-left: 3px solid var(--accent);
+      font-family: var(--serif);
+      font-size: 1.12rem;
+      line-height: 1.65;
+    }
+
+    .note { font-size: 0.94rem; color: var(--ink-soft); }
+
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+      margin: 1.5rem 0 0;
+      max-width: 34rem;
+    }
+    .card {
+      padding: 1.1rem 1.15rem;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 2px;
+    }
+    .card strong {
+      display: block;
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      color: var(--accent);
+      margin-bottom: 0.25rem;
+    }
+    .card > span {
+      display: block;
+      color: var(--ink-soft);
+      font-size: 0.96rem;
+    }
+    .card a { display: inline-block; margin-top: 0.5rem; font-size: 0.9rem; }
+    .card dl {
+      margin: 0.85rem 0 0;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.35rem 0.9rem;
+      font-size: 0.94rem;
+    }
+    .card dt { color: var(--ink-soft); white-space: nowrap; }
+    .card dd { margin: 0; font-weight: 600; }
+    @media (min-width: 34rem) {
+      .cards { grid-template-columns: 1fr 1fr; }
+    }
+
+    .cases {
+      list-style: none;
+      margin: 1.25rem 0 1.5rem;
+      padding: 0;
+      max-width: 34rem;
+    }
+    .cases li {
+      position: relative;
+      padding: 0.7rem 0 0.7rem 1.2rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .cases li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 1.45rem;
+      width: 5px;
+      height: 5px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+    .cases strong { color: var(--accent); }
+
+    /* FAQ 아코디언 — JS 없이 details/summary */
+    .faq { margin-top: 1.5rem; border-top: 1px solid var(--line); }
+    .faq details { border-bottom: 1px solid var(--line); }
+    .faq summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 1rem 0;
+      font-weight: 600;
+      cursor: pointer;
+      list-style: none;
+    }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after {
+      content: '+';
+      flex: none;
+      color: var(--accent);
+      font-weight: 400;
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+    .faq details[open] summary::after { content: '−'; }
+    .faq summary:hover { color: var(--accent); }
+    .faq .answer { padding: 0 0 1.1rem; max-width: 34rem; }
+    .faq .answer p {
+      margin: 0 0 0.7rem;
+      font-size: 0.96rem;
+      color: var(--ink-soft);
+    }
+    .faq .answer p:last-child { margin-bottom: 0; }
+
+    .closing { margin-top: 4rem; }
+
+    @media (max-width: 34rem) {
+      .hero h1 { font-size: 1.5rem; }
+      .statement { font-size: 1.05rem; }
+    }
+  </style>
+</Base>
