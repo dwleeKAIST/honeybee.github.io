@@ -1,0 +1,556 @@
+---
+import Base from '../layouts/Base.astro';
+import { clinic } from '../data/clinic';
+
+const title = '동탄 소화불량 한의원 | 속편안 클리닉 · 기능성 소화불량';
+const description =
+  '내시경에서 이상이 없는데 속이 불편한 경우. 동탄 시호한의원 속편안 클리닉이 한방내과 전문의 진료로 살펴봅니다.';
+
+// ⚠ 원장 검수 대기. 확인이 필요한 항목:
+//   1) 메가약침의 시술 목적·구성 (자료에는 '심한 피로감/감기/장염',
+//      '시술시간 20분'만 있어 그 수준으로만 기재)
+//   2) 복부 초음파를 진료에 활용하는지 (초음파 장비는 있으나 복부 촬영
+//      여부는 확인 전이라 언급하지 않았습니다)
+//   3) 과민성 장증후군으로 진단받고 오시는 경우를 진료 범위에 포함하는지
+//   4) 헬리코박터 등 소화기 관련 검사를 원내에서 진행하는지
+//   5) '시럽 한약'이 연조엑스 형태의 보험한약을 가리키는 표현이 맞는지
+//
+// ⚠ 원장 자료에서 아래는 반영하지 않았습니다.
+//   - '한방내과전문의 2인 진료' → 한방내과 전문의는 김은미 대표원장 한
+//     분입니다. 코편안 클리닉과 같이 '한방내과 전문의를 포함한 한의사 2인'
+//   - '양한방 협진 노하우가 풍부한' → 과장 표현
+//   - '링거수액 대신 메가약침' → 다른 의료행위와의 비교이자 대체 주장
+//   - '10회 선결제 할인 40만원' → 할인·선결제 안내는 환자 유인 행위로
+//     다투어질 수 있습니다. 비급여 금액은 코편안 클리닉과 같은 방침으로
+//     표시하지 않습니다
+//   - '실비적용 1만원' → 실손보험은 가입 상품에 따라 다릅니다
+//   - '위장을 따뜻하게 / 순환을 원활하게 / 근육을 부드럽게' → 목적 서술로 변경
+//
+// 아래는 지키고 있습니다.
+//   - 위암 등 중대 질환을 암시하며 불안을 유발하는 서술 없음
+//   - 대신 경고 증상이 있을 때 검사를 받도록 안내하는 섹션을 두었습니다
+//   - 내시경이나 다른 진료과의 검사를 폄하하는 서술 없음
+//   - '역류성 식도염을 치료합니다'가 아니라 보험한약 목록 수준의
+//     '~에 사용합니다' 서술 유지
+// 검수 전까지 noindex + sitemap 제외 상태입니다.
+
+const symptoms = [
+  { t: '더부룩함', d: '조금만 먹어도 명치가 답답하고 오래 남아 있다' },
+  { t: '속쓰림 · 신물', d: '쓰리거나 신물이 올라오고 목에 걸리는 느낌이 든다' },
+  { t: '잘 체함', d: '자주 체하고 체하면 오래 힘들다' },
+  { t: '가스 · 팽만', d: '배에 가스가 차고 옷이 불편할 만큼 부푼다' },
+  { t: '복통 · 설사', d: '긴장하거나 특정 음식에 배가 아프고 화장실을 급하게 간다' },
+  { t: '변비', d: '며칠씩 못 보거나 보고 나도 잔변감이 남는다' },
+  { t: '메슥거림', d: '울렁거리고 입맛이 없다' },
+  { t: '식후 졸음', d: '먹고 나면 유난히 처지고 졸린다' },
+];
+
+const care = [
+  {
+    t: '맞춤 한약',
+    d: '한방내과 전문의가 진찰한 뒤 체질과 상태에 맞추어 약재 구성과 용량을 조절해 처방합니다.',
+    href: null,
+  },
+  {
+    t: '시럽 한약',
+    d: '식체, 속쓰림, 복통 등 증상에 맞추어 처방하는 형태입니다. 건강보험이 적용되어 부담이 크지 않고, 아이도 복용하기 쉽습니다.',
+    href: '/insurance-herbs/',
+  },
+  {
+    t: '소화약침',
+    d: '복부나 등에 뚜렷하게 불편한 지점이 있으면 그 부위에 사용합니다.',
+    href: '/treatments/yakchim/',
+  },
+  {
+    t: '메가약침',
+    d: '심한 피로감이나 감기, 장염이 함께 있을 때 사용합니다. 시술 시간은 20분 정도입니다.',
+    href: null,
+  },
+];
+
+const faqs = [
+  {
+    q: '내시경에서 이상이 없다고 들었는데 계속 불편합니다.',
+    a: [
+      '구조적인 문제가 확인되지 않았다는 것은 중요한 정보입니다. 그 결과를 가져오시면 진료에 도움이 됩니다.',
+      '위나 장이 움직이는 정도, 음식이 내려가는 속도, 예민해진 감각은 내시경으로 확인되지 않습니다. 이런 경우 지금 어떤 상황에서 어떤 증상이 생기는지를 함께 살펴봅니다.',
+    ],
+  },
+  {
+    q: '위장약을 먹고 있어도 한약을 함께 복용할 수 있나요?',
+    a: [
+      '복용 중인 약을 알려주시면 확인한 뒤 안내해 드립니다.',
+      '기존 치료를 임의로 중단하지 마시고, 담당 선생님과 상의하시는 것이 좋습니다.',
+    ],
+  },
+  {
+    q: '건강보험이 적용되는 한약이 있나요?',
+    a: [
+      '네. 상부 소화기 증상, 장 운동, 변비 등에 사용하는 보험한약이 여러 가지 있습니다.',
+      '어떤 처방이 맞는지는 진찰 후 정합니다. 목록은 보험한약 안내에 정리해 두었습니다.',
+    ],
+  },
+  {
+    q: '한약을 먹으면 속이 더 불편해질까 걱정됩니다.',
+    a: [
+      '비위가 약한 경우에는 그 점을 고려해 처방을 구성합니다. 용량을 조절하거나 복용 시간을 바꾸기도 합니다.',
+      '복용 중 불편한 점이 생기면 멈추고 알려주세요. 확인 후 조정합니다.',
+    ],
+  },
+  {
+    q: '얼마나 복용해야 하나요?',
+    a: [
+      '최근에 생긴 문제와 여러 해 이어진 문제의 경과가 같지 않습니다. 진찰 후 대략적인 계획을 말씀드립니다.',
+      '복용 중 경과를 확인하면서 조정합니다.',
+    ],
+  },
+  {
+    q: '식사는 어떻게 해야 하나요?',
+    a: [
+      '지금 상태에서 무엇을 줄이고 무엇을 늘리면 좋을지 함께 안내합니다.',
+      '무조건 가려 먹으라고 말씀드리지는 않습니다. 어떤 음식에서 증상이 생기는지 확인한 뒤 그에 맞춰 정합니다.',
+    ],
+  },
+];
+
+const faqLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a.join(' ') },
+    })),
+  },
+];
+---
+
+<Base title={title} description={description} jsonLd={faqLd} noindex={true}>
+  <section class="hero">
+    <p class="eyebrow">속편안 클리닉</p>
+    <h1>내시경에서 이상이 없다는데 속이 계속 불편하신가요?</h1>
+    <p class="lead">
+      조금만 먹어도 명치가 답답하고, 자주 체하고, 긴장하면 배가 아픕니다. 검사를
+      받아봤지만 특별한 소견은 없다고 들으셨을 수 있습니다.
+    </p>
+    <p>
+      소화기는 한방내과가 오래 다뤄 온 영역입니다. 시호한의원 속편안 클리닉은
+      한방내과 전문의를 포함한 한의사 2인이 진료하며, 지금 위와 장이 어떤
+      상태인지부터 확인합니다.
+    </p>
+    <p class="cta-row">
+      <a class="cta" href={clinic.links.naverBooking}>소화 상담하기</a>
+    </p>
+  </section>
+
+  <section class="sec band">
+    <h2>어떤 증상으로 오시나요?</h2>
+    <div class="cards">
+      {symptoms.map((s) => (
+        <div class="card">
+          <strong>{s.t}</strong>
+          <span>{s.d}</span>
+        </div>
+      ))}
+    </div>
+    <p class="note">
+      여러 가지가 함께 나타나는 경우가 많습니다. 그중 어느 것이 가장 불편한지부터
+      말씀해 주세요.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>검사에서 이상이 없다는데 왜 불편할까요?</h2>
+    <p>
+      내시경은 점막의 염증이나 궤양처럼 눈으로 확인되는 문제를 찾는 검사입니다.
+      이런 검사에서 뚜렷한 소견이 없다는 것은 중요한 정보이고, 큰 병이 아니라는
+      확인이기도 합니다.
+    </p>
+    <p>
+      다만 위와 장이 얼마나 잘 움직이는지, 음식이 어느 속도로 내려가는지, 같은
+      자극에 얼마나 예민하게 반응하는지는 내시경으로 보이지 않습니다. 소견이 없는데
+      불편이 이어지는 경우가 여기에 해당합니다.
+    </p>
+    <p class="statement">
+      보이는 문제가 없다는 것과 아무 문제가 없다는 것은 다릅니다.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>긴장하면 속이 불편해지는 것도 관련이 있나요?</h2>
+    <p>
+      네. 위와 장의 움직임은 자율신경이 조절합니다. 그래서 긴장하거나 잠을 제대로
+      못 자면 소화가 함께 흐트러지는 경우가 많습니다.
+    </p>
+    <p>
+      시험이나 발표를 앞두고 배가 아프거나, 스트레스가 심한 시기에만 속이 불편해지는
+      것이 여기에 해당합니다. 이런 경우 소화기만 보는 것보다 수면과 긴장 정도를
+      함께 확인하는 편이 낫습니다.
+    </p>
+    <p class="note">
+      자율신경과 관련해 나타나는 증상 전반은
+      <a href="/autonomic/">자율신경 · 번아웃 진료 안내</a>에 정리해 두었습니다.
+    </p>
+  </section>
+
+  <section class="sec band">
+    <h2>이런 경우에는 검사를 먼저 받아보세요</h2>
+    <p>
+      아래에 해당한다면 한약보다 검사가 먼저입니다. 아직 검사를 받지 않으셨다면
+      내과나 소화기내과 진료를 먼저 권해 드립니다.
+    </p>
+    <ul class="cases">
+      <li>의도하지 않은 체중 감소가 있다</li>
+      <li>변에 피가 섞이거나 검은 변을 봤다</li>
+      <li>음식을 삼키기 어렵거나 삼킬 때 걸린다</li>
+      <li>구토가 반복되거나 토한 것에 피가 섞였다</li>
+      <li>야간에 잠에서 깰 정도의 통증이 있다</li>
+      <li>빈혈이 있다고 들었다</li>
+    </ul>
+    <p>
+      검사를 받고 오시면 그 결과를 함께 보면서 진료합니다. 필요하다고 판단되면
+      진료 중에도 검사를 받아보시도록 안내해 드립니다.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>속편안 프로그램은 어떻게 진행되나요?</h2>
+    <p>
+      소화기 증상은 위와 장만의 문제로 끝나지 않는 경우가 많습니다. 복부의 순환과
+      목·어깨의 긴장이 함께 있는 경우가 있어, 세 가지를 이어서 진행합니다.
+    </p>
+    <ol class="steps">
+      <li>
+        <strong>온열돔 적외선치료</strong>
+        <span>복부를 따뜻하게 유지하는 것을 목적으로 진행합니다.</span>
+      </li>
+      <li>
+        <strong>순환침치료 · 소화약침</strong>
+        <span
+          >복부와 등, 손발의 경혈에 침과 약침을 사용합니다. 순환을 돕는 방향으로
+          진행합니다.</span
+        >
+      </li>
+      <li>
+        <strong>복부 고주파 · 목어깨 ICT</strong>
+        <span
+          >복부에는 고주파를, 목과 어깨에는 ICT를 사용해 근육의 긴장을 다룹니다.</span
+        >
+      </li>
+    </ol>
+    <p class="note">
+      세 가지를 모두 진행하지 않는 경우도 있습니다. 지금 상태에 무엇이 필요한지는
+      진찰 후 정합니다.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>어떤 치료를 받게 되나요?</h2>
+    <div class="cards">
+      {care.map((c) => (
+        <div class="card">
+          <strong>{c.t}</strong>
+          <span>{c.d}</span>
+          {c.href && <a href={c.href}>자세히 보기</a>}
+        </div>
+      ))}
+    </div>
+    <p class="note">
+      어느 쪽이 맞는지는 진찰 후 말씀드립니다. 건강보험이 적용되지 않는 항목은
+      진행 전에 비용을 안내해 드립니다.
+    </p>
+  </section>
+
+  <section class="sec band">
+    <h2>건강보험이 적용되나요?</h2>
+    <p>
+      소화기 진료에는 건강보험이 적용되는 항목이 여럿 있습니다.
+    </p>
+    <ul class="cases">
+      <li>
+        <strong>보험한약 · 시럽 한약</strong> — 상부 소화기 증상, 장 운동, 변비 등에
+        사용하는 처방이 여러 가지 있습니다
+      </li>
+      <li><strong>침 치료</strong> — 건강보험이 적용됩니다</li>
+      <li>
+        <strong>첩약 건강보험</strong> — <strong>기능성 소화불량</strong>은 적용 가능
+        상병에 해당하여, 맞춤 한약도 건강보험으로 처방받으실 수 있습니다
+      </li>
+    </ul>
+    <p>
+      첩약 건강보험으로 처방받으시는 경우 10일분 기준 본인부담은 약 3~5만원입니다.
+      실손보험에 가입되어 있으시면 보장 범위에 따라 부담이 더 줄어들 수 있습니다.
+      적용 여부와 금액은 가입하신 상품에 따라 다릅니다.
+    </p>
+    <p class="note">
+      기능성 소화불량 외에 월경통, 알레르기비염, 안면마비도 첩약 건강보험 적용
+      가능 상병입니다. 보험한약 전체 목록은
+      <a href="/insurance-herbs/">보험한약 안내</a>에 정리해 두었습니다.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>진료는 어떤 순서로 진행되나요?</h2>
+    <ol class="steps">
+      <li>
+        <strong>지금 상태 확인</strong>
+        <span
+          >식사량과 식후 증상, 배변 상태, 수면과 긴장 정도를 함께 확인합니다. 어떤
+          음식이나 상황에서 증상이 심해지는지도 여쭤봅니다.</span
+        >
+      </li>
+      <li>
+        <strong>검사 결과와 복용 약 확인</strong>
+        <span
+          >내시경이나 혈액검사 결과가 있으면 함께 봅니다. 복용 중인 약도
+          확인합니다. 필요하면 원내에서 기본 혈액검사를 진행할 수 있습니다.</span
+        >
+      </li>
+      <li>
+        <strong>처방과 생활 안내</strong>
+        <span
+          >상태에 맞는 한약을 처방하고, 필요하면 침 치료를 함께 진행합니다. 식사에서
+          조정할 부분도 함께 안내합니다.</span
+        >
+      </li>
+      <li>
+        <strong>경과 확인</strong>
+        <span
+          >복용 중 어떤 증상이 어떻게 달라졌는지 확인하면서 처방을 조정합니다.</span
+        >
+      </li>
+    </ol>
+  </section>
+
+  <section class="sec band">
+    <h2>누가 진료하나요?</h2>
+    <p>
+      김은미 대표원장은 한방내과 전문의로, 한방병원에서 4년 이상 근무했습니다.
+      소화기는 한방내과 진료의 중심이 되는 영역입니다.
+    </p>
+    <p>
+      상부 소화기 증상뿐 아니라 그와 함께 나타나는 수면, 피로, 두통, 어지럼 같은
+      증상도 함께 살펴봅니다.
+    </p>
+    <p class="note">
+      두 원장의 이력과 진료 요일은 <a href="/doctors/">의료진 소개</a>에 정리해
+      두었습니다. 수험생의 소화 문제는
+      <a href="/student-care/">수험생 클리닉</a>에도 정리해 두었습니다.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>소화 진료 자주 묻는 질문</h2>
+    <div class="faq">
+      {faqs.map((f) => (
+        <details>
+          <summary>{f.q}</summary>
+          <div class="answer">{f.a.map((t) => <p>{t}</p>)}</div>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <section class="sec band closing">
+    <h2>상담과 예약</h2>
+    <p>
+      시호한의원은 경기 화성시 동탄신리천로 407 동탄리더스타워 2층에 있습니다.
+      지금 어떤 상태인지 먼저 확인한 뒤 무엇부터 다룰지 말씀드립니다. 검사 결과가
+      있으시면 가져와 주세요.
+    </p>
+    <p class="cta-row">
+      <a class="cta" href={clinic.links.naverBooking}>소화 상담하기</a>
+    </p>
+    <p class="cta-sub">
+      전화 <a href={`tel:${clinic.phone}`}>{clinic.phone}</a> ·
+      <a href={clinic.links.kakaoChannel}>카카오톡 문의</a>
+    </p>
+  </section>
+
+  <style>
+    .hero,
+    .sec {
+      --surface: #fbfcfa;
+      --sunk: #edf0e9;
+    }
+    .sec { margin-top: 3.5rem; }
+    .sec > p { max-width: 34rem; margin: 0 0 1rem; }
+    .sec > p:last-child { margin-bottom: 0; }
+    .sec h2 + p { margin-top: 0; }
+
+    .band {
+      margin-inline: -1.25rem;
+      padding: 2.25rem 1.25rem 2.5rem;
+      background: var(--sunk);
+    }
+    .band > h2:first-child { margin-top: 0; }
+
+    .hero { margin-bottom: 1rem; }
+    .hero p { max-width: 34rem; margin: 0 0 1rem; }
+    .eyebrow {
+      margin: 0 0 0.75rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+    }
+    .hero h1 { line-height: 1.35; }
+    .hero .lead { font-size: 1.08rem; }
+
+    .cta-row { margin: 1.75rem 0 0.75rem; }
+    .cta {
+      display: inline-block;
+      padding: 0.75rem 1.6rem;
+      background: var(--accent);
+      color: var(--paper);
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: background-color 0.15s ease;
+    }
+    .cta:hover { background: #7d561a; color: var(--paper); }
+    .cta-sub { margin: 0; font-size: 0.92rem; color: var(--ink-soft); }
+    .cta-sub a { color: var(--ink-soft); }
+    .cta-sub a:hover { color: var(--accent); }
+
+    .statement {
+      max-width: 34rem;
+      margin: 1.75rem 0 0;
+      padding-left: 1.1rem;
+      border-left: 3px solid var(--accent);
+      font-family: var(--serif);
+      font-size: 1.12rem;
+      line-height: 1.65;
+    }
+
+    .note { font-size: 0.94rem; color: var(--ink-soft); }
+
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+      margin: 1.5rem 0;
+      max-width: 34rem;
+    }
+    .card {
+      padding: 1.1rem 1.15rem;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 2px;
+    }
+    .card strong {
+      display: block;
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      color: var(--accent);
+      margin-bottom: 0.25rem;
+    }
+    .card span {
+      display: block;
+      color: var(--ink-soft);
+      font-size: 0.96rem;
+    }
+    .card a { display: inline-block; margin-top: 0.5rem; font-size: 0.9rem; }
+    @media (min-width: 34rem) {
+      .cards { grid-template-columns: 1fr 1fr; }
+    }
+
+    .cases {
+      list-style: none;
+      margin: 1.25rem 0 1.5rem;
+      padding: 0;
+      max-width: 34rem;
+    }
+    .cases li {
+      position: relative;
+      padding: 0.7rem 0 0.7rem 1.2rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .cases li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 1.45rem;
+      width: 5px;
+      height: 5px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+
+    .steps {
+      list-style: none;
+      counter-reset: step;
+      margin: 1.5rem 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      max-width: 34rem;
+    }
+    .steps li {
+      counter-increment: step;
+      position: relative;
+      padding: 1.1rem 1.15rem 1.1rem 3rem;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 2px;
+    }
+    .steps li::before {
+      content: counter(step);
+      position: absolute;
+      left: 1.15rem;
+      top: 1.05rem;
+      font-family: var(--serif);
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .steps strong {
+      display: block;
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      margin-bottom: 0.2rem;
+    }
+    .steps span { color: var(--ink-soft); font-size: 0.96rem; }
+
+    /* FAQ 아코디언 — JS 없이 details/summary */
+    .faq { margin-top: 1.5rem; border-top: 1px solid var(--line); }
+    .faq details { border-bottom: 1px solid var(--line); }
+    .faq summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 1rem 0;
+      font-weight: 600;
+      cursor: pointer;
+      list-style: none;
+    }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after {
+      content: '+';
+      flex: none;
+      color: var(--accent);
+      font-weight: 400;
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+    .faq details[open] summary::after { content: '−'; }
+    .faq summary:hover { color: var(--accent); }
+    .faq .answer { padding: 0 0 1.1rem; max-width: 34rem; }
+    .faq .answer p {
+      margin: 0 0 0.7rem;
+      font-size: 0.96rem;
+      color: var(--ink-soft);
+    }
+    .faq .answer p:last-child { margin-bottom: 0; }
+
+    .closing { margin-top: 4rem; }
+
+    @media (max-width: 34rem) {
+      .hero h1 { font-size: 1.45rem; }
+      .statement { font-size: 1.05rem; }
+      .steps li { padding: 1rem 1rem 1rem 2.7rem; }
+    }
+  </style>
+</Base>
