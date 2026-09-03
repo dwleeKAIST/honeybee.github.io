@@ -7,10 +7,8 @@ const title = '동탄 한방 다이어트 | 시호 다이어트 환·캡슐 안�
 const description =
   '동탄 시호한의원 한방 다이어트 안내. 환과 캡슐, 다이어트 보약의 차이와 복용 방법, 처방가를 정리했습니다.';
 
-// ⚠ 원장 검수 대기. 확인이 필요한 항목:
-//   1) 제품명 '시선 캡슐'이 맞는지 (자료 표기 그대로 반영)
-//   2) 처방가는 src/data/diet-programs.ts 에서 관리합니다. 변동 시 그 파일만 수정
-//   3) 마황이 들어간 처방을 피해야 하는 경우를 더 구체적으로 적을지
+// 원장 검수 완료. 제품명 '시선 캡슐'은 원장 확인 사항입니다.
+// 처방가는 src/data/diet-programs.ts 에서 관리합니다. 변동 시 그 파일만 수정하세요.
 //
 // 자료에서 아래는 반영하지 않았습니다.
 //   - '엔오(NO)가 지방을 태우는 스위치를 켭니다', '백색지방을 갈색지방으로',
@@ -19,7 +17,6 @@ const description =
 //   - '식욕억제 효과를 위해' → '식욕 조절을 목적으로'
 //   - '추천' → '이런 분께 안내합니다'
 // 체중 감량 수치, 시술 전후 비교, 환자 후기는 쓰지 않습니다.
-// 검수 전까지 noindex + sitemap 제외 상태입니다.
 
 const faqs = [
   {
@@ -79,7 +76,7 @@ const faqLd = [
 ];
 ---
 
-<Base title={title} description={description} jsonLd={faqLd} noindex={true}>
+<Base title={title} description={description} jsonLd={faqLd}>
   <section class="hero">
     <p class="eyebrow">한방 다이어트</p>
     <h1>시호 다이어트, 환과 캡슐 중 무엇을 선택하나요?</h1>
