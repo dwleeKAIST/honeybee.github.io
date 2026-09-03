@@ -7,6 +7,10 @@ const treatments = defineCollection({
     title: z.string(),
     summary: z.string(), // 목록/메타 설명에 사용 (1–2문장)
     order: z.number().default(99),
+    // 선택. 채우면 페이지 하단에 아코디언으로 표시되고 FAQPage 구조화 데이터가 자동 생성됩니다.
+    faqs: z
+      .array(z.object({ q: z.string(), a: z.string() }))
+      .default([]),
   }),
 });
 

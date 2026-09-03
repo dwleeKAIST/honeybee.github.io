@@ -8,12 +8,78 @@ export async function getStaticPaths() {
 }
 const { entry } = Astro.props;
 const { Content } = await render(entry);
+const faqs = entry.data.faqs;
+
+// frontmatter에 faqs가 있으면 FAQPage 구조화 데이터를 자동 생성합니다.
+const jsonLd = faqs.length
+  ? [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: faqs.map((f) => ({
+          '@type': 'Question',
+          name: f.q,
+          acceptedAnswer: { '@type': 'Answer', text: f.a },
+        })),
+      },
+    ]
+  : [];
 ---
-<Base title={entry.data.title} description={entry.data.summary}>
+<Base title={entry.data.title} description={entry.data.summary} jsonLd={jsonLd}>
   <article class="prose">
     <h1>{entry.data.title}</h1>
     <Content />
   </article>
+
+  {faqs.length > 0 && (
+    <section class="faq-section">
+      <h2>자주 묻는 질문</h2>
+      <div class="faq">
+        {faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <div class="answer"><p>{f.a}</p></div>
+          </details>
+        ))}
+      </div>
+    </section>
+  )}
+
   <hr class="rule" />
   <p><a href="/treatments/">← 진료 안내 목록</a> · <a href="/faq/">자주 묻는 질문</a></p>
+
+  <style>
+    .faq-section { margin-top: 3rem; }
+
+    /* FAQ 아코디언 — JS 없이 details/summary */
+    .faq { margin-top: 1.25rem; border-top: 1px solid var(--line); }
+    .faq details { border-bottom: 1px solid var(--line); }
+    .faq summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 1rem 0;
+      font-weight: 600;
+      cursor: pointer;
+      list-style: none;
+    }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after {
+      content: '+';
+      flex: none;
+      color: var(--accent);
+      font-weight: 400;
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+    .faq details[open] summary::after { content: '−'; }
+    .faq summary:hover { color: var(--accent); }
+    .faq .answer { padding: 0 0 1.1rem; max-width: 34rem; }
+    .faq .answer p {
+      margin: 0;
+      font-size: 0.96rem;
+      color: var(--ink-soft);
+    }
+  </style>
 </Base>

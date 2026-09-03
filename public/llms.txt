@@ -14,6 +14,10 @@
 ## 주요 페이지
 
 - [진료 안내](https://thesiho.kr/treatments/): 추나, 도침, 약침, 매선, 맞춤 클리닉
+- [추나요법](https://thesiho.kr/treatments/chuna/): 진행 방식, 적용 증상, 건강보험 적용
+- [도침치료](https://thesiho.kr/treatments/dochim/): 일반 침과의 차이, 유착성 질환 적용
+- [약침치료 · 초음파약침](https://thesiho.kr/treatments/yakchim/): 초음파로 목표 부위를 확인하며 주입하는 초음파약침 포함
+- [매선치료](https://thesiho.kr/treatments/maeseon/): 만성 통증 부위와 안면부 활용, 시술 후 관리
 - [자주 묻는 질문](https://thesiho.kr/faq/): 보험 적용, 첫 방문 안내
 - [보험한약 안내](https://thesiho.kr/insurance-herbs/): 건강보험 적용 한약 목록
 - [수험생 클리닉](https://thesiho.kr/student-care/): 비염, 소화불량, 수면·체력, 목·허리 통증, 월경통, 피부 등 공부를 방해하는 문제별 맞춤진료
