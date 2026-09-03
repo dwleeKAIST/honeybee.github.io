@@ -6,16 +6,12 @@ const title = '동탄 피부미용 | 시호한의원 시술과 장비 안내';
 const description =
   '동탄 시호한의원 피부미용 안내. 리프팅, 색소 치료, 스킨부스터, 필링과 원내 보유 장비를 정리했습니다.';
 
-// ⚠ 원장 검수 대기. 확인이 필요한 항목:
-//   1) 각 시술의 적용 부위·횟수·간격
-//   2) 시술별 상담 절차 (당일 시술 가능 여부)
-//   3) 아래 목록에서 빠진 시술이나 장비가 있는지
+// 원장 검수 완료. 시술·장비 목록과 레이저 기기 명시는 원장 확인 사항입니다.
 //
 // 원장 초안에서 아래는 반영하지 않았습니다.
 //   - '피부과에서 많이 쓰는 최신 기종' → 비교·과장 광고에 해당하여 삭제
 //   - '개선'·'제거' 등 결과를 보장하는 서술은 '~에 사용합니다'로 변경
 // 환자 후기, 시술 전후 비교, 다른 진료과와의 비교는 이 페이지에 쓰지 않습니다.
-// 검수 전까지 noindex + sitemap 제외 상태입니다.
 
 const groups = [
   {
@@ -166,7 +162,7 @@ const faqLd = [
 ];
 ---
 
-<Base title={title} description={description} jsonLd={faqLd} noindex={true}>
+<Base title={title} description={description} jsonLd={faqLd}>
   <section class="hero">
     <p class="eyebrow">피부미용</p>
     <h1>시호한의원은 어떤 피부 시술과 장비를 갖추고 있나요?</h1>
