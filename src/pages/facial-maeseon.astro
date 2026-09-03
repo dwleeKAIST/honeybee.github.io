@@ -1,0 +1,372 @@
+---
+import Base from '../layouts/Base.astro';
+import { clinic } from '../data/clinic';
+
+const title = '동탄 안면매선 | 팔자주름 매선 시술 안내';
+const description =
+  '동탄 시호한의원 안면매선 안내. 팔자주름 부위를 비롯한 얼굴 매선의 시술 방식과 진행 과정, 시술 후 관리를 정리했습니다.';
+
+// ⚠ 원장 검수 대기. 아래 5가지는 확인 후 확정해야 합니다.
+//   1) 실제 시술 부위 (현재는 '팔자주름 부위를 비롯한 얼굴 여러 부위'로만 표기)
+//   2) 시술 소요 시간
+//   3) 보통 몇 회에 걸쳐 진행하는지, 간격은 어떻게 두는지
+//   4) 부기·멍이 가라앉기까지 대략 며칠인지
+//   5) 세안·화장 가능 시점
+// 임신·수유 중 시술 가능 여부는 확인 전이므로 아예 다루지 않았습니다.
+//
+// 의료광고법 제약으로 아래는 이 페이지에 쓰지 않습니다.
+//   - 환자 후기·치료경험담 (의료법 제56조 제2항 제2호)
+//   - 다른 시술과의 비교 (필러·보톡스 등)
+//   - 주름 개선·탄력·리프팅 등 효과 서술
+// 검수 전까지 noindex + sitemap 제외 상태입니다.
+const faqs = [
+  {
+    q: '시술은 얼마나 걸리나요?',
+    a: [
+      '시술 부위와 개수에 따라 달라집니다. 상담과 시술을 한 번에 진행하는 경우가 많습니다.',
+      '처음 오시는 경우에는 얼굴 상태를 확인하고 어느 부위에 시술할지 상의하는 시간이 더 필요합니다. 예약하고 오시면 대기 없이 진행하실 수 있습니다.',
+    ],
+  },
+  {
+    q: '실이 만져지거나 겉으로 보이지 않나요?',
+    a: [
+      '실은 피부 아래층에 삽입하므로 겉으로 드러나지 않습니다.',
+      '시술 직후에는 삽입 부위가 만져지는 느낌이 들 수 있습니다. 신경 쓰이는 부분이 있으면 알려주세요. 확인 후 안내해 드립니다.',
+    ],
+  },
+  {
+    q: '시술 후 바로 일상생활이 가능한가요?',
+    a: [
+      '일상생활은 가능합니다. 다만 시술 부위에 부기나 멍이 며칠 남을 수 있습니다.',
+      '중요한 일정이 있으시다면 그 일정을 고려해 시술 시기를 정하시는 편이 좋습니다. 상담 때 일정을 말씀해 주시면 함께 정해 드립니다.',
+    ],
+  },
+  {
+    q: '얼굴에 다른 시술을 받은 적이 있어도 가능한가요?',
+    a: [
+      '이전에 받으신 시술의 종류와 시기를 알려주세요.',
+      '어떤 시술을 언제 받으셨는지에 따라 확인이 필요할 수 있습니다. 복용 중인 약이 있다면 함께 말씀해 주세요.',
+    ],
+  },
+  {
+    q: '몸에 하는 매선과 같은 시술인가요?',
+    a: [
+      '실을 삽입해 해당 부위를 지속적으로 자극한다는 원리는 같습니다.',
+      '다만 얼굴은 피부가 얇고 구조가 촘촘해 삽입하는 층과 방향을 다르게 잡습니다. 통증 부위에 하는 매선은 목·어깨·허리처럼 근육층이 두꺼운 부위를 다루므로 접근이 같지 않습니다.',
+    ],
+  },
+];
+
+const faqLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a.join(' ') },
+    })),
+  },
+];
+
+const steps = [
+  {
+    t: '상담',
+    d: '얼굴을 보면서 어느 부위에 시술할지 상의합니다. 피부 상태와 좌우 균형, 복용 중인 약을 함께 확인합니다.',
+  },
+  {
+    t: '시술 부위 결정',
+    d: '어느 부위에 몇 개를 넣을지 정합니다. 상태에 따라 이 시술이 지금 적합하지 않다고 판단되면 그렇게 말씀드립니다.',
+  },
+  {
+    t: '시술',
+    d: '정한 부위에 실을 삽입합니다. 진행 중 불편하시면 말씀해 주세요.',
+  },
+  {
+    t: '관리 안내',
+    d: '시술 후 주의할 점과 다음 내원 시점을 안내해 드립니다.',
+  },
+];
+---
+
+<Base title={title} description={description} jsonLd={faqLd} noindex={true}>
+  <section class="hero">
+    <p class="eyebrow">매선치료 · 안면부</p>
+    <h1>안면매선, 얼굴의 어느 부위에 어떻게 시술하나요?</h1>
+    <p class="lead">
+      안면매선은 시호한의원에서 자주 시행하는 시술 중 하나입니다. 팔자주름 부위를
+      비롯해 얼굴의 여러 부위에 시술합니다.
+    </p>
+    <p>
+      이 페이지에는 시술이 어떤 방식으로 진행되는지, 시술 후에는 무엇을 주의해야
+      하는지를 정리했습니다. 지금 이 시술이 적합한지는 얼굴 상태와 전신 상태를
+      확인한 뒤 말씀드립니다.
+    </p>
+    <p class="cta-row">
+      <a class="cta" href={clinic.links.naverBooking}>안면매선 상담하기</a>
+    </p>
+  </section>
+
+  <section class="sec band">
+    <h2>안면매선이란 무엇인가요?</h2>
+    <p>
+      매선은 시간이 지나면 인체에 자연 흡수되는 의료용 실을 피부 또는 근육층에
+      삽입하는 치료입니다. 안면매선은 이 방식을 얼굴 부위에 적용해, 실이 남아 있는
+      기간 동안 해당 부위를 지속적으로 자극하는 시술입니다.
+    </p>
+    <p>
+      침 치료는 시술하는 동안에만 자극이 이루어집니다. 매선은 실이 흡수되는 기간
+      내내 자극이 이어지므로, 자주 내원하기 어려운 경우에 활용합니다.
+    </p>
+    <p class="statement">
+      실은 피부 아래층에 삽입하므로 겉으로 드러나지 않습니다.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>얼굴의 어느 부위에 시술하나요?</h2>
+    <p>
+      팔자주름 부위를 비롯해 얼굴의 여러 부위에 시술합니다. 어느 부위에 몇 개를
+      넣을지는 얼굴의 좌우 균형과 피부·근육 상태를 확인한 뒤 정합니다.
+    </p>
+    <p>
+      얼굴은 좌우가 완전히 같지 않습니다. 한쪽으로 씹는 습관이나 자세에 따라
+      좌우의 상태가 다른 경우가 있어, 같은 부위라도 양쪽에 같은 개수를 넣지 않을
+      수 있습니다.
+    </p>
+    <p>
+      시술 부위는 상담에서 함께 정합니다. 원하시는 부위를 말씀해 주시면 그 부위가
+      적합한지 확인해 드립니다.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>시술은 어떻게 진행되나요?</h2>
+    <ol class="steps">
+      {steps.map((s) => (
+        <li>
+          <strong>{s.t}</strong>
+          <span>{s.d}</span>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="sec band">
+    <h2>얼굴만 보지 않고 무엇을 함께 확인하나요?</h2>
+    <p>
+      시호한의원은 한의원이므로, 얼굴 부위만 따로 떼어 보지 않습니다. 소화 상태,
+      수면, 스트레스, 월경 상태처럼 전신의 상태를 함께 확인한 뒤 시술 여부를
+      판단합니다.
+    </p>
+    <p>
+      복용 중인 약이 있거나 치료 중인 질환이 있으면 알려주세요. 확인이 필요한
+      경우가 있습니다.
+    </p>
+    <p>
+      상담 과정에서 이 시술이 지금 적합하지 않다고 판단되면 그렇게 말씀드립니다.
+      필요하다면 다른 진료를 먼저 권해 드릴 수도 있습니다.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>시술 후에는 어떻게 관리하나요?</h2>
+    <ul class="cases">
+      <li>시술 부위에 부기나 멍이 며칠 남을 수 있습니다</li>
+      <li>당일에는 사우나와 격한 운동을 피해 주세요</li>
+      <li>시술 부위를 세게 누르는 마사지는 피해 주세요</li>
+      <li>중요한 일정이 있다면 그 일정을 고려해 시술 시기를 정하는 편이 좋습니다</li>
+    </ul>
+    <p class="note">
+      시술 후 불편한 점이 있으면
+      <a href={clinic.links.kakaoChannel}>카카오톡 채널</a>이나 전화로 알려주세요.
+      확인 후 안내해 드립니다. 통증 부위에 하는 매선은
+      <a href="/treatments/maeseon/">매선치료 안내</a>에 정리해 두었습니다.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>안면매선 자주 묻는 질문</h2>
+    <div class="faq">
+      {faqs.map((f) => (
+        <details>
+          <summary>{f.q}</summary>
+          <div class="answer">{f.a.map((t) => <p>{t}</p>)}</div>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <section class="sec band closing">
+    <h2>상담과 예약</h2>
+    <p>
+      시호한의원은 경기 화성시 동탄신리천로 407 동탄리더스타워 2층에 있습니다.
+      얼굴 상태를 먼저 확인한 뒤 어느 부위에 시술하면 좋을지 말씀드립니다.
+      수요일은 21:00까지 야간진료를 운영합니다.
+    </p>
+    <p class="cta-row">
+      <a class="cta" href={clinic.links.naverBooking}>안면매선 상담하기</a>
+    </p>
+    <p class="cta-sub">
+      전화 <a href={`tel:${clinic.phone}`}>{clinic.phone}</a> ·
+      <a href={clinic.links.kakaoChannel}>카카오톡 문의</a>
+    </p>
+  </section>
+
+  <style>
+    /* 다른 랜딩 페이지와 같은 토큰·리듬을 씁니다. */
+    .hero,
+    .sec {
+      --surface: #fbfcfa;
+      --sunk: #edf0e9;
+    }
+    .sec { margin-top: 3.5rem; }
+    .sec > p { max-width: 34rem; margin: 0 0 1rem; }
+    .sec > p:last-child { margin-bottom: 0; }
+    .sec h2 + p { margin-top: 0; }
+
+    .band {
+      margin-inline: -1.25rem;
+      padding: 2.25rem 1.25rem 2.5rem;
+      background: var(--sunk);
+    }
+    .band > h2:first-child { margin-top: 0; }
+
+    .hero { margin-bottom: 1rem; }
+    .hero p { max-width: 34rem; margin: 0 0 1rem; }
+    .eyebrow {
+      margin: 0 0 0.75rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+    }
+    .hero h1 { line-height: 1.35; }
+    .hero .lead { font-size: 1.08rem; }
+
+    .cta-row { margin: 1.75rem 0 0.75rem; }
+    .cta {
+      display: inline-block;
+      padding: 0.75rem 1.6rem;
+      background: var(--accent);
+      color: var(--paper);
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: background-color 0.15s ease;
+    }
+    .cta:hover { background: #7d561a; color: var(--paper); }
+    .cta-sub { margin: 0; font-size: 0.92rem; color: var(--ink-soft); }
+    .cta-sub a { color: var(--ink-soft); }
+    .cta-sub a:hover { color: var(--accent); }
+
+    .statement {
+      max-width: 34rem;
+      margin: 1.75rem 0 0;
+      padding-left: 1.1rem;
+      border-left: 3px solid var(--accent);
+      font-family: var(--serif);
+      font-size: 1.12rem;
+      line-height: 1.65;
+    }
+
+    .note { font-size: 0.94rem; color: var(--ink-soft); }
+
+    .cases {
+      list-style: none;
+      margin: 1.25rem 0 1.5rem;
+      padding: 0;
+      max-width: 34rem;
+    }
+    .cases li {
+      position: relative;
+      padding: 0.7rem 0 0.7rem 1.2rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .cases li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 1.45rem;
+      width: 5px;
+      height: 5px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+
+    .steps {
+      list-style: none;
+      counter-reset: step;
+      margin: 1.5rem 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      max-width: 34rem;
+    }
+    .steps li {
+      counter-increment: step;
+      position: relative;
+      padding: 1.1rem 1.15rem 1.1rem 3rem;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 2px;
+    }
+    .steps li::before {
+      content: counter(step);
+      position: absolute;
+      left: 1.15rem;
+      top: 1.05rem;
+      font-family: var(--serif);
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .steps strong {
+      display: block;
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      margin-bottom: 0.2rem;
+    }
+    .steps span { color: var(--ink-soft); font-size: 0.96rem; }
+
+    /* FAQ 아코디언 — JS 없이 details/summary */
+    .faq { margin-top: 1.5rem; border-top: 1px solid var(--line); }
+    .faq details { border-bottom: 1px solid var(--line); }
+    .faq summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 1rem 0;
+      font-weight: 600;
+      cursor: pointer;
+      list-style: none;
+    }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after {
+      content: '+';
+      flex: none;
+      color: var(--accent);
+      font-weight: 400;
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+    .faq details[open] summary::after { content: '−'; }
+    .faq summary:hover { color: var(--accent); }
+    .faq .answer { padding: 0 0 1.1rem; max-width: 34rem; }
+    .faq .answer p {
+      margin: 0 0 0.7rem;
+      font-size: 0.96rem;
+      color: var(--ink-soft);
+    }
+    .faq .answer p:last-child { margin-bottom: 0; }
+
+    .closing { margin-top: 4rem; }
+
+    @media (max-width: 34rem) {
+      .hero h1 { font-size: 1.5rem; }
+      .statement { font-size: 1.05rem; }
+      .steps li { padding: 1rem 1rem 1rem 2.7rem; }
+    }
+  </style>
+</Base>

@@ -1,0 +1,371 @@
+---
+import Base from '../layouts/Base.astro';
+import { clinic } from '../data/clinic';
+
+const title = '동탄 피부미용 | 시호한의원 시술과 장비 안내';
+const description =
+  '동탄 시호한의원 피부미용 안내. 리프팅, 색소 치료, 스킨부스터, 필링과 원내 보유 장비를 정리했습니다.';
+
+// ⚠ 원장 검수 대기. 확인이 필요한 항목:
+//   1) 각 시술의 적용 부위·횟수·간격
+//   2) 시술별 상담 절차 (당일 시술 가능 여부)
+//   3) 아래 목록에서 빠진 시술이나 장비가 있는지
+//
+// 원장 초안에서 아래는 반영하지 않았습니다.
+//   - '피부과에서 많이 쓰는 최신 기종' → 비교·과장 광고에 해당하여 삭제
+//   - '개선'·'제거' 등 결과를 보장하는 서술은 '~에 사용합니다'로 변경
+// 환자 후기, 시술 전후 비교, 다른 진료과와의 비교는 이 페이지에 쓰지 않습니다.
+// 검수 전까지 noindex + sitemap 제외 상태입니다.
+
+const groups = [
+  {
+    name: '리프팅',
+    items: [
+      {
+        t: '슈링크 유니버스',
+        sub: 'HIFU · 고강도 집속 초음파',
+        d: '초음파 에너지를 피부의 특정 층에 집속하는 방식의 장비입니다.',
+        href: null,
+      },
+      {
+        t: '극초단파 리프팅',
+        sub: null,
+        d: '고주파 에너지를 이용하는 시술입니다.',
+        href: null,
+      },
+      {
+        t: '매선 (녹는 실)',
+        sub: null,
+        d: '인체에 자연 흡수되는 의료용 실을 피부 아래층에 삽입합니다.',
+        href: '/facial-maeseon/',
+      },
+    ],
+  },
+  {
+    name: '색소 치료 · 레이저',
+    items: [
+      {
+        t: '엔디야그 레이저',
+        sub: '헬리오스4 (레이저옵텍)',
+        d: '흑자, 문신, 피코 토닝, 제네시스 토닝에 사용합니다. 피코 모드를 포함해 여러 모드로 운용할 수 있는 장비입니다.',
+        href: null,
+      },
+      {
+        t: '어븀야그 레이저',
+        sub: '로투스2 (레이저옵텍)',
+        d: '사마귀와 점, 모공 관련 시술에 사용합니다.',
+        href: null,
+      },
+      {
+        t: 'CO2 레이저',
+        sub: null,
+        d: '점 시술에 사용합니다.',
+        href: null,
+      },
+    ],
+  },
+  {
+    name: '스킨부스터',
+    items: [
+      {
+        t: '여드름 재생 앰플',
+        sub: null,
+        d: '여드름 이후의 피부 관리에 사용합니다.',
+        href: null,
+      },
+      {
+        t: '라디쥬',
+        sub: '연어 · 철갑상어 PDRN',
+        d: 'PDRN 성분을 사용하는 스킨부스터입니다.',
+        href: null,
+      },
+      { t: '큐티셀', sub: null, d: '스킨부스터 시술에 사용합니다.', href: null },
+      { t: '엑소좀', sub: null, d: '스킨부스터 시술에 사용합니다.', href: null },
+    ],
+  },
+  {
+    name: '필링',
+    items: [
+      { t: '밀크필', sub: null, d: '피부 표면을 정돈하는 필링 시술입니다.', href: null },
+      { t: '라라필', sub: null, d: '피부 표면을 정돈하는 필링 시술입니다.', href: null },
+    ],
+  },
+  {
+    name: '한방 시술',
+    items: [
+      {
+        t: '정안침',
+        sub: null,
+        d: '얼굴 부위의 경혈에 놓는 침 치료입니다.',
+        href: null,
+      },
+      {
+        t: '안면매선',
+        sub: null,
+        d: '팔자주름 부위를 비롯한 얼굴 여러 부위에 시술합니다.',
+        href: '/facial-maeseon/',
+      },
+      {
+        t: 'PDRN 손주사',
+        sub: null,
+        d: '한의사가 직접 부위를 잡아 주입하는 방식입니다.',
+        href: null,
+      },
+    ],
+  },
+];
+
+const faqs = [
+  {
+    q: '상담 당일에 바로 시술받을 수 있나요?',
+    a: [
+      '시술에 따라 다릅니다. 상담과 시술을 한 번에 진행하는 경우도 있고, 피부 상태를 확인한 뒤 다음 내원 때 진행하는 경우도 있습니다.',
+      '예약하고 오시면 대기 없이 상담하실 수 있습니다.',
+    ],
+  },
+  {
+    q: '여러 시술을 함께 받을 수 있나요?',
+    a: [
+      '함께 진행하는 경우가 있고, 간격을 두어야 하는 경우도 있습니다.',
+      '피부 상태와 이전에 받으신 시술을 확인한 뒤 어떤 순서로 진행하면 좋을지 말씀드립니다.',
+    ],
+  },
+  {
+    q: '한의원에서 피부 시술을 받는 것은 무엇이 다른가요?',
+    a: [
+      '얼굴 부위만 따로 떼어 보지 않고 전신 상태를 함께 확인합니다.',
+      '소화 상태, 수면, 스트레스, 월경 상태를 함께 살펴본 뒤 시술 여부와 순서를 정합니다. 필요하다면 한약이나 침 치료를 함께 권해 드릴 수도 있습니다.',
+    ],
+  },
+  {
+    q: '복용 중인 약이 있어도 시술받을 수 있나요?',
+    a: [
+      '복용 중인 약과 치료 중인 질환을 알려주세요. 시술에 따라 확인이 필요한 경우가 있습니다.',
+      '이전에 받으신 시술이 있다면 종류와 시기도 함께 말씀해 주세요.',
+    ],
+  },
+  {
+    q: '건강보험이 적용되나요?',
+    a: [
+      '피부미용 시술은 건강보험이 적용되지 않습니다.',
+      '시술별 비용은 상담에서 안내해 드립니다.',
+    ],
+  },
+];
+
+const faqLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a.join(' ') },
+    })),
+  },
+];
+---
+
+<Base title={title} description={description} jsonLd={faqLd} noindex={true}>
+  <section class="hero">
+    <p class="eyebrow">피부미용</p>
+    <h1>시호한의원은 어떤 피부 시술과 장비를 갖추고 있나요?</h1>
+    <p class="lead">
+      리프팅, 색소 치료, 스킨부스터, 필링과 한방 시술을 함께 운영합니다. 원내에
+      갖추고 있는 장비와 시술을 아래에 정리했습니다.
+    </p>
+    <p>
+      어떤 시술이 지금 필요한지는 피부 상태와 전신 상태를 함께 확인한 뒤
+      말씀드립니다. 상담 과정에서 적합하지 않다고 판단되면 그렇게 말씀드립니다.
+    </p>
+    <p class="cta-row">
+      <a class="cta" href={clinic.links.naverBooking}>피부 상담하기</a>
+    </p>
+  </section>
+
+  {groups.map((g, i) => (
+    <section class={i % 2 === 1 ? 'sec band' : 'sec'}>
+      <h2>{g.name}</h2>
+      <div class="cards">
+        {g.items.map((it) => (
+          <div class="card">
+            <strong>{it.t}</strong>
+            {it.sub && <em>{it.sub}</em>}
+            <span>{it.d}</span>
+            {it.href && <a href={it.href}>자세히 보기</a>}
+          </div>
+        ))}
+      </div>
+    </section>
+  ))}
+
+  <section class="sec">
+    <h2>한의원에서는 얼굴만 보지 않습니다</h2>
+    <p>
+      시호한의원은 한의원이므로, 얼굴 부위만 따로 떼어 보지 않습니다. 소화 상태,
+      수면, 스트레스, 월경 상태처럼 전신의 상태를 함께 확인한 뒤 시술 여부와
+      순서를 정합니다.
+    </p>
+    <p>
+      필요하다면 시술과 함께 한약이나 침 치료를 권해 드릴 수도 있습니다. 반대로
+      지금은 시술보다 다른 진료가 먼저라고 판단되면 그렇게 말씀드립니다.
+    </p>
+    <p class="note">
+      진료 항목 전반은 <a href="/treatments/">진료 안내</a>에, 안면매선은
+      <a href="/facial-maeseon/">안면매선 안내</a>에 정리해 두었습니다.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>피부미용 자주 묻는 질문</h2>
+    <div class="faq">
+      {faqs.map((f) => (
+        <details>
+          <summary>{f.q}</summary>
+          <div class="answer">{f.a.map((t) => <p>{t}</p>)}</div>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <section class="sec band closing">
+    <h2>상담과 예약</h2>
+    <p>
+      시호한의원은 경기 화성시 동탄신리천로 407 동탄리더스타워 2층에 있습니다.
+      어떤 시술이 지금 맞는지 상담을 통해 안내해 드립니다. 수요일은 21:00까지
+      야간진료를 운영합니다.
+    </p>
+    <p class="cta-row">
+      <a class="cta" href={clinic.links.naverBooking}>피부 상담하기</a>
+    </p>
+    <p class="cta-sub">
+      전화 <a href={`tel:${clinic.phone}`}>{clinic.phone}</a> ·
+      <a href={clinic.links.kakaoChannel}>카카오톡 문의</a>
+    </p>
+  </section>
+
+  <style>
+    .hero,
+    .sec {
+      --surface: #fbfcfa;
+      --sunk: #edf0e9;
+    }
+    .sec { margin-top: 3.5rem; }
+    .sec > p { max-width: 34rem; margin: 0 0 1rem; }
+    .sec > p:last-child { margin-bottom: 0; }
+    .sec h2 + p { margin-top: 0; }
+
+    .band {
+      margin-inline: -1.25rem;
+      padding: 2.25rem 1.25rem 2.5rem;
+      background: var(--sunk);
+    }
+    .band > h2:first-child { margin-top: 0; }
+
+    .hero { margin-bottom: 1rem; }
+    .hero p { max-width: 34rem; margin: 0 0 1rem; }
+    .eyebrow {
+      margin: 0 0 0.75rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+    }
+    .hero h1 { line-height: 1.35; }
+    .hero .lead { font-size: 1.08rem; }
+
+    .cta-row { margin: 1.75rem 0 0.75rem; }
+    .cta {
+      display: inline-block;
+      padding: 0.75rem 1.6rem;
+      background: var(--accent);
+      color: var(--paper);
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: background-color 0.15s ease;
+    }
+    .cta:hover { background: #7d561a; color: var(--paper); }
+    .cta-sub { margin: 0; font-size: 0.92rem; color: var(--ink-soft); }
+    .cta-sub a { color: var(--ink-soft); }
+    .cta-sub a:hover { color: var(--accent); }
+
+    .note { font-size: 0.94rem; color: var(--ink-soft); }
+
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+      margin: 1.5rem 0 0;
+      max-width: 34rem;
+    }
+    .card {
+      padding: 1.1rem 1.15rem;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 2px;
+    }
+    .card strong {
+      display: block;
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      color: var(--accent);
+    }
+    .card em {
+      display: block;
+      margin-top: 0.15rem;
+      font-style: normal;
+      font-size: 0.85rem;
+      letter-spacing: 0.02em;
+      color: var(--ink-soft);
+    }
+    .card span {
+      display: block;
+      margin-top: 0.4rem;
+      color: var(--ink-soft);
+      font-size: 0.96rem;
+    }
+    .card a { display: inline-block; margin-top: 0.5rem; font-size: 0.9rem; }
+    @media (min-width: 34rem) {
+      .cards { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* FAQ 아코디언 — JS 없이 details/summary */
+    .faq { margin-top: 1.5rem; border-top: 1px solid var(--line); }
+    .faq details { border-bottom: 1px solid var(--line); }
+    .faq summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 1rem 0;
+      font-weight: 600;
+      cursor: pointer;
+      list-style: none;
+    }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after {
+      content: '+';
+      flex: none;
+      color: var(--accent);
+      font-weight: 400;
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+    .faq details[open] summary::after { content: '−'; }
+    .faq summary:hover { color: var(--accent); }
+    .faq .answer { padding: 0 0 1.1rem; max-width: 34rem; }
+    .faq .answer p {
+      margin: 0 0 0.7rem;
+      font-size: 0.96rem;
+      color: var(--ink-soft);
+    }
+    .faq .answer p:last-child { margin-bottom: 0; }
+
+    .closing { margin-top: 4rem; }
+
+    @media (max-width: 34rem) {
+      .hero h1 { font-size: 1.5rem; }
+    }
+  </style>
+</Base>
