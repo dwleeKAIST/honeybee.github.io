@@ -25,6 +25,7 @@ const desc = `시호한의원 오시는 길, 주소, 전화번호, 예약 방법
   {clinic.hours.length > 0 && (
     <>
       <h2>진료시간은 어떻게 되나요?</h2>
+      <p>원장별로 진료하는 요일이 다릅니다. <a href="/doctors/#schedule">원장별 진료 요일</a>을 확인해 주세요.</p>
       <table class="hours">
         <tbody>
           {clinic.hours.map((h) => (
