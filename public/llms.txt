@@ -19,7 +19,7 @@
 - [약침치료 · 초음파약침](https://thesiho.kr/treatments/yakchim/): 초음파로 목표 부위를 확인하며 주입하는 초음파약침 포함
 - [매선치료](https://thesiho.kr/treatments/maeseon/): 만성 통증 부위와 안면부 활용, 시술 후 관리
 - [피부미용](https://thesiho.kr/skin-care/): 리프팅(슈링크 유니버스 HIFU, 극초단파, 매선), 색소 치료 레이저(엔디야그 헬리오스4, 어븀야그 로투스2, CO2), 스킨부스터(라디쥬 PDRN, 큐티셀, 엑소좀), 필링(밀크필, 라라필), 정안침, PDRN 손주사
-- [안면매선](https://thesiho.kr/facial-maeseon/): 팔자주름 부위를 비롯한 얼굴 매선의 시술 방식, 진행 과정, 시술 후 관리
+- [안면매선](https://thesiho.kr/facial-maeseon/): 시술 부위(팔자주름·미간·눈가·아래턱·좌우 비대칭 부위), 1회 30분, 보통 4~10회 진행 후 6개월~1년 간격 리터치, 세안·화장은 다음날부터 가능
 - [자주 묻는 질문](https://thesiho.kr/faq/): 보험 적용, 첫 방문 안내
 - [보험한약 안내](https://thesiho.kr/insurance-herbs/): 건강보험 적용 한약 목록
 - [수험생 클리닉](https://thesiho.kr/student-care/): 비염, 소화불량, 수면·체력, 목·허리 통증, 월경통, 피부 등 공부를 방해하는 문제별 맞춤진료
