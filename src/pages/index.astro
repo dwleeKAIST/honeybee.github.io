@@ -1,12 +1,15 @@
 ---
 import Base from '../layouts/Base.astro';
 import { clinic } from '../data/clinic';
+import { img, photos } from '../lib/img';
 import { getCollection } from 'astro:content';
 const treatments = (await getCollection('treatments')).sort(
   (a, b) => a.data.order - b.data.order,
 );
 
 // 클리닉 카드. 순서는 원장이 주로 보는 진료 순입니다.
+const heroPhoto = img(photos.together);
+
 const clinics = [
   {
     href: '/autonomic/',
@@ -52,20 +55,30 @@ const clinics = [
 ---
 
 <Base title={clinic.slogan} description={clinic.metaDescription}>
-  <section class="hero home-hero">
-    <p class="eyebrow">경기 화성시 동탄</p>
-    <h1>{clinic.slogan},<br />시호한의원입니다.</h1>
-    <p class="lead">
-      한방내과 전문의를 포함한 한의사 2인이 진료합니다. 통증과 자율신경, 비염을
-      중심으로 보며, 지금 가장 불편한 것부터 다룹니다.
-    </p>
-    <p class="cta-row">
-      <a class="cta" href={clinic.links.naverBooking}>네이버 예약</a>
-      <a class="cta ghost" href={`tel:${clinic.phone}`}>전화 {clinic.phone}</a>
-    </p>
-    <p class="cta-sub">
-      <a href={clinic.links.kakaoChannel}>카카오톡 문의</a> · <a href="/contact/">오시는 길</a> · <a href="/doctors/">의료진 소개</a>
-    </p>
+  <section class={`hero home-hero${heroPhoto ? ' has-photo' : ''}`}>
+    <div class="hero-text">
+      <p class="eyebrow">경기 화성시 동탄</p>
+      <h1>{clinic.slogan},<br />시호한의원입니다.</h1>
+      <p class="lead">
+        한방내과 전문의를 포함한 한의사 2인이 진료합니다. 통증과 자율신경, 비염을
+        중심으로 보며, 지금 가장 불편한 것부터 다룹니다.
+      </p>
+      <p class="cta-row">
+        <a class="cta" href={clinic.links.naverBooking}>네이버 예약</a>
+        <a class="cta ghost" href={`tel:${clinic.phone}`}>전화 {clinic.phone}</a>
+      </p>
+      <p class="cta-sub">
+        <a href={clinic.links.kakaoChannel}>카카오톡 문의</a> · <a href="/contact/">오시는 길</a> · <a href="/doctors/">의료진 소개</a>
+      </p>
+    </div>
+    {heroPhoto && (
+      <img
+        class="hero-photo"
+        src={heroPhoto}
+        alt="시호한의원 박종규 진료원장과 김은미 대표원장 — 한의사 2인 진료"
+        loading="eager"
+      />
+    )}
   </section>
 
   <section class="sec">
@@ -137,6 +150,17 @@ const clinics = [
     .home-hero { padding-bottom: 0.5rem; }
     .home-hero h1 { font-size: 2.15rem; }
     .home-hero .lead { max-width: 32rem; }
+
+    /* 사진이 있으면 2열, 없으면 텍스트만 그대로 */
+    .home-hero.has-photo { display: grid; gap: 1.75rem; align-items: center; }
+    .hero-photo {
+      display: block; width: 100%; height: auto;
+      border-radius: 10px; background: var(--sunk);
+    }
+    @media (min-width: 46rem) {
+      .home-hero.has-photo { grid-template-columns: 1.05fr 0.95fr; gap: 2.25rem; }
+      .home-hero.has-photo .hero-text { padding-bottom: 0.5rem; }
+    }
 
     /* 카드 전체를 링크로 */
     .link-card { display: block; text-decoration: none; }
