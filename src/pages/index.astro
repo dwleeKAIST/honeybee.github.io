@@ -2,77 +2,163 @@
 import Base from '../layouts/Base.astro';
 import { clinic } from '../data/clinic';
 import { getCollection } from 'astro:content';
-const treatments = (await getCollection('treatments')).sort((a, b) => a.data.order - b.data.order);
+const treatments = (await getCollection('treatments')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+
+// 클리닉 카드. 순서는 원장이 주로 보는 진료 순입니다.
+const clinics = [
+  {
+    href: '/autonomic/',
+    t: '자율신경 · 번아웃',
+    d: '불면, 어지럼, 두근거림, 이명, 공황·불안. 검사에서 이상이 없는데 불편이 이어지는 경우.',
+  },
+  {
+    href: '/digestion/',
+    t: '속편안 클리닉',
+    d: '기능성 소화불량, 역류 증상, 잘 체함, 과민한 장. 온열순환치료와 첩약 건강보험.',
+  },
+  {
+    href: '/rhinitis/',
+    t: '코편안 클리닉',
+    d: '코막힘, 콧물, 알레르기비염, 코골이. 비내시경으로 코 안을 직접 확인합니다.',
+  },
+  {
+    href: '/car-accident/',
+    t: '교통사고 한방치료',
+    d: '자동차보험 접수부터 진단서 발급까지. 평일 야간까지 통원하실 수 있습니다.',
+  },
+  {
+    href: '/posture/',
+    t: '체형교정',
+    d: '거북목, 골반 불균형, 턱관절. 아이밸런스로 체형을 측정하고 추나로 접근합니다.',
+  },
+  {
+    href: '/menopause/',
+    t: '갱년기 클리닉',
+    d: '안면홍조, 불면, 감정 기복. 요실금 등 비뇨생식기 증상과 남성 갱년기도 함께.',
+  },
+  {
+    href: '/student-care/',
+    t: '수험생 클리닉',
+    d: '비염, 소화, 수면과 체력, 통증. 공부를 방해하는 문제부터 살펴봅니다.',
+  },
+  {
+    href: '/skin-care/',
+    t: '피부미용',
+    d: '리프팅, 색소 치료, 스킨부스터, 필링과 안면매선. 원내 장비를 정리해 두었습니다.',
+  },
+];
 ---
+
 <Base title={clinic.slogan} description={clinic.metaDescription}>
-  <h1>{clinic.slogan},<br />시호한의원입니다.</h1>
-  <p class="lead">{clinic.address.full}로 소중한 분들을 모십니다.</p>
-  <p class="lead">
-    추나·도침·약침·매선 치료와 소화불량·불면·피로·스트레스 진료,
-    수험생·갱년기·다이어트·소아한약 클리닉을 운영합니다.
-  </p>
+  <section class="hero home-hero">
+    <p class="eyebrow">경기 화성시 동탄</p>
+    <h1>{clinic.slogan},<br />시호한의원입니다.</h1>
+    <p class="lead">
+      한방내과 전문의를 포함한 한의사 2인이 진료합니다. 통증과 자율신경, 비염을
+      중심으로 보며, 지금 가장 불편한 것부터 다룹니다.
+    </p>
+    <p class="cta-row">
+      <a class="cta" href={clinic.links.naverBooking}>네이버 예약</a>
+      <a class="cta ghost" href={`tel:${clinic.phone}`}>전화 {clinic.phone}</a>
+    </p>
+    <p class="cta-sub">
+      <a href={clinic.links.kakaoChannel}>카카오톡 문의</a> · <a href="/contact/">오시는 길</a> · <a href="/doctors/">의료진 소개</a>
+    </p>
+  </section>
 
-  <h2>진료 안내</h2>
-  <ul class="plain">
-    {treatments.map((t) => (
-      <li>
-        <a href={`/treatments/${t.id}/`}>{t.data.title}</a>
-        <span class="summary">{t.data.summary}</span>
-      </li>
-    ))}
-  </ul>
-  <p class="lead">
-    코막힘이나 알레르기비염은 <a href="/rhinitis/">코편안 클리닉 안내</a>,
-    갱년기는 <a href="/menopause/">갱년기 클리닉 안내</a>를 참고해 주세요.
-  </p>
-  <p class="lead">
-    속이 불편하시면 <a href="/digestion/">속편안 클리닉 안내</a>를 참고해 주세요.
-  </p>
-  <p class="lead">
-    검사에서 이상이 없는데 불편이 이어진다면
-    <a href="/autonomic/">자율신경 · 번아웃 진료 안내</a>를 참고해 주세요.
-  </p>
-  <p class="lead">
-    체형교정은 <a href="/posture/">체형교정 · 추나 안내</a>,
-    다이어트는 <a href="/diet/">한방 다이어트 안내</a>를 참고해 주세요.
-  </p>
-  <p class="lead">
-    피부미용은 <a href="/skin-care/">시술과 장비 안내</a> ·
-    <a href="/facial-maeseon/">안면매선</a>을 참고해 주세요.
-  </p>
-  <p class="lead">
-    교통사고로 오셨다면 <a href="/car-accident/">교통사고 한방치료 안내</a>를 참고해 주세요.
-  </p>
-  <p class="lead">
-    한약은 <a href="/insurance-herbs/">보험한약</a> ·
-    <a href="/gongjindan/">공진단 · 경옥고</a> ·
-    <a href="/student-care/herbal-medicine/">수험생 보약</a> 안내를 참고해 주세요.
-  </p>
+  <section class="sec">
+    <h2>어떤 진료를 찾으시나요?</h2>
+    <div class="cards home-cards">
+      {clinics.map((c) => (
+        <a class="card link-card" href={c.href}>
+          <strong>{c.t}</strong>
+          <span>{c.d}</span>
+        </a>
+      ))}
+    </div>
+  </section>
 
-  <h2>진료시간은 어떻게 되나요?</h2>
-  <ul class="plain hours-brief">
-    {clinic.hours.map((h) => (
-      <li>
-        <strong>{h.days}</strong> {h.open}–{h.close}
-        {h.lunch && <span class="summary">점심 {h.lunch}</span>}
-        {h.note && <span class="summary">{h.note}</span>}
-      </li>
-    ))}
-    <li><strong>일요일</strong> 휴진</li>
-  </ul>
-  <p class="lead">{clinic.closedDays}. {clinic.lastReception}</p>
+  <section class="sec band">
+    <h2>진료시간은 어떻게 되나요?</h2>
+    <ul class="hours">
+      {clinic.hours.map((h) => (
+        <li>
+          <strong>{h.days}</strong>
+          <span>
+            {h.open}–{h.close}
+            {h.lunch && ` · 점심 ${h.lunch}`}
+            {h.note && ` · ${h.note}`}
+          </span>
+        </li>
+      ))}
+      <li><strong>일요일</strong><span>휴진</span></li>
+    </ul>
+    <p class="note">
+      {clinic.closedDays}. {clinic.lastReception} 원장별 진료 요일은{' '}
+      <a href="/doctors/#schedule">의료진 소개</a>에서 확인하실 수 있습니다.
+    </p>
+  </section>
 
-  <h2>예약과 문의</h2>
-  <p>
-    전화 <a href={`tel:${clinic.phone}`}>{clinic.phone}</a> ·
-    <a href={clinic.links.naverBooking}>네이버 예약</a> ·
-    <a href={clinic.links.kakaoChannel}>카카오톡 문의</a>
-  </p>
-  <p><a href="/contact/">오시는 길 보기</a></p>
+  <section class="sec">
+    <h2>치료 항목은 무엇이 있나요?</h2>
+    <ul class="plain">
+      {treatments.map((t) => (
+        <li>
+          <a href={`/treatments/${t.id}/`}>{t.data.title}</a>
+          <span class="summary">{t.data.summary}</span>
+        </li>
+      ))}
+    </ul>
+    <p class="note">
+      건강보험이 적용되는 한약은 <a href="/insurance-herbs/">보험한약 안내</a>에,
+      자주 받는 질문은 <a href="/faq/">자주 묻는 질문</a>에 정리해 두었습니다.
+    </p>
+  </section>
+
+  <section class="sec band closing">
+    <h2>예약과 문의</h2>
+    <p>
+      {clinic.address.full}에 있습니다. 예약 없이도 진료가 가능하지만, 초진 상담이나
+      한약 상담은 시간이 조금 더 필요하니 미리 예약하고 오시는 편이 좋습니다.
+    </p>
+    <p class="cta-row">
+      <a class="cta" href={clinic.links.naverBooking}>네이버 예약</a>
+      <a class="cta ghost" href={`tel:${clinic.phone}`}>전화 {clinic.phone}</a>
+    </p>
+    <p class="cta-sub">
+      휴진 일정은 <a href={clinic.links.naverBooking}>네이버 예약창</a>에서 확인하실
+      수 있습니다.
+    </p>
+  </section>
 
   <style>
-    .hours-brief li { display: flex; flex-wrap: wrap; gap: 0 0.6rem; align-items: baseline; }
-    .hours-brief strong { min-width: 5.5rem; }
-    .hours-brief .summary { display: inline; }
+    .home-hero { padding-bottom: 0.5rem; }
+    .home-hero h1 { font-size: 2.15rem; }
+    .home-hero .lead { max-width: 32rem; }
+
+    /* 카드 전체를 링크로 */
+    .link-card { display: block; text-decoration: none; }
+    .link-card strong { text-decoration: none; }
+    .link-card span { color: var(--ink-soft); }
+    .link-card:hover strong { color: var(--accent-ink); }
+
+    /* 진료시간 목록 — clinic.ts에서 생성 */
+    .hours { list-style: none; margin: 1.25rem 0; padding: 0; max-width: var(--read); }
+    .hours li {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0 0.75rem;
+      align-items: baseline;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .hours strong { min-width: 5rem; }
+    .hours span { color: var(--ink-soft); font-size: 0.96rem; }
+
+    @media (max-width: 34rem) {
+      .home-hero h1 { font-size: 1.75rem; }
+    }
   </style>
 </Base>

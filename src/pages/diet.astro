@@ -142,7 +142,7 @@ const faqLd = [
       <li>복용 중 불편한 점이 생기면 멈추고 알려주세요</li>
     </ul>
     <p class="note">
-      복용 방법은 처방받으실 때 다시 안내해 드립니다. 복용 중 궁금한 점은
+      복용 방법은 처방받으실 때 다시 안내해 드립니다. 복용 중 궁금한 점은{' '}
       <a href={clinic.links.kakaoChannel}>카카오톡 채널</a>이나 전화로 문의하실 수
       있습니다.
     </p>
@@ -174,7 +174,7 @@ const faqLd = [
       </li>
     </ol>
     <p class="note">
-      박종규 진료원장은 대한한방비만학회 인증 한의사입니다. 이력은
+      박종규 진료원장은 대한한방비만학회 인증 한의사입니다. 이력은{' '}
       <a href="/doctors/">의료진 소개</a>에 정리해 두었습니다.
     </p>
   </section>
@@ -202,109 +202,16 @@ const faqLd = [
       <a class="cta" href={clinic.links.naverBooking}>다이어트 상담하기</a>
     </p>
     <p class="cta-sub">
-      전화 <a href={`tel:${clinic.phone}`}>{clinic.phone}</a> ·
-      <a href={clinic.links.kakaoChannel}>카카오톡 문의</a>
+      전화 <a href={`tel:${clinic.phone}`}>{clinic.phone}</a> · <a href={clinic.links.kakaoChannel}>카카오톡 문의</a>
     </p>
   </section>
 
   <style>
-    .hero,
-    .sec {
-      --surface: #fbfcfa;
-      --sunk: #edf0e9;
-    }
-    .sec { margin-top: 3.5rem; }
-    .sec > p { max-width: 34rem; margin: 0 0 1rem; }
-    .sec > p:last-child { margin-bottom: 0; }
-    .sec h2 + p { margin-top: 0; }
-
-    .band {
-      margin-inline: -1.25rem;
-      padding: 2.25rem 1.25rem 2.5rem;
-      background: var(--sunk);
-    }
-    .band > h2:first-child { margin-top: 0; }
-
-    .hero { margin-bottom: 1rem; }
-    .hero p { max-width: 34rem; margin: 0 0 1rem; }
-    .eyebrow {
-      margin: 0 0 0.75rem;
-      font-size: 0.82rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      color: var(--accent);
-    }
-    .hero h1 { line-height: 1.35; }
-    .hero .lead { font-size: 1.08rem; }
-
-    .cta-row { margin: 1.75rem 0 0.75rem; }
-    .cta {
-      display: inline-block;
-      padding: 0.75rem 1.6rem;
-      background: var(--accent);
-      color: var(--paper);
-      font-weight: 600;
-      text-decoration: none;
-      border-radius: 2px;
-      transition: background-color 0.15s ease;
-    }
-    .cta:hover { background: #7d561a; color: var(--paper); }
-    .cta-sub { margin: 0; font-size: 0.92rem; color: var(--ink-soft); }
-    .cta-sub a { color: var(--ink-soft); }
-    .cta-sub a:hover { color: var(--accent); }
-
-    .statement {
-      max-width: 34rem;
-      margin: 1.75rem 0 0;
-      padding-left: 1.1rem;
-      border-left: 3px solid var(--accent);
-      font-family: var(--serif);
-      font-size: 1.12rem;
-      line-height: 1.65;
-    }
-
-    .note { font-size: 0.94rem; color: var(--ink-soft); }
-
-    .cards {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 0.75rem;
-      margin: 1.5rem 0 0;
-      max-width: 34rem;
-    }
-    .card {
-      padding: 1.15rem 1.2rem;
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 2px;
-    }
-    .card strong {
-      font-family: var(--serif);
-      font-size: 1.1rem;
-      color: var(--accent);
-    }
-    .card em {
-      display: inline-block;
-      margin-left: 0.5rem;
-      padding: 0.1rem 0.5rem;
-      font-style: normal;
-      font-size: 0.78rem;
-      letter-spacing: 0.02em;
-      color: var(--ink-soft);
-      background: var(--sunk);
-      border-radius: 2px;
-    }
-    .card > span {
-      display: block;
-      margin-top: 0.45rem;
-      color: var(--ink-soft);
-      font-size: 0.96rem;
-    }
     /* 카드가 좁아도 줄바꿈이 어색하지 않게 라벨을 위, 값을 아래로 둡니다. */
     .card dl {
       margin: 0.85rem 0 0;
       padding-top: 0.75rem;
-      border-top: 1px solid var(--line);
+      border-top: 1px solid var(--line-soft);
       font-size: 0.92rem;
     }
     .card dt {
@@ -317,105 +224,5 @@ const faqLd = [
     .card dd { margin: 0 0 0.7rem; color: var(--ink-soft); }
     .card dd:last-child { margin-bottom: 0; }
     .card .price { display: block; }
-    @media (min-width: 34rem) {
-      .cards { grid-template-columns: 1fr 1fr; }
-    }
-
-    .cases {
-      list-style: none;
-      margin: 1.25rem 0 1.5rem;
-      padding: 0;
-      max-width: 34rem;
-    }
-    .cases li {
-      position: relative;
-      padding: 0.7rem 0 0.7rem 1.2rem;
-      border-bottom: 1px solid var(--line);
-    }
-    .cases li::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 1.45rem;
-      width: 5px;
-      height: 5px;
-      background: var(--accent);
-      border-radius: 50%;
-    }
-
-    .steps {
-      list-style: none;
-      counter-reset: step;
-      margin: 1.5rem 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      max-width: 34rem;
-    }
-    .steps li {
-      counter-increment: step;
-      position: relative;
-      padding: 1.1rem 1.15rem 1.1rem 3rem;
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 2px;
-    }
-    .steps li::before {
-      content: counter(step);
-      position: absolute;
-      left: 1.15rem;
-      top: 1.05rem;
-      font-family: var(--serif);
-      font-weight: 700;
-      color: var(--accent);
-    }
-    .steps strong {
-      display: block;
-      font-family: var(--serif);
-      font-size: 1.05rem;
-      margin-bottom: 0.2rem;
-    }
-    .steps span { color: var(--ink-soft); font-size: 0.96rem; }
-
-    /* FAQ 아코디언 — JS 없이 details/summary */
-    .faq { margin-top: 1.5rem; border-top: 1px solid var(--line); }
-    .faq details { border-bottom: 1px solid var(--line); }
-    .faq summary {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 1rem;
-      padding: 1rem 0;
-      font-weight: 600;
-      cursor: pointer;
-      list-style: none;
-    }
-    .faq summary::-webkit-details-marker { display: none; }
-    .faq summary::after {
-      content: '+';
-      flex: none;
-      color: var(--accent);
-      font-weight: 400;
-      font-size: 1.2rem;
-      line-height: 1;
-    }
-    .faq details[open] summary::after { content: '−'; }
-    .faq summary:hover { color: var(--accent); }
-    .faq .answer { padding: 0 0 1.1rem; max-width: 34rem; }
-    .faq .answer p {
-      margin: 0 0 0.7rem;
-      font-size: 0.96rem;
-      color: var(--ink-soft);
-    }
-    .faq .answer p:last-child { margin-bottom: 0; }
-
-    .closing { margin-top: 4rem; }
-
-    @media (max-width: 34rem) {
-      .hero h1 { font-size: 1.5rem; }
-      .statement { font-size: 1.05rem; }
-      .steps li { padding: 1rem 1rem 1rem 2.7rem; }
-    }
   </style>
 </Base>

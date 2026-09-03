@@ -266,99 +266,16 @@ const faqLd = [
       <a class="cta" href={clinic.links.naverBooking}>비염 상담하기</a>
     </p>
     <p class="cta-sub">
-      전화 <a href={`tel:${clinic.phone}`}>{clinic.phone}</a> ·
-      <a href={clinic.links.kakaoChannel}>카카오톡 문의</a>
+      전화 <a href={`tel:${clinic.phone}`}>{clinic.phone}</a> · <a href={clinic.links.kakaoChannel}>카카오톡 문의</a>
     </p>
   </section>
 
   <style>
-    .hero,
-    .sec {
-      --surface: #fbfcfa;
-      --sunk: #edf0e9;
-    }
-    .sec { margin-top: 3.5rem; }
-    .sec > p { max-width: 34rem; margin: 0 0 1rem; }
-    .sec > p:last-child { margin-bottom: 0; }
-    .sec h2 + p { margin-top: 0; }
-
-    .band {
-      margin-inline: -1.25rem;
-      padding: 2.25rem 1.25rem 2.5rem;
-      background: var(--sunk);
-    }
-    .band > h2:first-child { margin-top: 0; }
-
-    .hero { margin-bottom: 1rem; }
-    .hero p { max-width: 34rem; margin: 0 0 1rem; }
-    .eyebrow {
-      margin: 0 0 0.75rem;
-      font-size: 0.82rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      color: var(--accent);
-    }
-    .hero h1 { line-height: 1.35; }
-    .hero .lead { font-size: 1.08rem; }
-
-    .cta-row { margin: 1.75rem 0 0.75rem; }
-    .cta {
-      display: inline-block;
-      padding: 0.75rem 1.6rem;
-      background: var(--accent);
-      color: var(--paper);
-      font-weight: 600;
-      text-decoration: none;
-      border-radius: 2px;
-      transition: background-color 0.15s ease;
-    }
-    .cta:hover { background: #7d561a; color: var(--paper); }
-    .cta-sub { margin: 0; font-size: 0.92rem; color: var(--ink-soft); }
-    .cta-sub a { color: var(--ink-soft); }
-    .cta-sub a:hover { color: var(--accent); }
-
-    .statement {
-      max-width: 34rem;
-      margin: 1.75rem 0 0;
-      padding-left: 1.1rem;
-      border-left: 3px solid var(--accent);
-      font-family: var(--serif);
-      font-size: 1.12rem;
-      line-height: 1.65;
-    }
-
-    .note { font-size: 0.94rem; color: var(--ink-soft); }
-
-    .cards {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 0.75rem;
-      margin: 1.5rem 0 0;
-      max-width: 34rem;
-    }
-    .card {
-      padding: 1.1rem 1.15rem;
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 2px;
-    }
-    .card strong {
-      display: block;
-      font-family: var(--serif);
-      font-size: 1.05rem;
-      color: var(--accent);
-      margin-bottom: 0.25rem;
-    }
-    .card > span {
-      display: block;
-      color: var(--ink-soft);
-      font-size: 0.96rem;
-    }
-    .card a { display: inline-block; margin-top: 0.5rem; font-size: 0.9rem; }
+    /* 카드 안의 정의 목록 — 라벨과 값을 두 열로 */
     .card dl {
       margin: 0.85rem 0 0;
       padding-top: 0.75rem;
-      border-top: 1px solid var(--line);
+      border-top: 1px solid var(--line-soft);
       display: grid;
       grid-template-columns: auto 1fr;
       gap: 0.35rem 0.9rem;
@@ -366,70 +283,5 @@ const faqLd = [
     }
     .card dt { color: var(--ink-soft); white-space: nowrap; }
     .card dd { margin: 0; font-weight: 600; }
-    @media (min-width: 34rem) {
-      .cards { grid-template-columns: 1fr 1fr; }
-    }
-
-    .cases {
-      list-style: none;
-      margin: 1.25rem 0 1.5rem;
-      padding: 0;
-      max-width: 34rem;
-    }
-    .cases li {
-      position: relative;
-      padding: 0.7rem 0 0.7rem 1.2rem;
-      border-bottom: 1px solid var(--line);
-    }
-    .cases li::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 1.45rem;
-      width: 5px;
-      height: 5px;
-      background: var(--accent);
-      border-radius: 50%;
-    }
-    .cases strong { color: var(--accent); }
-
-    /* FAQ 아코디언 — JS 없이 details/summary */
-    .faq { margin-top: 1.5rem; border-top: 1px solid var(--line); }
-    .faq details { border-bottom: 1px solid var(--line); }
-    .faq summary {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 1rem;
-      padding: 1rem 0;
-      font-weight: 600;
-      cursor: pointer;
-      list-style: none;
-    }
-    .faq summary::-webkit-details-marker { display: none; }
-    .faq summary::after {
-      content: '+';
-      flex: none;
-      color: var(--accent);
-      font-weight: 400;
-      font-size: 1.2rem;
-      line-height: 1;
-    }
-    .faq details[open] summary::after { content: '−'; }
-    .faq summary:hover { color: var(--accent); }
-    .faq .answer { padding: 0 0 1.1rem; max-width: 34rem; }
-    .faq .answer p {
-      margin: 0 0 0.7rem;
-      font-size: 0.96rem;
-      color: var(--ink-soft);
-    }
-    .faq .answer p:last-child { margin-bottom: 0; }
-
-    .closing { margin-top: 4rem; }
-
-    @media (max-width: 34rem) {
-      .hero h1 { font-size: 1.5rem; }
-      .statement { font-size: 1.05rem; }
-    }
   </style>
 </Base>
