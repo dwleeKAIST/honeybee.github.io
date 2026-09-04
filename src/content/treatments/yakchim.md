@@ -45,6 +45,13 @@ faqs:
 
 시호한의원 박종규 진료원장은 미국근골격계초음파사(RMSK) 자격을 취득했습니다. 근골격계 초음파를 판독하는 자격으로, 초음파를 보면서 진행하는 시술에 활용합니다. 이력은 [의료진 소개](/doctors/)에 정리해 두었습니다.
 
+<div class="us-grid">
+  <img src="/images/ultrasound-shoulder.webp" alt="어깨 관절 초음파 진단" width="1080" height="1080" loading="lazy">
+  <img src="/images/ultrasound-knee.webp" alt="무릎 관절 초음파 진단" width="1080" height="1080" loading="lazy">
+  <img src="/images/ultrasound-wrist.webp" alt="손목 관절 초음파 진단" width="1080" height="1080" loading="lazy">
+  <img src="/images/ultrasound-plantar.webp" alt="족저근막염 초음파 진단" width="1080" height="1080" loading="lazy">
+</div>
+
 시호한의원에서는 통증 부위를 살펴볼 때 초음파를 함께 활용합니다. 약침을 주입할 때뿐 아니라, 도침 시술 지점을 정할 때나 추나요법 전에 조직 상태를 확인할 때도 사용합니다.
 
 검사 결과에서 뚜렷한 소견이 없는데 통증이 이어지는 경우, 지금 어느 부위가 어떤 상태인지 함께 보면서 설명해 드립니다.
