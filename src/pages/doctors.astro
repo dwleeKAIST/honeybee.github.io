@@ -28,6 +28,7 @@ const doctors = [
     role: '대표원장',
     credential: '한방내과 전문의 (보건복지부)',
     photo: img(photos.kimEunmi),
+    card: img(photos.cardKimEunmi),
     career: [
       '대전대학교 한의예과 · 한의학과 졸업',
       '청연한방병원 일반수련의 / 전문수련의',
@@ -68,6 +69,7 @@ const doctors = [
     role: '진료원장',
     credential: null,
     photo: img(photos.parkJonggyu),
+    card: img(photos.cardParkJonggyu),
     career: [
       '대전대학교 청주한방병원 일반수련의 수료',
       '前 명작한의원 진료원장',
@@ -130,7 +132,7 @@ const jsonLd = [
   </p>
   {photoTogether && (
     <img
-      class="place-photo"
+      class="place-photo doc-photo"
       src={photoTogether}
       alt="시호한의원 박종규 진료원장과 김은미 대표원장 — 한의사 2인 진료, 통증·자율신경·비염"
       loading="lazy"
@@ -139,7 +141,7 @@ const jsonLd = [
 
   {photoConsult && (
     <img
-      class="place-photo"
+      class="place-photo doc-photo"
       src={photoConsult}
       alt="김은미 대표원장이 진료실에서 환자를 진찰하는 모습"
       loading="lazy"
@@ -202,7 +204,10 @@ const jsonLd = [
   {doctors.map((d) => (
     <section class="doc" id={d.id}>
       <div class="head">
-        {d.photo && <img src={d.photo} alt={`${d.name} ${d.role}`} width="200" height="267" loading="lazy" />}
+        {/* 이력 카드 이미지가 있으면 얼굴이 그 안에 있으므로 따로 넣지 않습니다. */}
+        {d.photo && !d.card && (
+          <img src={d.photo} alt={`${d.name} ${d.role}`} width="200" height="267" loading="lazy" />
+        )}
         <div class="name">
           <h2>{d.name} <span>{d.role}</span></h2>
           {d.credential && <p class="cred">{d.credential}</p>}
@@ -213,6 +218,15 @@ const jsonLd = [
         <blockquote class="greeting">
           {d.greeting.map((g) => <p>{g}</p>)}
         </blockquote>
+      )}
+
+      {d.card && (
+        <img
+          class="profile-card"
+          src={d.card}
+          alt={`${d.name} ${d.role} 이력 안내`}
+          loading="lazy"
+        />
       )}
 
       <h3>이력</h3>
@@ -349,6 +363,22 @@ const jsonLd = [
       line-height: 1.7;
     }
     .greeting p:last-child { margin-bottom: 0; }
+
+    /* 페이지 안의 사진들을 이력 카드와 같은 폭으로 맞춥니다. */
+    .doc-photo { max-width: 26rem; }
+
+    /* 이력 카드 이미지 — 아래 텍스트 이력과 같은 내용입니다.
+       이미지 속 글자는 검색엔진이 읽지 못하므로 텍스트를 함께 둡니다. */
+    .profile-card {
+      display: block;
+      width: 100%;
+      max-width: 26rem;
+      height: auto;
+      margin: 0.5rem 0 1.5rem;
+      border: 1px solid var(--line-soft);
+      border-radius: 8px;
+      background: var(--sunk);
+    }
 
     .doc h3 { margin-top: 2rem; }
     .doc ul { max-width: 34rem; }
