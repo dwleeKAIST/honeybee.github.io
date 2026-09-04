@@ -59,11 +59,15 @@ const clinics = [
   <PromoBanner />
   <section class={`hero home-hero${heroPhoto ? ' has-photo' : ''}`}>
     <div class="hero-text">
-      <p class="eyebrow">경기 화성시 동탄</p>
-      <h1>{clinic.slogan},<br />시호한의원입니다.</h1>
+      <p class="eyebrow">경기 화성시 동탄 · 통증과 내과질환을 함께 보는 한의원</p>
+      <h1>몸이 보내는 신호를 읽고,<br class="br-wide" />회복의 방향을 찾습니다.</h1>
       <p class="lead">
-        한방내과 전문의를 포함한 한의사 2인이 진료합니다. 통증과 자율신경, 비염을
-        중심으로 보며, 지금 가장 불편한 것부터 다룹니다.
+        한방내과 전문의를 포함한 두 한의사가 통증부터 자율신경, 비염과 소화
+        문제까지 함께 살핍니다.
+      </p>
+      <p class="lead lead-soft">
+        오늘의 불편을 덜어내는 것을 넘어, 더 건강한 일상으로 이어지는 진료를
+        합니다.
       </p>
       <p class="cta-row">
         <a class="cta" href={clinic.links.naverBooking}>네이버 예약</a>
@@ -152,6 +156,18 @@ const clinics = [
     .home-hero { padding-bottom: 0.5rem; }
     .home-hero h1 { font-size: 2.15rem; }
     .home-hero .lead { max-width: 32rem; }
+    /* 두 문단이 이어지므로 뒤 문단은 한 톤 낮춰 읽는 리듬을 만듭니다. */
+    .home-hero .lead-soft { color: var(--ink-soft); }
+
+    /* 2열로 갈라지는 폭에서는 글 칸이 좁아 제목이 네 줄로 흩어집니다.
+       강제 줄바꿈을 풀고 글자를 한 단계 줄여 두 줄로 앉힙니다. */
+    @media (max-width: 58rem) {
+      .home-hero .br-wide { display: none; }
+      .home-hero h1 { text-wrap: balance; }
+    }
+    @media (min-width: 46rem) and (max-width: 58rem) {
+      .home-hero h1 { font-size: 1.8rem; }
+    }
 
     /* 사진이 있으면 2열, 없으면 텍스트만 그대로 */
     .home-hero.has-photo { display: grid; gap: 1.75rem; align-items: center; }
