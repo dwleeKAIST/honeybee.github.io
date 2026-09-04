@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import { clinic } from '../data/clinic';
 import { img, photos } from '../lib/img';
 import { getCollection } from 'astro:content';
+import PromoPopup from '../components/PromoPopup.astro';
 const treatments = (await getCollection('treatments')).sort(
   (a, b) => a.data.order - b.data.order,
 );
@@ -55,6 +56,7 @@ const clinics = [
 ---
 
 <Base title={clinic.slogan} description={clinic.metaDescription}>
+  <PromoPopup />
   <section class={`hero home-hero${heroPhoto ? ' has-photo' : ''}`}>
     <div class="hero-text">
       <p class="eyebrow">경기 화성시 동탄</p>
