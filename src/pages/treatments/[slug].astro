@@ -49,6 +49,21 @@ const jsonLd = faqs.length
   <p><a href="/treatments/">← 진료 안내 목록</a> · <a href="/faq/">자주 묻는 질문</a></p>
 
   <style>
+    /* 본문(마크다운) 안에 넣은 사진 격자 — 어깨·무릎·손목·족저근막 초음파 */
+    .prose :global(.us-grid) {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+      margin: 1.75rem 0;
+    }
+    .prose :global(.us-grid img) {
+      display: block;
+      width: 100%;
+      height: auto;
+      border: 1px solid var(--line-soft);
+      border-radius: 8px;
+    }
+
     .faq-section { margin-top: 3rem; }
 
     /* FAQ 아코디언 — JS 없이 details/summary */
