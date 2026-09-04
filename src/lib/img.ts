@@ -35,10 +35,14 @@ export const photos = {
   reception: 'clinic-reception',
   /** 진료실 상담 — 의료진 소개 */
   consult: 'consult-room',
-  /** 김은미 대표원장 */
+  /** 김은미 대표원장 — 인물 사진 */
   kimEunmi: 'doctor-kim-eunmi',
-  /** 박종규 진료원장 */
+  /** 박종규 진료원장 — 인물 사진 */
   parkJonggyu: 'doctor-park-jonggyu',
+  /** 김은미 대표원장 — 이력 카드 이미지 */
+  cardKimEunmi: 'profile-kim-eunmi',
+  /** 박종규 진료원장 — 이력 카드 이미지 */
+  cardParkJonggyu: 'profile-park-jonggyu',
   /** 진료시간표 이미지 — 의료진 소개 */
   schedule: 'schedule',
 } as const;
