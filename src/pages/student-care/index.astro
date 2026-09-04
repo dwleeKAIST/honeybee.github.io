@@ -2,6 +2,10 @@
 import Base from '../../layouts/Base.astro';
 import { clinic } from '../../data/clinic';
 import { pages } from '../../data/links';
+import { img, photos } from '../../lib/img';
+
+// 그림이 있으면 해당 항목 아래에 표시합니다. 파일이 없으면 자리를 비웁니다.
+const menstrualFigure = img(photos.menstrualMechanism);
 
 // Base 레이아웃이 `{title} | 시호한의원`으로 조합하므로 뒤쪽 브랜드명은 넣지 않습니다.
 const title = '동탄 수험생 한의원 | 비염·소화·수면·체력·통증 맞춤진료';
@@ -74,6 +78,9 @@ const details = [
   {
     id: 'menstrual',
     title: '월경통·PMS',
+    figure: menstrualFigure,
+    figureAlt:
+      '월경통 발생 과정과 한의학 치료를 정리한 그림. 프로스타글란딘 과분비, 자궁 근육 과수축, 혈류 감소, 산소 부족으로 통증이 생기며, 한의학 치료는 어혈 제거와 혈액순환 개선으로 수축을 완화하고 첩약 건강보험이 적용된다는 내용',
     body: [
       '한 달에 한 번씩 반복되는 월경통은 여학생의 수험생활에서 생각보다 큰 변수가 될 수 있습니다.',
       '통증으로 공부하기 힘들거나, 월경 전후로 두통, 부종, 소화불량, 피로와 같은 증상이 함께 나타난다면 매달 일정 기간 컨디션이 흔들릴 수 있습니다.',
@@ -334,6 +341,16 @@ const faqLd = [
         <article class="detail" id={d.id}>
           <h3>{d.title}</h3>
           {d.body.map((t) => <p>{t}</p>)}
+          {d.figure && (
+            <img
+              class="detail-figure"
+              src={d.figure}
+              alt={d.figureAlt}
+              width="896"
+              height="896"
+              loading="lazy"
+            />
+          )}
           <div class="care">
             <p class="care-label">진료 방식</p>
             {d.care.map((t) => <p>{t}</p>)}
@@ -594,6 +611,15 @@ const faqLd = [
 
     /* ── 6개 상세 영역 ── */
     .care .more { margin-top: 0.6rem; font-size: 0.94rem; }
+    .detail-figure {
+      display: block;
+      width: 100%;
+      max-width: 26rem;
+      height: auto;
+      margin: 1rem 0 0;
+      border: 1px solid var(--line-soft);
+      border-radius: 8px;
+    }
 
     .details {
       margin-top: 2rem;
