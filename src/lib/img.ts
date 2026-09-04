@@ -45,4 +45,8 @@ export const photos = {
   cardParkJonggyu: 'profile-park-jonggyu',
   /** 진료시간표 이미지 — 의료진 소개 */
   schedule: 'schedule',
+  /** 월경통 발생 기전 인포그래픽 — 수험생 클리닉 월경통 항목 */
+  menstrualMechanism: 'menstrual-pain-mechanism',
+  /** 월경통 첩약 건강보험 인포그래픽 — 자주 묻는 질문 */
+  menstrualInsurance: 'menstrual-pain-insurance',
 } as const;
