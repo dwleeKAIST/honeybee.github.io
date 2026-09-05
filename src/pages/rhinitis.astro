@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { clinic } from '../data/clinic';
-import { chuppyakInsurance } from '../data/rhinitis-prices';
+import { chuppyak } from '../data/chuppyak';
 
 const title = '동탄 비염 한의원 | 코편안 클리닉 · 알레르기비염 진료';
 const description =
@@ -263,15 +263,16 @@ const faqLd = [
         처방이 있습니다
       </li>
       <li>
-        <strong>첩약 건강보험</strong> — {chuppyakInsurance.disease}은 적용 가능
-        상병에 해당하여, 맞춤 한약도 건강보험으로 처방받으실 수 있습니다
+        <strong>첩약 건강보험</strong> — 알레르기비염은 적용 가능 상병에 해당하여,
+        맞춤 한약도 건강보험으로 처방받으실 수 있습니다
       </li>
     </ul>
     <p>
-      첩약 건강보험으로 처방받으시는 경우 {chuppyakInsurance.amount} 기준 본인부담은
-      약 {chuppyakInsurance.patientPay}입니다. {chuppyakInsurance.privateInsuranceNote}
+      첩약 건강보험으로 처방받으시는 경우 {chuppyak.amount} 기준 본인부담은
+      약 {chuppyak.patientPay}입니다. {chuppyak.privateInsuranceNote}
     </p>
     <p class="note">
+      첩약 건강보험 제도 전반은 <a href="/chuppyak/">첩약 건강보험 안내</a>에,
       보험한약 전체 목록은 <a href="/insurance-herbs/">보험한약 안내</a>에 정리해
       두었습니다. 건강보험이 적용되지 않는 맞춤 한약으로 처방받으시는 경우에는
       상담에서 비용을 안내해 드립니다.

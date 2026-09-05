@@ -1,6 +1,6 @@
 # 시호한의원 홈페이지 (thesiho.kr)
 
-Astro 기반 정적 사이트. Cloudflare Pages에 연결되어 main 브랜치에 push하면 자동 배포됩니다.
+Astro 기반 정적 사이트. Cloudflare Workers(정적 자산)에 연결되어 main 브랜치에 push하면 자동 배포됩니다.
 
 ## 자주 하는 작업
 
