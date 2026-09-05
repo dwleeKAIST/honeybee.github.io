@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import { clinic } from '../data/clinic';
 import { img, photos } from '../lib/img';
-const desc = `시호한의원 오시는 길, 주소, 전화번호, 예약 방법 안내. ${clinic.address.full}`;
+const desc = `화성시 동탄구 목동 시호한의원 오시는 길과 주소, 전화번호, 예약 방법 안내.`;
 const reception = img(photos.reception);
 ---
 <Base title="오시는 길 · 예약" description={desc}>
@@ -19,6 +19,10 @@ const reception = img(photos.reception);
 
   <h2>주소</h2>
   <p>{clinic.address.full}</p>
+  <p>
+    시호한의원은 <strong>경기도 화성시 동탄구 목동</strong>, 동탄2신도시 동탄리더스타워
+    2층에 있습니다. 동탄구와 인근 지역에서 오시는 분들이 많습니다.
+  </p>
   <p>
     <a href={clinic.links.kakaoMap}>카카오맵</a> · <a href={clinic.links.naverMap}>네이버맵</a> · <a href={clinic.links.tMap}>T맵</a> · <a href={clinic.links.googleMap}>구글맵</a>
   </p>
