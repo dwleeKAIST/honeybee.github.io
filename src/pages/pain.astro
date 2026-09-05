@@ -40,22 +40,40 @@ const summary = [
 
 const areas = [
   {
+    id: 'shoulder',
     t: '어깨',
     d: '팔을 들 때 아프거나 힘이 빠지는 경우, 밤에 통증으로 잠을 설치는 경우.',
+    more: '어깨는 힘줄과 관절 주변 조직이 겹쳐 있어 엑스레이만으로는 확인되지 않는 경우가 많습니다. 초음파로 어느 층의 문제인지 확인한 뒤 침, 약침, 도침 가운데 필요한 것을 정합니다.',
   },
   {
+    id: 'neck-back',
     t: '목 · 허리',
     d: '오래 앉아 일하며 생긴 결림, 자세와 함께 반복되는 통증, 다리로 내려가는 저림.',
+    more: '자세와 함께 반복되는 경우가 많아 움직임과 좌우 균형을 같이 봅니다. 추나요법은 건강보험이 적용되고, 요추추간판탈출증으로 진단되면 한약도 첩약 건강보험으로 처방받으실 수 있습니다.',
   },
-  { t: '무릎', d: '계단이나 앉았다 일어설 때의 통증, 오래 걷고 난 뒤의 불편.' },
   {
+    id: 'knee',
+    t: '무릎',
+    d: '계단이나 앉았다 일어설 때의 통증, 오래 걷고 난 뒤의 불편.',
+    more: '무릎은 관절 안쪽과 주변 인대·힘줄을 나누어 보아야 합니다. 초음파로 부기나 조직 상태를 확인하고, 걷는 동작에서 어느 지점이 아픈지 함께 봅니다.',
+  },
+  {
+    id: 'wrist-hand',
     t: '손목 · 손',
     d: '반복 작업 뒤의 손목 통증, 손이 저리거나 붓는 느낌.',
+    more: '손 저림은 손목에서 비롯되기도 하고 목에서 내려오기도 합니다. 어느 쪽인지에 따라 치료 부위가 달라져, 초음파와 이학적 검사로 구분한 뒤 진행합니다.',
   },
-  { t: '발 · 발목', d: '아침 첫걸음이 아픈 발바닥, 접질린 뒤 남은 발목 불편.' },
   {
+    id: 'foot-ankle',
+    t: '발 · 발목',
+    d: '아침 첫걸음이 아픈 발바닥, 접질린 뒤 남은 발목 불편.',
+    more: '아침 첫걸음이 아픈 경우 족저근막을 초음파로 확인합니다. 접질린 뒤 오래 남은 발목 불편도 인대 상태를 보면서 진행합니다.',
+  },
+  {
+    id: 'tmj',
     t: '턱관절',
     d: '입을 벌릴 때 소리가 나거나 아픈 경우. 체형·자세와 함께 살핍니다.',
+    more: '턱관절은 목과 어깨의 긴장, 자세와 함께 나타나는 경우가 있어 얼굴 부위만 따로 보지 않습니다. 박종규 진료원장은 TBT 턱관절균형요법 전문과정을 수료했습니다.',
   },
 ];
 
@@ -171,11 +189,15 @@ const faqLd = [
 
   <section class="sec band">
     <h2>어떤 부위를 진료하나요?</h2>
+    <nav class="toc" aria-label="부위 바로가기">
+      {areas.map((a) => <a href={`#${a.id}`}>{a.t}</a>)}
+    </nav>
     <div class="cards">
       {areas.map((a) => (
         <div class="card">
           <strong>{a.t}</strong>
           <span>{a.d}</span>
+          <a href={`#${a.id}`}>자세히 보기</a>
         </div>
       ))}
     </div>
@@ -186,6 +208,17 @@ const faqLd = [
   </section>
 
   <section class="sec">
+    <h2>부위별로 무엇을 확인하나요?</h2>
+    {areas.map((a) => (
+      <div class="area" id={a.id}>
+        <h3>{a.t}</h3>
+        <p>{a.d}</p>
+        <p>{a.more}</p>
+      </div>
+    ))}
+  </section>
+
+  <section class="sec band">
     <h2>왜 초음파로 확인하나요?</h2>
     <p>
       통증은 겉으로 보이지 않습니다. 같은 어깨 통증이라도 힘줄의 문제인 경우와
@@ -221,7 +254,7 @@ const faqLd = [
     </p>
   </section>
 
-  <section class="sec band">
+  <section class="sec">
     <h2>어떤 치료를 받게 되나요?</h2>
     <ul class="cases">
       <li>
@@ -258,7 +291,7 @@ const faqLd = [
     </p>
   </section>
 
-  <section class="sec">
+  <section class="sec band">
     <h2>진료는 어떤 순서로 진행되나요?</h2>
     <ol class="steps">
       {steps.map((s) => (
@@ -270,7 +303,7 @@ const faqLd = [
     </ol>
   </section>
 
-  <section class="sec band">
+  <section class="sec">
     <h2>같은 곳이 자꾸 아프다면</h2>
     <p>
       한 부위가 반복해서 아프다면 그 부위만 보는 것으로는 부족한 경우가 있습니다.
@@ -283,7 +316,7 @@ const faqLd = [
     </p>
   </section>
 
-  <section class="sec">
+  <section class="sec band">
     <h2>통증 진료 자주 묻는 질문</h2>
     <div class="faq">
       {faqs.map((f) => (
@@ -295,7 +328,7 @@ const faqLd = [
     </div>
   </section>
 
-  <section class="sec band closing">
+  <section class="sec closing">
     <h2>상담과 예약</h2>
     <p>
       시호한의원은 <strong>경기도 화성시 동탄구 목동, 동탄신리천로 407
@@ -317,6 +350,40 @@ const faqLd = [
   </section>
 
   <style>
+    /* 부위 바로가기 */
+    .toc {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin: 1.25rem 0 0;
+    }
+    .toc a {
+      padding: 0.35rem 0.75rem;
+      border: 1px solid var(--line-soft);
+      border-radius: 999px;
+      background: var(--surface);
+      font-size: 0.92rem;
+      text-decoration: none;
+    }
+    .toc a:hover { border-color: var(--accent); }
+
+    /* 부위별 설명 */
+    .area {
+      max-width: var(--read);
+      padding: 1.25rem 0;
+      border-bottom: 1px solid var(--line-soft);
+      /* 상단 고정 헤더(약 126px) 아래로 오도록 여유를 둡니다 */
+      scroll-margin-top: 9rem;
+    }
+    .area:last-of-type { border-bottom: 0; }
+    .area h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.02rem;
+      color: var(--accent);
+    }
+    .area p { margin: 0 0 0.6rem; }
+    .area p:last-child { margin-bottom: 0; }
+
     /* 부위별 초음파 사진 격자 */
     .us-grid {
       display: grid;
