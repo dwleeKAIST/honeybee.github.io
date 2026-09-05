@@ -28,7 +28,11 @@ export const chuppyak = {
       note: '검사에서 뚜렷한 원인이 나오지 않는 소화 증상',
       href: '/digestion/',
     },
-    { name: '월경통', note: '매달 반복되는 월경 통증', href: null },
+    {
+      name: '월경통',
+      note: '매달 반복되는 월경 통증',
+      href: '/menstrual-pain/',
+    },
     {
       name: '요추추간판탈출증',
       note: '허리 디스크로 인한 통증과 다리 저림',
