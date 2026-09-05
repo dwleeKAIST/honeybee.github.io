@@ -9,6 +9,6 @@ export const pages = {
   contact: '/contact/',
   /** 수험생 클리닉 — 청소년·수험생 관련 안내를 여기로 연결합니다. */
   studentCare: '/student-care/' as string | null,
-  /** 소아 진료 독립 페이지. 만들면 '/pediatrics/' 처럼 경로를 채우세요. */
-  pediatrics: null as string | null,
+  /** 소아 진료 독립 페이지. */
+  pediatrics: '/pediatrics/' as string | null,
 };
