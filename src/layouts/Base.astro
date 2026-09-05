@@ -1,5 +1,6 @@
 ---
 import { clinic } from '../data/clinic';
+import { webAnalyticsToken } from '../data/analytics';
 
 interface Props {
   title: string;
@@ -586,5 +587,16 @@ const isCurrent = (href: string) =>
         html { scroll-behavior: auto; }
       }
     </style>
+
+    {/* Cloudflare Web Analytics — 쿠키 없이 실제 방문자만 집계합니다.
+        is:inline을 붙여 Astro가 손대지 않고 그대로 내보내게 합니다. */}
+    {webAnalyticsToken && (
+      <script
+        is:inline
+        type="module"
+        src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon={`{"token": "${webAnalyticsToken}"}`}
+      />
+    )}
   </body>
 </html>
