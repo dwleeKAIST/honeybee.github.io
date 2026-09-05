@@ -1,0 +1,320 @@
+---
+import Base from '../layouts/Base.astro';
+import { clinic } from '../data/clinic';
+import { img } from '../lib/img';
+
+const title = '동탄 목동 관절·근육 통증';
+const description =
+  '화성시 동탄구 목동 시호한의원. 어깨·목·허리·무릎·손목·발 통증을 초음파로 확인하고 침·약침·도침·추나로 진료합니다.';
+
+// 이 페이지는 새로운 의료 내용을 만들지 않았습니다. 이미 사이트에 있고
+// 원장 확인을 거친 서술만 모아 부위별로 다시 구성했습니다.
+//   - 초음파 진단 4부위(어깨·무릎·손목·족저근막) — /treatments/yakchim/ 이미지
+//   - 박종규 진료원장 RMSK, 척추신경추나의학회, 시리악스 정형의학회,
+//     TBT 턱관절균형요법, 대한스포츠한의학회 — /doctors/
+//   - 침·약침·초음파약침·도침·추나·매선 — /treatments/*
+//   - 추나 건강보험 적용 — /treatments/chuna/
+//   - 요추추간판탈출증 첩약 건강보험 — /chuppyak/
+//
+// ⚠ 확인 필요: 부위 목록에 빠지거나 더할 것이 있는지
+
+const ultrasound = [
+  { name: 'shoulder', part: '어깨 관절', file: 'ultrasound-shoulder' },
+  { name: 'knee', part: '무릎 관절', file: 'ultrasound-knee' },
+  { name: 'wrist', part: '손목 관절', file: 'ultrasound-wrist' },
+  { name: 'plantar', part: '족저근막', file: 'ultrasound-plantar' },
+]
+  .map((u) => ({ ...u, src: img(u.file) }))
+  .filter((u) => u.src);
+
+const summary = [
+  '경기 화성시 동탄구 목동, 동탄리더스타워 2층',
+  '어깨 · 목 · 허리 · 무릎 · 손목 · 발 통증을 진료합니다',
+  '필요한 경우 초음파로 해당 부위를 직접 확인합니다',
+  '침 · 약침 · 초음파약침 · 도침 · 추나 · 매선',
+  '추나요법은 건강보험이 적용됩니다',
+];
+
+const areas = [
+  {
+    t: '어깨',
+    d: '팔을 들 때 아프거나 힘이 빠지는 경우, 밤에 통증으로 잠을 설치는 경우.',
+  },
+  {
+    t: '목 · 허리',
+    d: '오래 앉아 일하며 생긴 결림, 자세와 함께 반복되는 통증, 다리로 내려가는 저림.',
+  },
+  { t: '무릎', d: '계단이나 앉았다 일어설 때의 통증, 오래 걷고 난 뒤의 불편.' },
+  {
+    t: '손목 · 손',
+    d: '반복 작업 뒤의 손목 통증, 손이 저리거나 붓는 느낌.',
+  },
+  { t: '발 · 발목', d: '아침 첫걸음이 아픈 발바닥, 접질린 뒤 남은 발목 불편.' },
+  {
+    t: '턱관절',
+    d: '입을 벌릴 때 소리가 나거나 아픈 경우. 체형·자세와 함께 살핍니다.',
+  },
+];
+
+const steps = [
+  {
+    t: '문진과 이학적 검사',
+    d: '언제부터, 어떤 동작에서 아픈지 확인하고 움직임을 직접 봅니다.',
+  },
+  {
+    t: '필요하면 초음파',
+    d: '근육·인대·힘줄은 층이 다릅니다. 지금 어느 부위가 어떤 상태인지 화면을 함께 보며 설명해 드립니다.',
+  },
+  {
+    t: '치료 방향 결정',
+    d: '침, 약침, 초음파약침, 도침, 추나, 매선 가운데 필요한 것을 정합니다.',
+  },
+  {
+    t: '경과 확인',
+    d: '반응을 보며 치료 간격과 방법을 조정합니다. 생활에서 조심할 부분도 함께 안내합니다.',
+  },
+];
+
+const faqs = [
+  {
+    q: '동탄 목동에서 관절·근육 통증을 진료하는 한의원인가요?',
+    a: [
+      '네. 시호한의원은 경기 화성시 동탄구 목동, 동탄신리천로 407 동탄리더스타워 2층에서 어깨·목·허리·무릎·손목·발 통증을 진료합니다.',
+      '필요한 경우 초음파로 해당 부위를 확인한 뒤 침, 약침, 도침, 추나 가운데 필요한 치료를 정합니다.',
+    ],
+  },
+  {
+    q: '한 번 치료받으면 바로 좋아지나요?',
+    a: [
+      '한 번의 치료로 정리되는 경우도 있지만, 대개는 여러 차례에 걸쳐 변화를 봅니다.',
+      '증상이 오래되어 만성화된 경우에는 쌓여 온 기간만큼 시간이 걸립니다. 치료 간격과 횟수는 부위와 상태에 따라 다르므로 진찰 후 말씀드립니다.',
+      '또 아픈 부위에 계속 무리가 가해지면 회복이 늦어집니다. 당분간 조심할 동작도 함께 안내해 드립니다.',
+    ],
+  },
+  {
+    q: '엑스레이나 MRI에서 이상이 없다고 하는데 계속 아픕니다.',
+    a: [
+      '뼈에 문제가 없다는 것은 중요한 정보입니다. 검사 결과가 있으시면 가져와 주세요.',
+      '근육과 인대, 힘줄의 상태는 엑스레이로 확인되지 않습니다. 이런 경우 초음파로 해당 부위를 직접 보면서 어디에서 비롯된 불편인지 살펴봅니다.',
+    ],
+  },
+  {
+    q: '초음파 검사는 왜 하나요?',
+    a: [
+      '근육, 인대, 힘줄, 신경은 서로 층이 다릅니다. 초음파로 화면을 보면 지금 어느 층이 어떤 상태인지 확인할 수 있습니다.',
+      '약침을 주입할 때뿐 아니라 도침 시술 지점을 정할 때, 추나요법 전에 조직 상태를 확인할 때도 사용합니다.',
+      '박종규 진료원장은 근골격계 초음파를 판독하는 미국근골격계초음파사(RMSK) 자격을 취득했습니다.',
+    ],
+  },
+  {
+    q: '건강보험이 적용되나요?',
+    a: [
+      '침 치료와 추나요법은 건강보험이 적용됩니다.',
+      '요추추간판탈출증으로 진단되는 경우에는 맞춤 한약도 첩약 건강보험으로 처방받으실 수 있습니다.',
+      '건강보험이 적용되지 않는 치료는 진행 전에 비용을 안내해 드립니다.',
+    ],
+  },
+  {
+    q: '교통사고로 아픈 경우도 여기서 보나요?',
+    a: [
+      '네. 자동차보험 적용 진료가 가능합니다. 사고접수번호를 알려주시면 보험사와 소통해 드립니다.',
+      '교통사고 진료는 별도로 정리해 두었으니 함께 참고해 주세요.',
+    ],
+  },
+  {
+    q: '자세가 문제인 것 같은데 통증 치료만 받으면 되나요?',
+    a: [
+      '같은 부위가 반복해서 아프다면 자세와 움직임을 함께 보는 편이 좋습니다.',
+      '거북목, 골반 불균형, 좌우 비대칭이 함께 있는 경우에는 체형교정 진료와 연결해 진행합니다.',
+    ],
+  },
+];
+
+const faqLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a.join(' ') },
+    })),
+  },
+];
+---
+
+<Base title={title} description={description} jsonLd={faqLd}>
+  <section class="hero">
+    <p class="eyebrow">관절 · 근육 통증</p>
+    <h1>동탄 목동 통증 진료 — 어디가 어떤 상태인지 보고 시작합니다</h1>
+    <p class="lead">
+      시호한의원은 경기 화성시 동탄구 목동에서 어깨, 목, 허리, 무릎, 손목, 발의
+      통증을 진료합니다. 필요한 경우 초음파로 해당 부위를 직접 확인한 뒤 치료
+      방향을 정합니다.
+    </p>
+    <ul class="hero-summary">{summary.map((x) => <li>{x}</li>)}</ul>
+    <p class="cta-row">
+      <a class="cta" href={clinic.links.naverBooking}>통증 상담하기</a>
+    </p>
+  </section>
+
+  <section class="sec band">
+    <h2>어떤 부위를 진료하나요?</h2>
+    <div class="cards">
+      {areas.map((a) => (
+        <div class="card">
+          <strong>{a.t}</strong>
+          <span>{a.d}</span>
+        </div>
+      ))}
+    </div>
+    <p class="note">
+      여러 부위가 함께 불편한 경우가 많습니다. 그중 지금 가장 불편한 곳부터
+      말씀해 주세요.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>왜 초음파로 확인하나요?</h2>
+    <p>
+      통증은 겉으로 보이지 않습니다. 같은 어깨 통증이라도 힘줄의 문제인 경우와
+      관절 주변 조직의 문제인 경우가 다르고, 엑스레이에서는 뼈만 확인됩니다.
+    </p>
+    <p>
+      근육과 인대, 힘줄, 신경은 서로 층이 다릅니다. 초음파로 화면을 보면서
+      진행하면 지금 어느 층이 어떤 상태인지 확인하며 치료할 수 있습니다. 약침을
+      주입할 때뿐 아니라 도침 시술 지점을 정할 때, 추나요법 전에 조직 상태를
+      확인할 때도 사용합니다.
+    </p>
+    {ultrasound.length > 0 && (
+      <div class="us-grid">
+        {ultrasound.map((u) => (
+          <img
+            src={u.src}
+            alt={`${u.part} 초음파 진단`}
+            width="1080"
+            height="1080"
+            loading="lazy"
+          />
+        ))}
+      </div>
+    )}
+    <p class="statement">
+      검사 결과에서 뚜렷한 소견이 없는데 통증이 이어지는 경우, 지금 어느 부위가
+      어떤 상태인지 함께 보면서 설명해 드립니다.
+    </p>
+    <p class="note">
+      박종규 진료원장은 근골격계 초음파를 판독하는{' '}
+      <strong>미국근골격계초음파사(RMSK)</strong> 자격을 취득했습니다. 두 원장의
+      이력은 <a href="/doctors/">의료진 소개</a>에 정리해 두었습니다.
+    </p>
+  </section>
+
+  <section class="sec band">
+    <h2>어떤 치료를 받게 되나요?</h2>
+    <ul class="cases">
+      <li>
+        <strong>침 치료</strong> — 건강보험이 적용됩니다 (<a href="/treatments/">진료 안내</a>)
+      </li>
+      <li>
+        <strong>약침 · 초음파약침</strong> — 정제한 한약 성분을 목표 부위에
+        주입합니다 (<a href="/treatments/yakchim/">자세히 보기</a>)
+      </li>
+      <li>
+        <strong>도침</strong> — 굳은 유착 조직을 풀어주는 치료로, 만성
+        근골격계 통증에 적용합니다 (<a href="/treatments/dochim/">자세히 보기</a>)
+      </li>
+      <li>
+        <strong>추나요법</strong> — 건강보험이 적용됩니다 (<a href="/treatments/chuna/">자세히 보기</a>)
+      </li>
+      <li>
+        <strong>매선</strong> — 흡수되는 실로 지속적인 자극을 주는 치료로, 만성
+        통증 부위에 활용합니다 (<a href="/treatments/maeseon/">자세히 보기</a>)
+      </li>
+      <li>
+        <strong>한약</strong> — 요추추간판탈출증은 첩약 건강보험 적용 대상입니다
+        (<a href="/chuppyak/">첩약 건강보험 안내</a>)
+      </li>
+    </ul>
+    <p class="statement">
+      어떤 조합이 필요한지는 부위와 상태를 확인한 뒤 정합니다. 모든 치료를 다
+      받아야 하는 것은 아닙니다.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>진료는 어떤 순서로 진행되나요?</h2>
+    <ol class="steps">
+      {steps.map((s) => (
+        <li>
+          <strong>{s.t}</strong>
+          <span>{s.d}</span>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="sec band">
+    <h2>같은 곳이 자꾸 아프다면</h2>
+    <p>
+      한 부위가 반복해서 아프다면 그 부위만 보는 것으로는 부족한 경우가 있습니다.
+      자세와 움직임, 좌우 균형을 함께 확인하면 왜 그 자리에 부담이 쌓이는지
+      드러나기도 합니다.
+    </p>
+    <p class="note">
+      자세와 체형은 <a href="/posture/">체형교정 안내</a>에, 교통사고 이후의
+      통증은 <a href="/car-accident/">교통사고 한방치료</a>에 정리해 두었습니다.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>통증 진료 자주 묻는 질문</h2>
+    <div class="faq">
+      {faqs.map((f) => (
+        <details>
+          <summary>{f.q}</summary>
+          <div class="answer">{f.a.map((t) => <p>{t}</p>)}</div>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <section class="sec band closing">
+    <h2>상담과 예약</h2>
+    <p>
+      시호한의원은 <strong>경기도 화성시 동탄구 목동, 동탄신리천로 407
+      동탄리더스타워 2층</strong>에 있습니다. 어느 동작에서 아픈지 확인한 뒤 지금
+      필요한 진료를 말씀드립니다.
+    </p>
+    <p>
+      처음 상담을 오시는 분은 검사 및 상담 시간이 1시간 이상 소요될 수 있어 예약
+      후 내원하시기를 권장드립니다. 수요일은 21:00까지 야간진료를 운영하여 퇴근
+      후에도 내원하실 수 있습니다.
+    </p>
+    <p class="cta-row">
+      <a class="cta" href={clinic.links.naverBooking}>네이버 예약</a>
+      <a class="cta ghost" href={`tel:${clinic.phone}`}>전화 {clinic.phone}</a>
+    </p>
+    <p class="cta-sub">
+      <a href={clinic.links.kakaoChannel}>카카오톡 문의</a> · <a href="/contact/">오시는 길</a>
+    </p>
+  </section>
+
+  <style>
+    /* 부위별 초음파 사진 격자 */
+    .us-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+      margin: 1.75rem 0;
+      max-width: var(--read);
+    }
+    .us-grid img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border: 1px solid var(--line-soft);
+      border-radius: 8px;
+    }
+  </style>
+</Base>
