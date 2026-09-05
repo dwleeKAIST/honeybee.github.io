@@ -1,0 +1,309 @@
+---
+import Base from '../layouts/Base.astro';
+import { clinic } from '../data/clinic';
+import { chuppyak } from '../data/chuppyak';
+
+const title = '동탄 목동 첩약 건강보험';
+const description =
+  '화성시 동탄구 목동 시호한의원 첩약 건강보험 안내. 적용 질환 6가지와 본인부담, 처방 절차를 정리했습니다.';
+
+// 제도 내용은 보건복지부 '첩약 건강보험 적용 2단계 시범사업' 기준입니다.
+// 2026년 9월 확인 결과 2025년과 변동이 없다는 것을 원장 확인 및 자료로
+// 함께 확인했습니다. 숫자는 src/data/chuppyak.ts 한 곳에서 관리합니다.
+//
+// 의료광고법
+//   - 실손보험은 '가입 상품에 따라 다릅니다'까지만. 환급액을 단정하면
+//     환자 유인(의료법 제27조 제3항) 소지가 있습니다
+//   - 시범사업 참여는 사실 서술까지만. 다른 한의원과 비교하지 않습니다
+//   - 치료 효과가 아니라 제도와 절차를 안내하는 페이지입니다
+
+const summary = [
+  '경기 화성시 동탄구 목동, 동탄리더스타워 2층',
+  '시호한의원은 첩약 건강보험 시범사업 참여 한의원입니다',
+  `적용 질환 6가지 — 알레르기비염 · 기능성 소화불량 · 월경통 등`,
+  `한의원 본인부담률 ${chuppyak.patientRate}, ${chuppyak.amount} 기준 약 ${chuppyak.patientPay}`,
+  '원내 탕전실에서 한방내과 전문의가 직접 조제',
+];
+
+// 보험한약(한약제제)과 첩약 건강보험의 차이
+const compare = [
+  {
+    label: '무엇인가요',
+    herb: '이미 만들어진 한약제제(과립·연조엑스)',
+    chup: '약재를 개별로 구성해 달인 맞춤 한약',
+  },
+  {
+    label: '적용 범위',
+    herb: '정해진 처방 목록 안에서 선택',
+    chup: '지정된 6개 질환에 해당하는 경우',
+  },
+  {
+    label: '주로 쓰는 경우',
+    herb: '비교적 가벼운 증상, 단기 복용',
+    chup: '일정 기간 꾸준히 복용해야 하는 경우',
+  },
+  {
+    label: '형태',
+    herb: '가루약 · 짜 먹는 시럽 형태',
+    chup: '탕약(달인 한약)',
+  },
+];
+
+const steps = [
+  {
+    t: '진찰',
+    d: '증상과 몸 상태를 확인합니다. 첩약 건강보험은 지정된 6개 질환으로 진단되는 경우에 적용됩니다.',
+  },
+  {
+    t: '적용 여부 안내',
+    d: '해당 질환에 해당하는지, 올해 남은 처방 횟수가 있는지 확인해 말씀드립니다.',
+  },
+  {
+    t: '처방 구성',
+    d: '증상과 체질에 맞춰 약재와 용량을 정합니다. 같은 질환이라도 처방은 사람마다 다릅니다.',
+  },
+  {
+    t: '원내 조제',
+    d: '원내 탕전실에서 직접 달여 드립니다.',
+  },
+];
+
+const faqs = [
+  {
+    q: '동탄 목동에서 첩약 건강보험이 되는 한의원인가요?',
+    a: [
+      '네. 시호한의원은 경기 화성시 동탄구 목동, 동탄신리천로 407 동탄리더스타워 2층에 있으며 첩약 건강보험 시범사업에 참여하고 있습니다.',
+      '첩약 건강보험은 시범사업에 참여하는 의료기관에서 처방받으실 수 있습니다.',
+    ],
+  },
+  {
+    q: '첩약 건강보험은 어떤 질환에 적용되나요?',
+    a: [
+      '알레르기비염, 기능성 소화불량, 월경통, 요추추간판탈출증, 안면신경마비, 뇌혈관질환 후유증 여섯 가지입니다.',
+      '진찰을 통해 해당 질환으로 진단되는 경우에 적용되므로, 증상만으로 미리 정해지지는 않습니다.',
+    ],
+  },
+  {
+    q: '한약 비용은 얼마나 되나요?',
+    a: [
+      `한의원 기준 본인부담률은 ${chuppyak.patientRate}이고, ${chuppyak.amount} 기준 본인부담은 약 ${chuppyak.patientPay}입니다.`,
+      '처방 구성과 약재에 따라 달라지므로 진찰 후 정확한 금액을 안내해 드립니다.',
+      chuppyak.privateInsuranceNote,
+    ],
+  },
+  {
+    q: '1년에 몇 번까지 받을 수 있나요?',
+    a: [
+      `${chuppyak.limit} 처방받으실 수 있습니다.`,
+      '기준이 되는 1년은 1월 1일부터 12월 31일까지이며, 해가 바뀌면 남은 횟수는 이월되지 않습니다.',
+    ],
+  },
+  {
+    q: '보험한약과 첩약 건강보험은 어떻게 다른가요?',
+    a: [
+      '보험한약은 이미 만들어진 한약제제이고, 첩약 건강보험은 약재를 개별로 구성해 달인 맞춤 한약입니다.',
+      '비교적 가벼운 증상에는 보험한약을, 일정 기간 꾸준히 복용해야 하는 경우에는 첩약을 고려합니다. 어느 쪽이 맞는지는 진찰 후 함께 정합니다.',
+    ],
+  },
+  {
+    q: '첩약도 원내에서 직접 만드나요?',
+    a: [
+      '네. 원내 탕전실에서 한방내과 전문의가 직접 조제합니다.',
+      '진찰 결과에 따라 약재와 용량을 정한 뒤 달이므로, 같은 질환이라도 처방 내용은 사람마다 다릅니다.',
+    ],
+  },
+  {
+    q: '침이나 추나 치료와 같은 날 받을 수 있나요?',
+    a: [
+      '가능합니다. 침 치료와 추나요법도 건강보험이 적용되는 항목이라 같은 날 함께 진행하는 경우가 많습니다.',
+      '어떤 조합이 필요한지는 진찰 후 정합니다.',
+    ],
+  },
+  {
+    q: '아이도 첩약 건강보험으로 처방받을 수 있나요?',
+    a: [
+      '해당 질환으로 진단되는 경우 연령과 관계없이 적용됩니다. 알레르기비염으로 오시는 어린이 환자가 많습니다.',
+      '복용량과 복용 방법은 나이와 몸 상태에 맞춰 안내해 드립니다.',
+    ],
+  },
+];
+
+const faqLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a.join(' ') },
+    })),
+  },
+];
+---
+
+<Base title={title} description={description} jsonLd={faqLd}>
+  <section class="hero">
+    <p class="eyebrow">한약 · 건강보험</p>
+    <h1>동탄 목동 첩약 건강보험 — 맞춤 한약도 건강보험이 됩니다</h1>
+    <p class="lead">
+      시호한의원은 경기 화성시 동탄구 목동에서 첩약 건강보험 시범사업에 참여하고
+      있습니다. 지정된 여섯 개 질환에 해당하면 맞춤 한약을 건강보험으로 처방받으실
+      수 있습니다.
+    </p>
+    <ul class="hero-summary">{summary.map((x) => <li>{x}</li>)}</ul>
+    <p class="cta-row">
+      <a class="cta" href={clinic.links.naverBooking}>한약 상담하기</a>
+    </p>
+  </section>
+
+  <section class="sec band">
+    <h2>첩약 건강보험이란 무엇인가요?</h2>
+    <p>
+      첩약은 약재를 개별로 구성해 달인 맞춤 한약을 말합니다. 예전에는 전액 본인
+      부담이었지만, 보건복지부 시범사업을 통해 <strong>일부 질환에 한해 건강보험이
+      적용</strong>되고 있습니다.
+    </p>
+    <p>
+      지정된 질환으로 진단되는 경우 한의원 기준 본인부담률
+      <strong>{chuppyak.patientRate}</strong>로 처방받으실 수 있습니다. 시범사업은
+      현재 {chuppyak.through}까지 운영될 예정입니다.
+    </p>
+    <p class="statement">
+      건강보험이 적용된다고 해서 처방이 정해져 있는 것은 아닙니다. 같은 질환이라도
+      증상과 몸 상태에 따라 약재 구성이 달라집니다.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>어떤 질환에 적용되나요?</h2>
+    <p>여섯 가지 질환입니다. 진찰을 통해 해당 질환으로 진단되는 경우에 적용됩니다.</p>
+    <ul class="cases">
+      {chuppyak.diseases.map((d) => (
+        <li>
+          <strong>{d.name}</strong> — {d.note}
+          {d.href && (
+            <>
+              {' '}(<a href={d.href}>진료 안내 보기</a>)
+            </>
+          )}
+        </li>
+      ))}
+    </ul>
+    <p class="note">
+      시호한의원에서는 이 가운데 알레르기비염과 기능성 소화불량 진료로 오시는 분이
+      많습니다. 각각{' '}
+      <a href="/rhinitis/">코편안 클리닉</a>과 <a href="/digestion/">속편안 클리닉</a>에
+      정리해 두었습니다.
+    </p>
+  </section>
+
+  <section class="sec band">
+    <h2>본인부담은 얼마인가요?</h2>
+    <p>
+      한의원 기준 본인부담률은 <strong>{chuppyak.patientRate}</strong>이며,
+      {chuppyak.amount} 기준 본인부담은 약 <strong>{chuppyak.patientPay}</strong>입니다.
+      처방 구성과 약재에 따라 달라지므로 진찰 후 정확한 금액을 안내해 드립니다.
+    </p>
+    <p>
+      급여 기준은 <strong>{chuppyak.limit}</strong>입니다. 기준이 되는 1년은 1월
+      1일부터 12월 31일까지이고, 해가 바뀌면 남은 횟수는 이월되지 않습니다.
+    </p>
+    <p>{chuppyak.privateInsuranceNote}</p>
+    <p class="note">
+      횟수를 모두 쓰신 뒤에도 같은 방식으로 맞춤 한약을 처방받으실 수 있습니다. 이
+      경우 비용은 상담에서 안내해 드립니다.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>보험한약과 첩약 건강보험은 어떻게 다른가요?</h2>
+    <p>
+      둘 다 건강보험이 적용되는 한약이지만 성격이 다릅니다. 문의를 가장 많이 받는
+      부분이라 표로 정리했습니다.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col"><span class="sr-only">구분</span></th>
+            <th scope="col">보험한약</th>
+            <th scope="col">첩약 건강보험</th>
+          </tr>
+        </thead>
+        <tbody>
+          {compare.map((row) => (
+            <tr>
+              <th scope="row">{row.label}</th>
+              <td>{row.herb}</td>
+              <td>{row.chup}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="note">
+      보험한약 종류는 <a href="/insurance-herbs/">보험한약 안내</a>에 정리해
+      두었습니다. 어느 쪽이 맞는지는 진찰 후 함께 정합니다.
+    </p>
+  </section>
+
+  <section class="sec band">
+    <h2>시호한의원에서는 어떻게 조제하나요?</h2>
+    <p>
+      <strong>원내 탕전실에서 직접 조제합니다.</strong> 김은미 대표원장은 보건복지부
+      한방내과 전문의로, 진찰 결과에 따라 약재와 용량을 정한 뒤 달입니다.
+    </p>
+    <p>
+      건강보험이 적용되더라도 처방이 정해져 있지는 않습니다. 같은 알레르기비염이라도
+      코막힘이 주된 경우와 맑은 콧물이 주된 경우에 약재 구성이 달라집니다.
+    </p>
+    <p class="note">
+      두 원장의 이력과 진료 요일은 <a href="/doctors/">의료진 소개</a>에 정리해
+      두었습니다.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>어떤 순서로 진행되나요?</h2>
+    <ol class="steps">
+      {steps.map((s) => (
+        <li>
+          <strong>{s.t}</strong>
+          <span>{s.d}</span>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="sec">
+    <h2>첩약 건강보험 자주 묻는 질문</h2>
+    <div class="faq">
+      {faqs.map((f) => (
+        <details>
+          <summary>{f.q}</summary>
+          <div class="answer">{f.a.map((t) => <p>{t}</p>)}</div>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <section class="sec band closing">
+    <h2>상담과 예약</h2>
+    <p>
+      시호한의원은 <strong>경기도 화성시 동탄구 목동, 동탄신리천로 407
+      동탄리더스타워 2층</strong>에 있습니다. 첩약 건강보험 적용 여부는 진찰 후
+      말씀드립니다.
+    </p>
+    <p>
+      처음 상담을 오시는 분은 검사 및 상담 시간이 1시간 이상 소요될 수 있어 예약 후
+      내원하시기를 권장드립니다. 수요일은 21:00까지 야간진료를 운영합니다.
+    </p>
+    <p class="cta-row">
+      <a class="cta" href={clinic.links.naverBooking}>네이버 예약</a>
+      <a class="cta ghost" href={`tel:${clinic.phone}`}>전화 {clinic.phone}</a>
+    </p>
+    <p class="cta-sub">
+      <a href={clinic.links.kakaoChannel}>카카오톡 문의</a> · <a href="/contact/">오시는 길</a>
+    </p>
+  </section>
+</Base>

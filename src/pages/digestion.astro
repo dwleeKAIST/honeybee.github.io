@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { clinic } from '../data/clinic';
+import { chuppyak } from '../data/chuppyak';
 
 const title = '동탄 소화불량 한의원 | 속편안 클리닉 · 기능성 소화불량';
 const description =
@@ -331,13 +332,13 @@ const faqLd = [
       </li>
     </ul>
     <p>
-      첩약 건강보험으로 처방받으시는 경우 10일분 기준 본인부담은 약 3~5만원입니다.
-      실손보험에 가입되어 있으시면 보장 범위에 따라 부담이 더 줄어들 수 있습니다.
-      적용 여부와 금액은 가입하신 상품에 따라 다릅니다.
+      첩약 건강보험으로 처방받으시는 경우 {chuppyak.amount} 기준 본인부담은
+      약 {chuppyak.patientPay}입니다. {chuppyak.privateInsuranceNote}
     </p>
     <p class="note">
-      기능성 소화불량 외에 월경통, 알레르기비염, 안면마비도 첩약 건강보험 적용
-      가능 상병입니다. 보험한약 전체 목록은{' '}
+      기능성 소화불량 외에 월경통, 알레르기비염, 안면신경마비 등도 첩약 건강보험
+      적용 가능 상병입니다. 적용 질환과 본인부담은{' '}
+      <a href="/chuppyak/">첩약 건강보험 안내</a>에, 보험한약 전체 목록은{' '}
       <a href="/insurance-herbs/">보험한약 안내</a>에 정리해 두었습니다.
     </p>
   </section>
