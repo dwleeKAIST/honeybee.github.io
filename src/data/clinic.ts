@@ -2,6 +2,11 @@
 export const clinic = {
   name: '시호한의원',
   nameEn: 'SIHO Korean Medicine Clinic',
+  // 홈의 <title>. 검색결과에 그대로 노출되므로 감성 문구가 아니라
+  // 실제로 검색되는 말로 씁니다. 뒤에 '| 시호한의원'이 자동으로 붙어
+  // 최종 30자가 됩니다(구글이 자르지 않는 길이).
+  homeTitle: '동탄 한의원 | 통증·내과질환·한약 진료',
+  // 브랜드 문구. 화면에 쓰고 싶을 때 사용합니다. <title>에는 쓰지 않습니다.
   slogan: '더 건강한 내일을 만드는 치유의 공간',
   // 구조화 데이터(JSON-LD)와 llms.txt용. 길어도 무방하며 정보가 많은 편이 유리합니다.
   description:
