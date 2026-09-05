@@ -31,6 +31,7 @@ export const clinic = {
     googleMap: 'https://maps.app.goo.gl/kSMzv5j38YLKJhce7',
     kakaoChannel: 'http://pf.kakao.com/_LxdhFG',
     naverBooking: 'http://naver.me/GgBsC8Nk',
+    blog: 'https://blog.naver.com/hani_mei',
   },
   // 진료시간 — 출처: 네이버 플레이스(시호한의원) 등록 정보
   // schema는 schema.org openingHours 형식. 점심시간은 두 구간으로 분리해 표기합니다.
