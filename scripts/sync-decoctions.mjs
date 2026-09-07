@@ -38,8 +38,9 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const LABELS = join(root, 'src/data/decoction-labels.json');
 const OUT = join(root, 'src/data/decoctions.json');
 
-/** 티커에 보여줄 기간(일). */
-const WINDOW_DAYS = 14;
+/** 티커에 보여줄 기간(일). 이 값만 고치면 됩니다.
+ *  포탈 URL 의 ?days= 는 이보다 크거나 같으면 됩니다(넉넉히 받아 걸러냅니다). */
+const WINDOW_DAYS = 7;
 
 /** 원본에서 읽을 열 이름 후보. 포탈 내보내기 형식에 맞추어 늘리세요. */
 const DATE_KEYS = ['조제일', '조제일자', '일자', '날짜', 'date', '탕전일'];
@@ -183,10 +184,29 @@ function kstNowIso() {
 
 async function main() {
   const { rules } = JSON.parse(await readFile(LABELS, 'utf-8'));
+
+  // 규칙은 세 가지 형태를 지원합니다. 위에서부터 먼저 맞는 것을 씁니다.
+  //   match   원본에 이 문자열이 들어 있으면      (예: '비염' → 비염8)
+  //   prefix  원본이 이 문자열로 시작하면        (예: 'TA' → TA 1-3)
+  //   pattern 정규식에 맞으면                    (예: '^\\d+-\\d+$' → 2-2)
+  //
+  // 비교 전에 공백을 없애므로 'TA 1-3' 은 'TA1-3' 으로 봅니다.
+  // prefix 는 대소문자를 가리지 않습니다. 'D 5-6' 을 'd 5-6' 으로 적어도
+  // 같게 봐야 하기 때문입니다.
+  const norm = (x) => x.replace(/\s+/g, '');
+  const compiled = rules.map((r) => ({
+    label: r.label,
+    match: r.match ? norm(r.match) : null,
+    prefix: r.prefix ? norm(r.prefix).toLowerCase() : null,
+    re: r.pattern ? new RegExp(r.pattern) : null,
+  }));
   const toLabel = (raw) => {
-    const s = raw.replace(/\s+/g, '');
-    for (const { match, label } of rules) {
-      if (s.includes(match.replace(/\s+/g, ''))) return label;
+    const s = norm(raw);
+    const lower = s.toLowerCase();
+    for (const r of compiled) {
+      if (r.match && s.includes(r.match)) return r.label;
+      if (r.prefix && lower.startsWith(r.prefix)) return r.label;
+      if (r.re && r.re.test(s)) return r.label;
     }
     return null;
   };
@@ -243,8 +263,21 @@ async function main() {
     if (dump.includes(k)) fail(`결과에 '${k}' 가 포함되었습니다. 중단합니다.`);
   }
 
+  // 조제 내역이 없는 날은 파일을 건드리지 않습니다.
+  //
+  // 휴진일이나 조제가 없던 기간에 '0건'으로 덮어쓰면 티커가 사라집니다.
+  // 원장 요청에 따라 그럴 때는 이전 기록을 그대로 두고, 다음에 실적이
+  // 생기면 그때 갱신합니다. 티커는 데이터에 담긴 실제 날짜를 표시하므로
+  // 오래된 기록이 최신인 것처럼 보이지는 않습니다.
+  if (total === 0) {
+    console.log(
+      '[sync-decoctions] 기간 내 조제 내역이 없습니다. 이전 기록을 그대로 둡니다.',
+    );
+    return;
+  }
+
   const next = {
-    updatedAt: total > 0 ? kstNowIso() : null,
+    updatedAt: kstNowIso(),
     windowDays: WINDOW_DAYS,
     total,
     items,
@@ -255,8 +288,8 @@ async function main() {
   console.log(`[sync-decoctions] 건너뜀:`, skipped);
   if (unmappedKinds.size) {
     // 로그(공개 저장소의 Actions 기록)에 원본이 길게 남지 않도록
-    // 짧은 값만, 30자까지 자르고, 20종까지만 찍습니다.
-    // 분류는 관리 목록에서 고르는 짧은 값이라 이 정도면 충분합니다.
+    // 30자까지 자르고 20종까지만 찍습니다. 분류는 관리 화면에서 고르는
+    // 짧은 값이라 이 정도면 이름표를 맞추기에 충분합니다.
     const shown = [...unmappedKinds]
       .filter((k) => k.length <= 30)
       .slice(0, 20)
