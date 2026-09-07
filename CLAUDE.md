@@ -9,6 +9,8 @@ Astro 기반 정적 사이트. Cloudflare Workers(정적 자산)에 연결되어
 - **보험한약 목록 수정**: `src/data/insurance-herbs.ts`
 - **주소/전화/링크/진료시간 수정**: `src/data/clinic.ts` (전 페이지 + JSON-LD에 반영됨)
 - **새 페이지**: `src/pages/*.astro`, 레이아웃은 `src/layouts/Base.astro` 사용
+- **탕전 실적 띠에 한약 종류 추가**: `src/data/decoction-labels.json` — 포탈의 분류를 공개 이름으로 바꾸는 표. 등록된 것만 표시되고 나머지는 버립니다. 자세한 내용은 README 참고
+- **`src/data/decoctions.json` 은 사람이 고치지 마세요** — 매일 아침 워크플로가 씁니다
 
 ## 콘텐츠 작성 규칙 (GEO)
 
@@ -31,3 +33,4 @@ Astro 기반 정적 사이트. Cloudflare Workers(정적 자산)에 연결되어
 
 - `npm run dev` — 로컬 개발 서버
 - `npm run build` — 빌드 검증 (커밋 전 실행 권장)
+- `npm run check:decoctions` — 탕전 띠가 세 가지 데이터 상태(비어 있음 / 하루치 / 여러 날)에서 모두 빌드되는지 확인. 티커나 `decoctions.json` 구조를 건드렸으면 실행하세요
