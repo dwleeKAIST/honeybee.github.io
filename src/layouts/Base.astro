@@ -1,5 +1,6 @@
 ---
 import { clinic } from '../data/clinic';
+import DecoctionTicker from '../components/DecoctionTicker.astro';
 
 interface Props {
   title: string;
@@ -116,6 +117,8 @@ const isCurrent = (href: string) =>
     <main id="main">
       <slot />
     </main>
+
+    <DecoctionTicker />
 
     <footer class="site-footer">
       <div class="footer-grid">
