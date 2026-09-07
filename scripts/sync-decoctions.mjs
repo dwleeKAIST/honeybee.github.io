@@ -184,10 +184,29 @@ function kstNowIso() {
 
 async function main() {
   const { rules } = JSON.parse(await readFile(LABELS, 'utf-8'));
+
+  // 규칙은 세 가지 형태를 지원합니다. 위에서부터 먼저 맞는 것을 씁니다.
+  //   match   원본에 이 문자열이 들어 있으면      (예: '비염' → 비염8)
+  //   prefix  원본이 이 문자열로 시작하면        (예: 'TA' → TA 1-3)
+  //   pattern 정규식에 맞으면                    (예: '^\\d+-\\d+$' → 2-2)
+  //
+  // 비교 전에 공백을 없애므로 'TA 1-3' 은 'TA1-3' 으로 봅니다.
+  // prefix 는 대소문자를 가리지 않습니다. 'D 5-6' 을 'd 5-6' 으로 적어도
+  // 같게 봐야 하기 때문입니다.
+  const norm = (x) => x.replace(/\s+/g, '');
+  const compiled = rules.map((r) => ({
+    label: r.label,
+    match: r.match ? norm(r.match) : null,
+    prefix: r.prefix ? norm(r.prefix).toLowerCase() : null,
+    re: r.pattern ? new RegExp(r.pattern) : null,
+  }));
   const toLabel = (raw) => {
-    const s = raw.replace(/\s+/g, '');
-    for (const { match, label } of rules) {
-      if (s.includes(match.replace(/\s+/g, ''))) return label;
+    const s = norm(raw);
+    const lower = s.toLowerCase();
+    for (const r of compiled) {
+      if (r.match && s.includes(r.match)) return r.label;
+      if (r.prefix && lower.startsWith(r.prefix)) return r.label;
+      if (r.re && r.re.test(s)) return r.label;
     }
     return null;
   };
@@ -269,8 +288,8 @@ async function main() {
   console.log(`[sync-decoctions] 건너뜀:`, skipped);
   if (unmappedKinds.size) {
     // 로그(공개 저장소의 Actions 기록)에 원본이 길게 남지 않도록
-    // 짧은 값만, 30자까지 자르고, 20종까지만 찍습니다.
-    // 분류는 관리 목록에서 고르는 짧은 값이라 이 정도면 충분합니다.
+    // 30자까지 자르고 20종까지만 찍습니다. 분류는 관리 화면에서 고르는
+    // 짧은 값이라 이 정도면 이름표를 맞추기에 충분합니다.
     const shown = [...unmappedKinds]
       .filter((k) => k.length <= 30)
       .slice(0, 20)
