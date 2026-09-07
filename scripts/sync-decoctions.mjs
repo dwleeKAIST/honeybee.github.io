@@ -9,7 +9,14 @@
 //
 //   원본 지정 방법 (하나만)
 //     SIHO_EXPORT_FILE=/path/to/export.csv
-//     SIHO_EXPORT_URL=https://...  (+ 필요하면 SIHO_EXPORT_TOKEN)
+//     SIHO_EXPORT_URL=https://...
+//       + SIHO_EXPORT_SECRET  (시호 포탈. x-stats-secret 헤더로 보냅니다)
+//       + SIHO_EXPORT_TOKEN   (그 밖의 Bearer 인증)
+//
+//   시호 포탈 연결
+//     SIHO_EXPORT_URL=https://<포탈>/api/public/decoction-stats?days=14
+//     SIHO_EXPORT_SECRET=<포탈의 PUBLIC_STATS_SECRET 과 같은 값>
+//     응답 { items: [{ date, prescription, count }] } 을 그대로 읽습니다.
 //
 // ── 지켜야 할 원칙 ──────────────────────────────────────────────
 // 이 스크립트는 날짜와 처방 종류, 건수만 뽑아냅니다.
@@ -37,6 +44,7 @@ const WINDOW_DAYS = 14;
 const DATE_KEYS = ['조제일', '조제일자', '일자', '날짜', 'date', '탕전일'];
 const NAME_KEYS = ['처방명', '처방', '한약명', '품목명', 'item', 'prescription'];
 const QTY_KEYS = ['수량', '건수', 'qty', 'count'];
+// 포탈 응답은 이미 (날짜, 처방명)으로 묶여 있어 count 가 그날의 건수입니다.
 
 /** 읽지 않을 열. 실수로 들어와도 무시합니다. */
 const FORBIDDEN_KEYS = [
@@ -64,7 +72,10 @@ async function loadSource() {
       '원본을 찾을 수 없습니다. SIHO_EXPORT_FILE 또는 SIHO_EXPORT_URL 을 지정하세요.',
     );
   }
-  const headers = { Accept: 'text/csv, application/json' };
+  const headers = { Accept: 'application/json, text/csv' };
+  // 시호 포탈은 공유 비밀을 전용 헤더로 받습니다.
+  const secret = process.env.SIHO_EXPORT_SECRET;
+  if (secret) headers['x-stats-secret'] = secret;
   const token = process.env.SIHO_EXPORT_TOKEN;
   if (token) headers.Authorization = `Bearer ${token}`;
 

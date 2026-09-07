@@ -9,11 +9,15 @@
 #
 # 켜기 전에 필요한 것 — 아래 시크릿이 없으면 아무 일도 하지 않고 끝납니다.
 #   Settings → Secrets and variables → Actions 에서 등록
-#     SIHO_EXPORT_URL    포탈에서 조제 목록을 CSV/JSON 으로 내려주는 주소 (필수)
-#     SIHO_EXPORT_TOKEN  그 주소에 인증이 필요하면 (선택)
+#     SIHO_EXPORT_URL     https://<포탈 주소>/api/public/decoction-stats?days=14
+#     SIHO_EXPORT_SECRET  포탈의 PUBLIC_STATS_SECRET 과 같은 값
 #
-# 포탈이 사내망에만 있어 GitHub 에서 접근할 수 없으면 이 방식은 쓸 수 없습니다.
-# 그때는 한의원 PC에서 스크립트를 돌려 push 하는 방식으로 바꾸어야 합니다.
+# 포탈(dwleeKAIST/siho_portal)에는 이 엔드포인트가 이미 있습니다.
+# 포탈 쪽 Cloud Run 환경변수 PUBLIC_STATS_SECRET / PUBLIC_STATS_CLINIC_ID 를
+# 설정해야 열립니다. 둘 중 하나라도 없으면 503 을 돌려줍니다.
+#
+# 응답에는 환자 정보가 들어 있지 않습니다. 포탈의 집계 쿼리가 환자 이름을
+# 애초에 SELECT 하지 않습니다(server/db/queries/publicStats.js).
 name: 탕전 실적 갱신
 
 on:
@@ -61,6 +65,7 @@ jobs:
         if: steps.gate.outputs.ready == 'true'
         env:
           SIHO_EXPORT_URL: ${{ secrets.SIHO_EXPORT_URL }}
+          SIHO_EXPORT_SECRET: ${{ secrets.SIHO_EXPORT_SECRET }}
           SIHO_EXPORT_TOKEN: ${{ secrets.SIHO_EXPORT_TOKEN }}
         run: node scripts/sync-decoctions.mjs
 
