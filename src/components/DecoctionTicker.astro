@@ -19,13 +19,20 @@ const duration = Math.max(24, Math.round(items.length * 2.6));
 // 남습니다. 그 상태에서 '최근 7일'이라고 적으면 3주 전 기록도 최근인 것처럼
 // 읽힙니다. 실제 날짜를 쓰면 그럴 일이 없고, 페이지가 오래 재배포되지
 // 않아도 문장이 계속 참입니다.
-const dates = items.map((it) => it.date).sort();
-const oldest = dates[0];
-const newest = dates[dates.length - 1];
-const period =
-  oldest === newest
+//
+// items 가 비어 있을 수 있으므로(데이터를 아직 못 받은 상태) 반드시
+// hasDecoctions 를 먼저 확인합니다. 아래 마크업이 그 값으로 감싸여
+// 있어도 이 계산은 먼저 실행됩니다.
+function periodOf(list) {
+  if (list.length === 0) return null;
+  const dates = list.map((it) => it.date).sort();
+  const oldest = dates[0];
+  const newest = dates[dates.length - 1];
+  return oldest === newest
     ? formatDay(newest)
     : `${formatDay(oldest)}~${formatDay(newest)}`;
+}
+const period = periodOf(items);
 ---
 
 {hasDecoctions && (
