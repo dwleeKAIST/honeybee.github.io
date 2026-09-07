@@ -38,9 +38,20 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const LABELS = join(root, 'src/data/decoction-labels.json');
 const OUT = join(root, 'src/data/decoctions.json');
 
-/** 티커에 보여줄 기간(일). 이 값만 고치면 됩니다.
- *  포탈 URL 의 ?days= 는 이보다 크거나 같으면 됩니다(넉넉히 받아 걸러냅니다). */
-const WINDOW_DAYS = 7;
+/** 티커에 보여줄 '조제가 있던 날'의 수. 달력 날짜가 아닙니다.
+ *
+ *  휴진일이나 조제가 없던 날은 세지 않습니다. 예를 들어 7이면 조제
+ *  기록이 있는 최근 7일치를 보여줍니다. 달력으로는 열흘 넘게 걸칠 수
+ *  있습니다. 이 값만 고치면 됩니다. */
+const ACTIVE_DAYS = 7;
+
+/** 포탈에서 받아올 달력 기간(일).
+ *
+ *  조제일 7일을 채우려면 달력 7일로는 부족합니다(휴진일 때문에).
+ *  넉넉히 받아서 조제일 기준으로 잘라냅니다. 시크릿에 넣은 URL 의
+ *  ?days= 값은 이 값으로 덮어쓰므로 시크릿을 고치지 않아도 됩니다.
+ *  포탈은 최대 90일까지 허용합니다. */
+const FETCH_DAYS = 60;
 
 /** 원본에서 읽을 열 이름 후보. 포탈 내보내기 형식에 맞추어 늘리세요. */
 const DATE_KEYS = ['조제일', '조제일자', '일자', '날짜', 'date', '탕전일'];
@@ -78,6 +89,18 @@ async function loadSource() {
       '원본을 찾을 수 없습니다. SIHO_EXPORT_FILE 또는 SIHO_EXPORT_URL 을 지정하세요.',
     );
   }
+  // 시크릿에 넣은 ?days= 값을 스크립트가 필요한 값으로 덮어씁니다.
+  // 조제일 기준으로 자르려면 달력 기간을 넉넉히 받아야 하는데,
+  // 그때마다 시크릿을 고치게 하지 않으려는 것입니다.
+  let target = url;
+  try {
+    const u = new URL(url);
+    if (u.searchParams.has('days')) u.searchParams.set('days', String(FETCH_DAYS));
+    target = u.toString();
+  } catch {
+    // URL 로 파싱되지 않으면 그대로 씁니다.
+  }
+
   const headers = { Accept: 'application/json, text/csv' };
   // 시호 포탈은 공유 비밀을 전용 헤더로 받습니다.
   const secret = process.env.SIHO_EXPORT_SECRET;
@@ -85,7 +108,7 @@ async function loadSource() {
   const token = process.env.SIHO_EXPORT_TOKEN;
   if (token) headers.Authorization = `Bearer ${token}`;
 
-  const res = await fetch(url, { headers });
+  const res = await fetch(target, { headers });
   if (!res.ok) {
     // 상태 코드만으로는 원인을 알기 어려워 본문도 함께 보여줍니다.
     //   503 → 포탈에 PUBLIC_STATS_SECRET / PUBLIC_STATS_CLINIC_ID 가 없음
@@ -95,7 +118,7 @@ async function loadSource() {
     const hint = body ? ` — ${body.slice(0, 300).replace(/\s+/g, ' ')}` : '';
     fail(`포탈 응답 ${res.status} ${res.statusText}${hint}`);
   }
-  return { text: await res.text(), from: url.replace(/\?.*$/, '') };
+  return { text: await res.text(), from: target.replace(/\?.*$/, '') };
 }
 
 // ── 파싱 ────────────────────────────────────────────────────────
@@ -215,12 +238,9 @@ async function main() {
   const rows = parseSource(text);
 
   const today = kstToday();
-  const oldest = new Date(Date.parse(`${today}T00:00:00Z`) - (WINDOW_DAYS - 1) * 86400000)
-    .toISOString()
-    .slice(0, 10);
 
   const buckets = new Map(); // JSON([date, label]) → { date, label, count }
-  const skipped = { noDate: 0, noKind: 0, unmapped: 0, outOfRange: 0 };
+  const skipped = { noDate: 0, noKind: 0, unmapped: 0, future: 0, beforeWindow: 0 };
   const unmappedKinds = new Set();
 
   for (const row of rows) {
@@ -228,7 +248,9 @@ async function main() {
     if (!rawDate) { skipped.noDate++; continue; }
     const date = normalizeDate(rawDate);
     if (!date) { skipped.noDate++; continue; }
-    if (date < oldest || date > today) { skipped.outOfRange++; continue; }
+    // 앞날짜는 입력 실수로 보고 버립니다. 과거는 뒤에서 조제일 기준으로
+    // 자르므로 여기서는 걸러내지 않습니다.
+    if (date > today) { skipped.future++; continue; }
 
     const rawKind = pick(row, KIND_KEYS);
     if (!rawKind) { skipped.noKind++; continue; }
@@ -246,9 +268,22 @@ async function main() {
   }
 
   // 최근 날짜부터, 같은 날은 건수 많은 것부터
-  const items = [...buckets.values()].sort((a, b) =>
+  const all = [...buckets.values()].sort((a, b) =>
     a.date === b.date ? b.count - a.count : b.date.localeCompare(a.date),
   );
+
+  // 조제가 있던 날만 세어 최근 ACTIVE_DAYS 일치를 남깁니다.
+  //
+  // 달력으로 자르지 않는 이유: 휴진이 이어지면 티커가 텅 비고, 반대로
+  // 바쁜 주에는 같은 7일에 더 많은 내용이 들어가 들쭉날쭉해집니다.
+  // 조제가 있던 날을 세면 어느 시기에나 비슷한 양이 보입니다.
+  const activeDates = [...new Set(all.map((it) => it.date))]
+    .sort()
+    .reverse()
+    .slice(0, ACTIVE_DAYS);
+  const keep = new Set(activeDates);
+  const items = all.filter((it) => keep.has(it.date));
+  skipped.beforeWindow = all.length - items.length;
 
   const total = items.reduce((s, it) => s + it.count, 0);
 
@@ -278,13 +313,17 @@ async function main() {
 
   const next = {
     updatedAt: kstNowIso(),
-    windowDays: WINDOW_DAYS,
+    /** 실제로 담긴 '조제가 있던 날'의 수. ACTIVE_DAYS 보다 적을 수 있습니다. */
+    activeDays: activeDates.length,
     total,
     items,
   };
 
   console.log(`[sync-decoctions] 원본: ${from}`);
-  console.log(`[sync-decoctions] 행 ${rows.length} → 항목 ${items.length}, 총 ${total}건`);
+  console.log(
+    `[sync-decoctions] 행 ${rows.length} → 조제일 ${activeDates.length}일, ` +
+      `항목 ${items.length}, 총 ${total}건`,
+  );
   console.log(`[sync-decoctions] 건너뜀:`, skipped);
   if (unmappedKinds.size) {
     // 로그(공개 저장소의 Actions 기록)에 원본이 길게 남지 않도록

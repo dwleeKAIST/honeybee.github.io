@@ -22,9 +22,12 @@ export interface DecoctionItem {
 export interface Decoctions {
   /** 마지막 갱신 시각(ISO, KST). 아직 한 번도 못 받았으면 null */
   updatedAt: string | null;
-  /** 집계 기간(일) */
-  windowDays: number;
-  /** 기간 내 총 건수 */
+  /**
+   * 담겨 있는 '조제가 있던 날'의 수. 달력 날짜가 아닙니다.
+   * 휴진일은 세지 않으므로 달력으로는 이보다 길게 걸칠 수 있습니다.
+   */
+  activeDays: number;
+  /** 담겨 있는 총 건수 */
   total: number;
   items: DecoctionItem[];
 }

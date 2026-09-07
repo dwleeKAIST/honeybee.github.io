@@ -25,34 +25,54 @@ const OUT = join(root, 'dist/index.html');
 const states = [
   {
     name: '비어 있음 (데이터를 아직 못 받은 상태)',
-    data: { updatedAt: null, windowDays: 7, total: 0, items: [] },
+    data: { updatedAt: null, activeDays: 0, total: 0, items: [] },
     expectTicker: false,
   },
   {
-    name: '하루치만',
+    name: '조제일 1일',
     data: {
       updatedAt: '2026-09-08T07:00:00+09:00',
-      windowDays: 7,
+      activeDays: 1,
       total: 2,
       items: [{ date: '2026-09-08', label: '비염 한약', count: 2 }],
     },
     expectTicker: true,
     expectPeriod: '9월 8일',
+    expectTitle: '최근 조제일 1일',
   },
   {
-    name: '여러 날',
+    // 배포 도중 데이터 파일과 컴포넌트의 버전이 어긋날 수 있습니다.
+    // 실제로 워크플로가 예전 형태(windowDays)로 써 둔 파일이 남은 적이
+    // 있습니다. 조제일 수를 items 에서 세므로 이 경우에도 맞아야 합니다.
+    name: '예전 형태 (activeDays 없이 windowDays)',
     data: {
       updatedAt: '2026-09-08T07:00:00+09:00',
       windowDays: 7,
-      total: 4,
+      total: 3,
       items: [
-        { date: '2026-09-08', label: '분골 녹용 보약', count: 2 },
-        { date: '2026-09-05', label: '소화 한약', count: 1 },
-        { date: '2026-09-02', label: '공진단', count: 1 },
+        { date: '2026-09-08', label: '비염 한약', count: 2 },
+        { date: '2026-09-02', label: '소화 한약', count: 1 },
       ],
     },
     expectTicker: true,
     expectPeriod: '9월 2일~9월 8일',
+    expectTitle: '최근 조제일 2일',
+  },
+  {
+    name: '조제일 여러 날 (달력으로는 띄엄띄엄)',
+    data: {
+      updatedAt: '2026-09-08T07:00:00+09:00',
+      activeDays: 3,
+      total: 4,
+      items: [
+        { date: '2026-09-08', label: '분골 녹용 보약', count: 2 },
+        { date: '2026-09-05', label: '기본 보약', count: 1 },
+        { date: '2026-08-26', label: '교통사고 한약', count: 1 },
+      ],
+    },
+    expectTicker: true,
+    expectPeriod: '8월 26일~9월 8일',
+    expectTitle: '최근 조제일 3일',
   },
 ];
 
@@ -84,6 +104,18 @@ try {
       continue;
     }
 
+    if (st.expectTitle) {
+      const m = html.match(/ledger-title[^>]*>([\s\S]*?)<\/p>/);
+      const title = m ? m[1].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim() : '(없음)';
+      if (!title.includes(st.expectTitle)) {
+        console.error(
+          `✗ ${st.name} — 머리글에 '${st.expectTitle}' 이 없습니다 (실제 '${title}')`,
+        );
+        failed++;
+        continue;
+      }
+    }
+
     if (st.expectPeriod) {
       const m = html.match(/ledger-time[^>]*>([^<]*)/);
       const period = m ? m[1].trim() : '(없음)';
@@ -107,4 +139,4 @@ if (failed) {
   console.error(`\n${failed}건 실패`);
   process.exit(1);
 }
-console.log('\n세 상태 모두 통과');
+console.log('\n모든 상태 통과');
