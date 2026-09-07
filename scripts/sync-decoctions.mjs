@@ -80,7 +80,15 @@ async function loadSource() {
   if (token) headers.Authorization = `Bearer ${token}`;
 
   const res = await fetch(url, { headers });
-  if (!res.ok) fail(`포탈 응답 ${res.status} ${res.statusText}`);
+  if (!res.ok) {
+    // 상태 코드만으로는 원인을 알기 어려워 본문도 함께 보여줍니다.
+    //   503 → 포탈에 PUBLIC_STATS_SECRET / PUBLIC_STATS_CLINIC_ID 가 없음
+    //   401 → 양쪽 비밀 값이 다름
+    //   500 → 포탈에서 오류. 본문과 Cloud Run 로그를 확인하세요
+    const body = await res.text().catch(() => '');
+    const hint = body ? ` — ${body.slice(0, 300).replace(/\s+/g, ' ')}` : '';
+    fail(`포탈 응답 ${res.status} ${res.statusText}${hint}`);
+  }
   return { text: await res.text(), from: url.replace(/\?.*$/, '') };
 }
 
