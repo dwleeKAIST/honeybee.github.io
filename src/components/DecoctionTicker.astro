@@ -1,0 +1,182 @@
+---
+// 원내 탕전실 조제 실적 티커 — 왼쪽에서 오른쪽으로 흐르는 한 줄.
+//
+// 데이터가 없으면 아무것도 렌더하지 않습니다(src/data/decoctions.json 이
+// 비어 있는 상태). 없는 숫자를 지어내 보여주지 않기 위한 장치입니다.
+//
+// 환자 이름은 표시하지 않습니다. 날짜 + 공개 이름표 + 건수만 씁니다.
+// 이유는 src/data/decoctions.ts 머리말 주석에 적어 두었습니다.
+import { decoctions, hasDecoctions, formatDay } from '../data/decoctions';
+
+const { items, total, windowDays, updatedAt } = decoctions;
+
+// 흐르는 속도 — 항목이 많을수록 길게. 한 항목당 2.6초쯤으로 잡습니다.
+const duration = Math.max(24, Math.round(items.length * 2.6));
+
+const updatedLabel = updatedAt
+  ? `${formatDay(updatedAt.slice(0, 10))} 07:00 기준`
+  : null;
+---
+
+{hasDecoctions && (
+  <section class="ledger" aria-label="원내 탕전실 최근 조제 내역">
+    <div class="ledger-head">
+      <p class="ledger-title">
+        원내 탕전실 · 최근 {windowDays}일 <strong>{total}건</strong> 조제
+      </p>
+      {updatedLabel && <p class="ledger-time">{updatedLabel}</p>}
+    </div>
+
+    <div class="ledger-window">
+      <div class="ledger-track" style={`--dur:${duration}s`}>
+        {[0, 1].map((copy) => (
+          <ul class="ledger-list" aria-hidden={copy === 1 ? 'true' : undefined}>
+            {items.map((it) => (
+              <li>
+                <span class="d">{formatDay(it.date)}</span>
+                <span class="l">{it.label}</span>
+                {it.count > 1 && <span class="c">×{it.count}</span>}
+              </li>
+            ))}
+          </ul>
+        ))}
+      </div>
+    </div>
+
+    <p class="ledger-note">
+      환자 정보는 표시하지 않습니다. 조제한 한약의 종류와 건수만 집계해
+      보여드립니다.
+    </p>
+  </section>
+)}
+
+<style>
+  .ledger {
+    border-top: 1px solid var(--line-soft);
+    border-bottom: 1px solid var(--line-soft);
+    background: var(--sunk);
+    padding: 1.25rem 0 1.1rem;
+  }
+
+  .ledger-head,
+  .ledger-note {
+    max-width: var(--w, 64rem);
+    margin: 0 auto;
+    padding: 0 var(--pad, 1.25rem);
+  }
+
+  .ledger-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.35rem 1rem;
+  }
+  .ledger-title {
+    margin: 0;
+    font-size: 0.96rem;
+    color: var(--ink);
+  }
+  .ledger-title strong {
+    color: var(--accent);
+  }
+  .ledger-time {
+    margin: 0;
+    font-size: 0.86rem;
+    color: var(--ink-soft);
+  }
+
+  /* 흐르는 영역. 양끝은 서서히 사라지게 합니다. */
+  .ledger-window {
+    overflow: hidden;
+    margin: 0.85rem 0 0.75rem;
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 3rem,
+      #000 calc(100% - 3rem),
+      transparent
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 3rem,
+      #000 calc(100% - 3rem),
+      transparent
+    );
+  }
+
+  .ledger-track {
+    display: flex;
+    width: max-content;
+    animation: ledger-scroll var(--dur) linear infinite;
+  }
+  /* 마우스를 올리거나 키보드 포커스가 들어오면 멈춥니다. */
+  .ledger-window:hover .ledger-track,
+  .ledger-window:focus-within .ledger-track {
+    animation-play-state: paused;
+  }
+
+  @keyframes ledger-scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      /* 목록을 두 벌 깔아 두었으므로 절반만 움직이면 이어집니다. */
+      transform: translateX(-50%);
+    }
+  }
+
+  .ledger-list {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0 0.25rem;
+  }
+  .ledger-list li {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    white-space: nowrap;
+    padding: 0.34rem 0.7rem;
+    border: 1px solid var(--line-soft);
+    border-radius: 999px;
+    background: var(--surface);
+    font-size: 0.9rem;
+  }
+  .ledger-list .d {
+    color: var(--ink-soft);
+    font-size: 0.82rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .ledger-list .l {
+    color: var(--ink);
+  }
+  .ledger-list .c {
+    color: var(--accent);
+    font-size: 0.82rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ledger-note {
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+  }
+
+  /* 움직임을 줄이도록 설정한 분에게는 흐르지 않게 하고,
+     대신 손으로 밀어 볼 수 있게 합니다. */
+  @media (prefers-reduced-motion: reduce) {
+    .ledger-window {
+      overflow-x: auto;
+    }
+    .ledger-track {
+      animation: none;
+    }
+    /* 정지 상태에서는 한 벌만 보이면 됩니다. */
+    .ledger-list[aria-hidden='true'] {
+      display: none;
+    }
+  }
+</style>

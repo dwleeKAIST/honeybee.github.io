@@ -1,0 +1,89 @@
+# 매일 아침 7시(KST) 탕전 실적을 받아 홈페이지 티커를 갱신합니다.
+#
+# 동작
+#   1. 시호 포탈에서 최근 조제 목록을 받습니다
+#   2. scripts/sync-decoctions.mjs 가 날짜·처방종류·건수만 남겨 집계합니다
+#      (환자 정보는 읽지도 쓰지도 않습니다)
+#   3. src/data/decoctions.json 이 바뀌면 main 에 커밋합니다
+#   4. main push → Cloudflare 가 2~3분 뒤 자동 배포합니다
+#
+# 켜기 전에 필요한 것 — 아래 시크릿이 없으면 아무 일도 하지 않고 끝납니다.
+#   Settings → Secrets and variables → Actions 에서 등록
+#     SIHO_EXPORT_URL    포탈에서 조제 목록을 CSV/JSON 으로 내려주는 주소 (필수)
+#     SIHO_EXPORT_TOKEN  그 주소에 인증이 필요하면 (선택)
+#
+# 포탈이 사내망에만 있어 GitHub 에서 접근할 수 없으면 이 방식은 쓸 수 없습니다.
+# 그때는 한의원 PC에서 스크립트를 돌려 push 하는 방식으로 바꾸어야 합니다.
+name: 탕전 실적 갱신
+
+on:
+  schedule:
+    # 22:00 UTC = 07:00 KST. 깃허브 크론은 몇 분 늦게 실행될 수 있습니다.
+    - cron: '0 22 * * *'
+  workflow_dispatch:
+
+# 다른 실행과 겹쳐 커밋이 충돌하지 않게 합니다.
+concurrency:
+  group: sync-decoctions
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: 시크릿 확인
+        id: gate
+        env:
+          URL: ${{ secrets.SIHO_EXPORT_URL }}
+        run: |
+          if [ -z "$URL" ]; then
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::SIHO_EXPORT_URL 시크릿이 없어 건너뜁니다. 등록하면 자동으로 동작합니다."
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: 소스 받기
+        if: steps.gate.outputs.ready == 'true'
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Node 준비
+        if: steps.gate.outputs.ready == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: 포탈에서 받아 집계
+        if: steps.gate.outputs.ready == 'true'
+        env:
+          SIHO_EXPORT_URL: ${{ secrets.SIHO_EXPORT_URL }}
+          SIHO_EXPORT_TOKEN: ${{ secrets.SIHO_EXPORT_TOKEN }}
+        run: node scripts/sync-decoctions.mjs
+
+      - name: 빌드 검증
+        if: steps.gate.outputs.ready == 'true'
+        run: |
+          npm ci
+          npm run build
+
+      - name: 바뀌었으면 커밋
+        if: steps.gate.outputs.ready == 'true'
+        run: |
+          if git diff --quiet -- src/data/decoctions.json; then
+            echo "::notice::변경 없음. 커밋하지 않습니다."
+            exit 0
+          fi
+          # 공개되면 안 되는 값이 섞였는지 마지막으로 한 번 더 봅니다.
+          if grep -Eq '"(환자|성명|이름|성별|나이|연락처|차트)' src/data/decoctions.json; then
+            echo "::error::결과에 환자 정보로 보이는 값이 있습니다. 커밋을 중단합니다."
+            exit 1
+          fi
+          git config user.name 'siho-bot'
+          git config user.email 'bot@thesiho.kr'
+          git add src/data/decoctions.json
+          git commit -m "탕전 실적 갱신 ($(TZ=Asia/Seoul date '+%Y-%m-%d'))"
+          git push origin main
