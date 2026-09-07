@@ -38,8 +38,9 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const LABELS = join(root, 'src/data/decoction-labels.json');
 const OUT = join(root, 'src/data/decoctions.json');
 
-/** 티커에 보여줄 기간(일). */
-const WINDOW_DAYS = 14;
+/** 티커에 보여줄 기간(일). 이 값만 고치면 됩니다.
+ *  포탈 URL 의 ?days= 는 이보다 크거나 같으면 됩니다(넉넉히 받아 걸러냅니다). */
+const WINDOW_DAYS = 7;
 
 /** 원본에서 읽을 열 이름 후보. 포탈 내보내기 형식에 맞추어 늘리세요. */
 const DATE_KEYS = ['조제일', '조제일자', '일자', '날짜', 'date', '탕전일'];
@@ -243,8 +244,21 @@ async function main() {
     if (dump.includes(k)) fail(`결과에 '${k}' 가 포함되었습니다. 중단합니다.`);
   }
 
+  // 조제 내역이 없는 날은 파일을 건드리지 않습니다.
+  //
+  // 휴진일이나 조제가 없던 기간에 '0건'으로 덮어쓰면 티커가 사라집니다.
+  // 원장 요청에 따라 그럴 때는 이전 기록을 그대로 두고, 다음에 실적이
+  // 생기면 그때 갱신합니다. 티커는 데이터에 담긴 실제 날짜를 표시하므로
+  // 오래된 기록이 최신인 것처럼 보이지는 않습니다.
+  if (total === 0) {
+    console.log(
+      '[sync-decoctions] 기간 내 조제 내역이 없습니다. 이전 기록을 그대로 둡니다.',
+    );
+    return;
+  }
+
   const next = {
-    updatedAt: total > 0 ? kstNowIso() : null,
+    updatedAt: kstNowIso(),
     windowDays: WINDOW_DAYS,
     total,
     items,

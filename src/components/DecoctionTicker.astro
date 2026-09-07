@@ -8,23 +8,33 @@
 // 이유는 src/data/decoctions.ts 머리말 주석에 적어 두었습니다.
 import { decoctions, hasDecoctions, formatDay } from '../data/decoctions';
 
-const { items, total, windowDays, updatedAt } = decoctions;
+const { items, total } = decoctions;
 
 // 흐르는 속도 — 항목이 많을수록 길게. 한 항목당 2.6초쯤으로 잡습니다.
 const duration = Math.max(24, Math.round(items.length * 2.6));
 
-const updatedLabel = updatedAt
-  ? `${formatDay(updatedAt.slice(0, 10))} 07:00 기준`
-  : null;
+// 기간은 '최근 N일'처럼 적지 않고 데이터에 담긴 실제 날짜로 씁니다.
+//
+// 조제가 없던 날에는 파일을 갱신하지 않아(원장 요청) 이전 기록이 그대로
+// 남습니다. 그 상태에서 '최근 7일'이라고 적으면 3주 전 기록도 최근인 것처럼
+// 읽힙니다. 실제 날짜를 쓰면 그럴 일이 없고, 페이지가 오래 재배포되지
+// 않아도 문장이 계속 참입니다.
+const dates = items.map((it) => it.date).sort();
+const oldest = dates[0];
+const newest = dates[dates.length - 1];
+const period =
+  oldest === newest
+    ? formatDay(newest)
+    : `${formatDay(oldest)}~${formatDay(newest)}`;
 ---
 
 {hasDecoctions && (
   <section class="ledger" aria-label="원내 탕전실 최근 조제 내역">
     <div class="ledger-head">
       <p class="ledger-title">
-        원내 탕전실 · 최근 {windowDays}일 <strong>{total}건</strong> 조제
+        원내 탕전실 · <strong>{total}건</strong> 조제
       </p>
-      {updatedLabel && <p class="ledger-time">{updatedLabel}</p>}
+      <p class="ledger-time">{period}</p>
     </div>
 
     <div class="ledger-window">
