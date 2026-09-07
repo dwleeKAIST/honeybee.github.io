@@ -16,7 +16,8 @@
 //   시호 포탈 연결
 //     SIHO_EXPORT_URL=https://<포탈>/api/public/decoction-stats?days=14
 //     SIHO_EXPORT_SECRET=<포탈의 PUBLIC_STATS_SECRET 과 같은 값>
-//     응답 { items: [{ date, prescription, count }] } 을 그대로 읽습니다.
+//     응답 { items: [{ date, class, count }] } 을 그대로 읽습니다.
+//     class 는 포탈의 '분류'입니다. 처방명이나 약재 구성이 아닙니다.
 //
 // ── 지켜야 할 원칙 ──────────────────────────────────────────────
 // 이 스크립트는 날짜와 처방 종류, 건수만 뽑아냅니다.
@@ -42,14 +43,18 @@ const WINDOW_DAYS = 14;
 
 /** 원본에서 읽을 열 이름 후보. 포탈 내보내기 형식에 맞추어 늘리세요. */
 const DATE_KEYS = ['조제일', '조제일자', '일자', '날짜', 'date', '탕전일'];
-const NAME_KEYS = ['처방명', '처방', '한약명', '품목명', 'item', 'prescription'];
+// 분류(class)를 읽습니다. 포탈의 prescription 은 처방 이름이 아니라
+// 약재 구성 전체('황기12 백출8 …')라 쓰지 않습니다.
+const KIND_KEYS = ['분류', 'class', 'category'];
 const QTY_KEYS = ['수량', '건수', 'qty', 'count'];
-// 포탈 응답은 이미 (날짜, 처방명)으로 묶여 있어 count 가 그날의 건수입니다.
+// 포탈 응답은 이미 (날짜, 분류)로 묶여 있어 count 가 그날의 건수입니다.
 
 /** 읽지 않을 열. 실수로 들어와도 무시합니다. */
 const FORBIDDEN_KEYS = [
   '환자', '환자명', '성명', '이름', '성별', '나이', '생년', '연락처',
   '전화', '휴대', '차트', '주민', 'name', 'patient', 'phone', 'chart',
+  // 약재 구성과 자유 입력란
+  '처방', 'prescription', '비고', 'bigo', '메모', 'memo',
 ];
 
 const argv = process.argv.slice(2);
@@ -195,8 +200,8 @@ async function main() {
     .slice(0, 10);
 
   const buckets = new Map(); // JSON([date, label]) → { date, label, count }
-  const skipped = { noDate: 0, noName: 0, unmapped: 0, outOfRange: 0 };
-  const unmappedNames = new Set();
+  const skipped = { noDate: 0, noKind: 0, unmapped: 0, outOfRange: 0 };
+  const unmappedKinds = new Set();
 
   for (const row of rows) {
     const rawDate = pick(row, DATE_KEYS);
@@ -205,11 +210,11 @@ async function main() {
     if (!date) { skipped.noDate++; continue; }
     if (date < oldest || date > today) { skipped.outOfRange++; continue; }
 
-    const rawName = pick(row, NAME_KEYS);
-    if (!rawName) { skipped.noName++; continue; }
+    const rawKind = pick(row, KIND_KEYS);
+    if (!rawKind) { skipped.noKind++; continue; }
 
-    const label = toLabel(rawName);
-    if (!label) { skipped.unmapped++; unmappedNames.add(rawName); continue; }
+    const label = toLabel(rawKind);
+    if (!label) { skipped.unmapped++; unmappedKinds.add(rawKind); continue; }
 
     const qty = Number(pick(row, QTY_KEYS) ?? 1);
     const n = Number.isFinite(qty) && qty > 0 ? Math.floor(qty) : 1;
@@ -248,10 +253,19 @@ async function main() {
   console.log(`[sync-decoctions] 원본: ${from}`);
   console.log(`[sync-decoctions] 행 ${rows.length} → 항목 ${items.length}, 총 ${total}건`);
   console.log(`[sync-decoctions] 건너뜀:`, skipped);
-  if (unmappedNames.size) {
+  if (unmappedKinds.size) {
+    // 로그(공개 저장소의 Actions 기록)에 원본이 길게 남지 않도록
+    // 짧은 값만, 30자까지 자르고, 20종까지만 찍습니다.
+    // 분류는 관리 목록에서 고르는 짧은 값이라 이 정도면 충분합니다.
+    const shown = [...unmappedKinds]
+      .filter((k) => k.length <= 30)
+      .slice(0, 20)
+      .map((k) => `'${k}'`);
+    const hidden = unmappedKinds.size - shown.length;
     console.log(
-      `[sync-decoctions] 이름표 미등록 처방 ${unmappedNames.size}종 —`,
-      [...unmappedNames].slice(0, 10).join(' / '),
+      `[sync-decoctions] 이름표 미등록 분류 ${unmappedKinds.size}종` +
+        (shown.length ? ` — ${shown.join(', ')}` : '') +
+        (hidden > 0 ? ` (그 밖에 ${hidden}종은 30자를 넘어 생략)` : ''),
     );
     console.log('  공개하려면 src/data/decoction-labels.json 의 rules 에 추가하세요.');
   }
