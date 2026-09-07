@@ -25,34 +25,36 @@ const OUT = join(root, 'dist/index.html');
 const states = [
   {
     name: '비어 있음 (데이터를 아직 못 받은 상태)',
-    data: { updatedAt: null, windowDays: 7, total: 0, items: [] },
+    data: { updatedAt: null, activeDays: 0, total: 0, items: [] },
     expectTicker: false,
   },
   {
-    name: '하루치만',
+    name: '조제일 1일',
     data: {
       updatedAt: '2026-09-08T07:00:00+09:00',
-      windowDays: 7,
+      activeDays: 1,
       total: 2,
       items: [{ date: '2026-09-08', label: '비염 한약', count: 2 }],
     },
     expectTicker: true,
     expectPeriod: '9월 8일',
+    expectTitle: '최근 조제일 1일',
   },
   {
-    name: '여러 날',
+    name: '조제일 여러 날 (달력으로는 띄엄띄엄)',
     data: {
       updatedAt: '2026-09-08T07:00:00+09:00',
-      windowDays: 7,
+      activeDays: 3,
       total: 4,
       items: [
         { date: '2026-09-08', label: '분골 녹용 보약', count: 2 },
-        { date: '2026-09-05', label: '소화 한약', count: 1 },
-        { date: '2026-09-02', label: '공진단', count: 1 },
+        { date: '2026-09-05', label: '기본 보약', count: 1 },
+        { date: '2026-08-26', label: '교통사고 한약', count: 1 },
       ],
     },
     expectTicker: true,
-    expectPeriod: '9월 2일~9월 8일',
+    expectPeriod: '8월 26일~9월 8일',
+    expectTitle: '최근 조제일 3일',
   },
 ];
 
@@ -82,6 +84,18 @@ try {
       );
       failed++;
       continue;
+    }
+
+    if (st.expectTitle) {
+      const m = html.match(/ledger-title[^>]*>([\s\S]*?)<\/p>/);
+      const title = m ? m[1].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim() : '(없음)';
+      if (!title.includes(st.expectTitle)) {
+        console.error(
+          `✗ ${st.name} — 머리글에 '${st.expectTitle}' 이 없습니다 (실제 '${title}')`,
+        );
+        failed++;
+        continue;
+      }
     }
 
     if (st.expectPeriod) {

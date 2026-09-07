@@ -1,1 +1,6 @@
-{"updatedAt": null, "windowDays": 7, "total": 0, "items": []}
+{
+  "updatedAt": null,
+  "activeDays": 0,
+  "total": 0,
+  "items": []
+}

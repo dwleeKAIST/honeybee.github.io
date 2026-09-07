@@ -8,7 +8,7 @@
 // 이유는 src/data/decoctions.ts 머리말 주석에 적어 두었습니다.
 import { decoctions, hasDecoctions, formatDay } from '../data/decoctions';
 
-const { items, total } = decoctions;
+const { items, total, activeDays } = decoctions;
 
 // 흐르는 속도 — 항목이 많을수록 길게. 한 항목당 2.6초쯤으로 잡습니다.
 const duration = Math.max(24, Math.round(items.length * 2.6));
@@ -39,7 +39,7 @@ const period = periodOf(items);
   <section class="ledger" aria-label="원내 탕전실 최근 조제 내역">
     <div class="ledger-head">
       <p class="ledger-title">
-        원내 탕전실 · <strong>{total}건</strong> 조제
+        원내 탕전실 · 최근 조제일 {activeDays}일 · <strong>{total}건</strong>
       </p>
       <p class="ledger-time">{period}</p>
     </div>
