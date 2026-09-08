@@ -49,4 +49,6 @@ export const photos = {
   menstrualMechanism: 'menstrual-pain-mechanism',
   /** 월경통 첩약 건강보험 인포그래픽 — 자주 묻는 질문 */
   menstrualInsurance: 'menstrual-pain-insurance',
+  /** 보폐고 제품 사진 — 보폐고 안내. 실제 원내 제품 사진만 올립니다 */
+  bopyego: 'product-bopyego',
 } as const;
