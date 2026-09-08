@@ -6,6 +6,25 @@
 //
 // 환자 이름은 표시하지 않습니다. 날짜 + 공개 이름표 + 건수만 씁니다.
 // 이유는 src/data/decoctions.ts 머리말 주석에 적어 두었습니다.
+//
+// ── 검색엔진과 AI 검색을 위한 구조 ──────────────────────────────
+// 이 블록은 Astro 가 빌드 시점에 정적 HTML 로 만듭니다. 자바스크립트로
+// 그리지 않으므로 크롤러가 숫자와 조제 내역을 그대로 읽습니다.
+// (dist/index.html 안에 <li>9월 8일 분골 녹용 보약 3건</li> 형태로 들어감)
+//
+// 아래를 의도적으로 지켰습니다.
+//   - 보이지 않는 텍스트나 키워드 반복을 넣지 않습니다. 화면에 보이는
+//     문장이 크롤러가 읽는 문장과 같습니다.
+//   - '많은 환자가 선택', '검증된 한약', '건수가 많으니 잘한다' 같은
+//     주관적·비교우위 표현은 쓰지 않습니다. 의료법 제56조에 걸립니다.
+//   - 날짜는 <time datetime> 으로 기계가 읽을 수 있게 적습니다.
+//     이는 숨긴 텍스트가 아니라 표준 마크업입니다.
+//
+// ⚠ '최근 7일'이라고 쓰지 마세요.
+//   activeDays 는 달력 7일이 아니라 '조제가 있었던 날' 7일입니다
+//   (원장 요청). 휴진일과 조제가 없던 날은 세지 않으므로 달력으로는
+//   더 길게 걸칩니다. 실제로 조제일 7일이 달력 11일에 걸친 적이
+//   있습니다. 그래서 문장에 실제 기간을 함께 적습니다.
 import { decoctions, hasDecoctions, formatDay } from '../data/decoctions';
 
 const { items, total } = decoctions;
@@ -31,26 +50,47 @@ const duration = Math.max(24, Math.round(items.length * 2.6));
 // items 가 비어 있을 수 있으므로(데이터를 아직 못 받은 상태) 반드시
 // hasDecoctions 를 먼저 확인합니다. 아래 마크업이 그 값으로 감싸여
 // 있어도 이 계산은 먼저 실행됩니다.
-function periodOf(list) {
+function periodOf(list: typeof items) {
   if (list.length === 0) return null;
   const dates = list.map((it) => it.date).sort();
-  const oldest = dates[0];
-  const newest = dates[dates.length - 1];
-  return oldest === newest
-    ? formatDay(newest)
-    : `${formatDay(oldest)}~${formatDay(newest)}`;
+  return { oldest: dates[0], newest: dates[dates.length - 1] };
 }
 const period = periodOf(items);
+const oneDay = period !== null && period.oldest === period.newest;
+
+// 종류별 집계 — 티커는 날짜별로 흐르므로 종류별 합계는 따로 보여줄
+// 가치가 있습니다. 표로 두면 크롤러가 '비염 한약 7건' 처럼 읽습니다.
+// 건수가 같으면 이름 순으로 정렬해 빌드마다 순서가 흔들리지 않게 합니다.
+const byLabel = [...items
+  .reduce((m, it) => m.set(it.label, (m.get(it.label) ?? 0) + it.count), new Map<string, number>())
+  .entries()]
+  .map(([label, count]) => ({ label, count }))
+  .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label, 'ko'));
 ---
 
-{hasDecoctions && (
-  <section class="ledger" aria-label="원내 탕전실 최근 조제 내역">
+{hasDecoctions && period && (
+  <section class="ledger" aria-labelledby="ledger-heading">
     <div class="ledger-head">
-      <p class="ledger-title">
-        원내 탕전실 · 최근 조제일 {activeDays}일 · <strong>{total}건</strong>
+      <h2 id="ledger-heading">시호한의원 원내 탕전실의 최근 한약 조제 현황</h2>
+      <p class="ledger-time">
+        {oneDay ? (
+          <time datetime={period.newest}>{formatDay(period.newest)}</time>
+        ) : (
+          <>
+            <time datetime={period.oldest}>{formatDay(period.oldest)}</time>~<time
+              datetime={period.newest}>{formatDay(period.newest)}</time>
+          </>
+        )}
       </p>
-      <p class="ledger-time">{period}</p>
     </div>
+
+    <p class="ledger-lead">
+      시호한의원은 진료 후 환자의 상태에 맞게 한약을 처방하고, 경기 화성시 동탄구
+      목동 <strong>원내 탕전실에서 직접 조제</strong>합니다. 아래는 조제가
+      있었던 최근 {activeDays}일 동안 원내에서 조제한 한약{' '}
+      <strong>{total}건</strong>의 종류와 건수입니다. 환자 개인정보는 표시하지
+      않습니다.
+    </p>
 
     <div class="ledger-window">
       <div class="ledger-track" style={`--dur:${duration}s`}>
@@ -58,9 +98,9 @@ const period = periodOf(items);
           <ul class="ledger-list" aria-hidden={copy === 1 ? 'true' : undefined}>
             {items.map((it) => (
               <li>
-                <span class="d">{formatDay(it.date)}</span>
+                <time class="d" datetime={it.date}>{formatDay(it.date)}</time>
                 <span class="l">{it.label}</span>
-                {it.count > 1 && <span class="c">×{it.count}</span>}
+                <span class="c">{it.count}건</span>
               </li>
             ))}
           </ul>
@@ -68,9 +108,45 @@ const period = periodOf(items);
       </div>
     </div>
 
+    <details class="ledger-detail">
+      <summary>종류별 조제 건수 보기</summary>
+      <div class="table-wrap">
+        <table>
+          <caption>
+            조제가 있었던 최근 {activeDays}일(
+            {oneDay
+              ? formatDay(period.newest)
+              : `${formatDay(period.oldest)}~${formatDay(period.newest)}`}
+            ) 원내 탕전실 조제 건수
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">한약 종류</th>
+              <th scope="col">조제 건수</th>
+            </tr>
+          </thead>
+          <tbody>
+            {byLabel.map((row) => (
+              <tr>
+                <th scope="row">{row.label}</th>
+                <td>{row.count}건</td>
+              </tr>
+            ))}
+          </tbody>
+          <tfoot>
+            <tr>
+              <th scope="row">합계</th>
+              <td>{total}건</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </details>
+
     <p class="ledger-note">
-      환자 정보는 표시하지 않습니다. 조제한 한약의 종류와 건수만 집계해
-      보여드립니다.
+      원내 기록에서 매일 아침 자동으로 갱신합니다. 조제가 없던 날은 갱신하지 않고
+      이전 기록을 그대로 둡니다. 표시하는 것은 한약의 종류와 조제 건수뿐이며,
+      환자의 이름·연령·성별·처방 내용은 포함하지 않습니다.
     </p>
   </section>
 )}
@@ -84,7 +160,9 @@ const period = periodOf(items);
   }
 
   .ledger-head,
-  .ledger-note {
+  .ledger-lead,
+  .ledger-note,
+  .ledger-detail {
     max-width: var(--w, 64rem);
     margin: 0 auto;
     padding: 0 var(--pad, 1.25rem);
@@ -97,24 +175,41 @@ const period = periodOf(items);
     justify-content: space-between;
     gap: 0.35rem 1rem;
   }
-  .ledger-title {
+  /* 의미상 h2 이지만 본문 제목처럼 커지면 안 되는 자리입니다.
+     기존 .ledger-title 과 같은 크기로 두어 디자인을 유지합니다. */
+  .ledger-head h2 {
     margin: 0;
+    font-family: inherit;
     font-size: 0.96rem;
+    font-weight: 600;
+    line-height: 1.5;
     color: var(--ink);
-  }
-  .ledger-title strong {
-    color: var(--accent);
   }
   .ledger-time {
     margin: 0;
     font-size: 0.86rem;
     color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* 설명문과 안내문은 제목과 같은 칸에 맞춥니다.
+     max-width 를 따로 주면 auto 여백이 다시 가운데로 밀어 제목과
+     왼쪽 끝이 어긋납니다(한 번 그렇게 만들었습니다). */
+  .ledger-lead {
+    margin: 0.5rem auto 0;
+    font-size: 0.9rem;
+    line-height: 1.65;
+    color: var(--ink-soft);
+  }
+  .ledger-lead strong {
+    color: var(--ink);
+    font-weight: 600;
   }
 
   /* 흐르는 영역. 양끝은 서서히 사라지게 합니다. */
   .ledger-window {
     overflow: hidden;
-    margin: 0.85rem 0 0.75rem;
+    margin: 0.9rem 0 0.75rem;
     -webkit-mask-image: linear-gradient(
       to right,
       transparent,
@@ -185,8 +280,40 @@ const period = periodOf(items);
     font-variant-numeric: tabular-nums;
   }
 
+  /* 종류별 집계 표 — 접어 두고, 펼치면 보입니다.
+     details 안의 내용도 검색엔진이 읽습니다. */
+  .ledger-detail {
+    margin-top: 0.25rem;
+    font-size: 0.88rem;
+  }
+  .ledger-detail summary {
+    cursor: pointer;
+    color: var(--ink-soft);
+    padding: 0.35rem 0;
+    width: fit-content;
+  }
+  .ledger-detail summary:hover {
+    color: var(--accent);
+  }
+  .ledger-detail .table-wrap {
+    max-width: 26rem;
+    margin: 0.5rem 0 0.9rem;
+  }
+  .ledger-detail caption {
+    text-align: left;
+    padding-bottom: 0.5rem;
+    font-size: 0.84rem;
+    color: var(--ink-soft);
+  }
+  .ledger-detail tfoot th,
+  .ledger-detail tfoot td {
+    font-weight: 600;
+  }
+
   .ledger-note {
+    margin: 0 auto;
     font-size: 0.82rem;
+    line-height: 1.6;
     color: var(--ink-soft);
   }
 

@@ -11,6 +11,14 @@
 //   반대로 실적이 들어온 뒤에는 빈 상태를 시험하지 않게 됩니다.
 //   그래서 세 상태를 모두 넣어 빌드해 봅니다.
 //
+// 데이터 상태 외에 아래도 함께 지킵니다.
+//   - 제목이 <h2 id="ledger-heading"> 이고 section 이 그것을 가리키는지
+//   - 설명문에 조제일 수가 들어가고, '최근 N일간'처럼 달력 기간으로
+//     읽히는 문구가 아닌지 (activeDays 는 달력 일수가 아닙니다)
+//   - 날짜가 <time datetime="YYYY-MM-DD"> 로 적혀 있는지
+//   - 종류별 집계 표가 자바스크립트 없이 HTML 에 들어 있는지
+// 검색엔진과 AI 검색이 이 영역을 읽는 지점이라 되돌아가지 않게 막습니다.
+//
 // 원본 decoctions.json 은 끝에 반드시 되돌립니다(중간에 실패해도).
 
 import { readFile, writeFile } from 'node:fs/promises';
@@ -38,7 +46,7 @@ const states = [
     },
     expectTicker: true,
     expectPeriod: '9월 8일',
-    expectTitle: '최근 조제일 1일',
+    expectLead: '최근 1일',
   },
   {
     // 배포 도중 데이터 파일과 컴포넌트의 버전이 어긋날 수 있습니다.
@@ -56,7 +64,7 @@ const states = [
     },
     expectTicker: true,
     expectPeriod: '9월 2일~9월 8일',
-    expectTitle: '최근 조제일 2일',
+    expectLead: '최근 2일',
   },
   {
     name: '조제일 여러 날 (달력으로는 띄엄띄엄)',
@@ -72,9 +80,12 @@ const states = [
     },
     expectTicker: true,
     expectPeriod: '8월 26일~9월 8일',
-    expectTitle: '최근 조제일 3일',
+    expectLead: '최근 3일',
   },
 ];
+
+/** HTML 조각에서 태그를 떼고 공백을 정리합니다. */
+const text = (s) => s.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 
 const original = await readFile(FILE, 'utf-8');
 let failed = 0;
@@ -104,12 +115,36 @@ try {
       continue;
     }
 
-    if (st.expectTitle) {
-      const m = html.match(/ledger-title[^>]*>([\s\S]*?)<\/p>/);
-      const title = m ? m[1].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim() : '(없음)';
-      if (!title.includes(st.expectTitle)) {
+    // 제목은 h2 여야 합니다. 검색엔진이 이 영역의 의미를 잡는 지점이고,
+    // 예전에 <p> 였습니다. 되돌아가지 않도록 여기서 지킵니다.
+    if (st.expectTicker) {
+      if (!/<h2 id="ledger-heading"[^>]*>\s*시호한의원 원내 탕전실/.test(html)) {
+        console.error(`✗ ${st.name} — id="ledger-heading" 인 h2 제목이 없습니다`);
+        failed++;
+        continue;
+      }
+      if (!/aria-labelledby="ledger-heading"/.test(html)) {
+        console.error(`✗ ${st.name} — section 이 h2 를 aria-labelledby 로 가리키지 않습니다`);
+        failed++;
+        continue;
+      }
+    }
+
+    if (st.expectLead) {
+      const m = html.match(/ledger-lead[^>]*>([\s\S]*?)<\/p>/);
+      const lead = m ? text(m[1]) : '(없음)';
+      if (!lead.includes(st.expectLead)) {
         console.error(
-          `✗ ${st.name} — 머리글에 '${st.expectTitle}' 이 없습니다 (실제 '${title}')`,
+          `✗ ${st.name} — 설명문에 '${st.expectLead}' 이 없습니다 (실제 '${lead}')`,
+        );
+        failed++;
+        continue;
+      }
+      // '최근 7일'처럼 달력 기간으로 읽히는 문구를 넣지 않았는지 확인합니다.
+      // activeDays 는 조제가 있었던 날의 수라 달력 일수와 다릅니다.
+      if (/최근 \d+일간/.test(lead)) {
+        console.error(
+          `✗ ${st.name} — 설명문에 '최근 N일간'이 있습니다. 조제일 수는 달력 일수가 아닙니다 ('${lead}')`,
         );
         failed++;
         continue;
@@ -117,12 +152,47 @@ try {
     }
 
     if (st.expectPeriod) {
-      const m = html.match(/ledger-time[^>]*>([^<]*)/);
-      const period = m ? m[1].trim() : '(없음)';
+      const m = html.match(/class="ledger-time"[^>]*>([\s\S]*?)<\/p>/);
+      // text() 가 태그를 공백으로 바꾸므로 '~' 주변 공백은 지웁니다.
+      // 화면에서는 <time>9월 2일</time>~<time>9월 8일</time> 로 붙어 있습니다.
+      const period = m ? text(m[1]).replace(/\s*~\s*/g, '~') : '(없음)';
       if (period !== st.expectPeriod) {
         console.error(
           `✗ ${st.name} — 기간 표기가 다릅니다 (예상 '${st.expectPeriod}', 실제 '${period}')`,
         );
+        failed++;
+        continue;
+      }
+      // 날짜는 <time datetime> 으로 적혀야 합니다(크롤러가 읽는 지점).
+      const iso = st.data.items.map((it) => it.date);
+      const missing = [...new Set([iso[0], iso[iso.length - 1]])].filter(
+        (d) => !html.includes(`datetime="${d}"`),
+      );
+      if (missing.length) {
+        console.error(
+          `✗ ${st.name} — <time datetime> 이 없습니다: ${missing.join(', ')}`,
+        );
+        failed++;
+        continue;
+      }
+    }
+
+    // 종류별 집계 표. 티커는 날짜별로 흐르므로 종류별 합계는 표로만
+    // 읽을 수 있습니다. 자바스크립트 없이 HTML 에 들어 있어야 합니다.
+    if (st.expectTicker) {
+      const labels = [...new Set(st.data.items.map((it) => it.label))];
+      const tbl = html.match(/<details class="ledger-detail"[\s\S]*?<\/details>/);
+      const body = tbl ? text(tbl[0]) : '';
+      const gone = labels.filter((l) => !body.includes(l));
+      if (!tbl || gone.length) {
+        console.error(
+          `✗ ${st.name} — 종류별 집계 표에 빠진 항목: ${gone.join(', ') || '(표 자체가 없음)'}`,
+        );
+        failed++;
+        continue;
+      }
+      if (!body.includes(`${st.data.total}건`)) {
+        console.error(`✗ ${st.name} — 집계 표에 합계 ${st.data.total}건이 없습니다`);
         failed++;
         continue;
       }
