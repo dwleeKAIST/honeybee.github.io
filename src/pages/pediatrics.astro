@@ -1,5 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
+import { photos } from '../lib/img';
+import Photos from '../components/Photos.astro';
 import { clinic } from '../data/clinic';
 
 const title = '동탄 목동 소아 한방 진료';
@@ -327,6 +329,15 @@ const faqLd = [
       자라는 데 관계있는 생활 전반을 함께 여쭙고, 지금 몸 상태를 놓고 상담해
       드립니다.
     </p>
+    <Photos
+      items={[
+        {
+          name: photos.roomInbody,
+          alt: '시호한의원 검사·상담 공간. 인바디 체성분 분석기와 신장계, 상담 데스크가 있습니다',
+        },
+      ]}
+      caption="체성분과 키를 확인하는 검사 공간입니다."
+    />
     <p class="statement">
       검사 결과는 화면과 결과지를 함께 보면서 설명해 드립니다. 지금 상태가
       어떤지부터 확인하시고 필요한 진료를 정하시면 됩니다.
