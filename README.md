@@ -76,6 +76,7 @@ Worker 이름은 `thesiho` 이고, Astro 가 만든 `dist/` 를 그대로 서빙
 | `care-megayakchim` | 메가약침 주입 장치 | 소화 |
 | `care-ultrasound-gyn` | 복부 초음파로 자궁을 확인하는 장면 | 월경통 |
 | `product-gongjindan-box` | 공진단 포장을 열어 환이 보이는 사진 | 공진단 |
+| `product-gongjindan-sahyang` | 사향 품질보증서 · CITES 인증 사향 · 공진단 한 환 | 공진단 |
 | `product-diet-capsule` | 시호 로고 다이어트 캡슐 | 한방 다이어트 |
 | `product-bopyego` | 보폐고 제품 | 보폐고 |
 
