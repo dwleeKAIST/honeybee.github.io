@@ -55,6 +55,10 @@ export const photos = {
   productGongjindan: 'product-gongjindan-red',
   /** 경옥고 제품 사진 — 공진단 안내 */
   productGyeongokgo: 'product-gyeongokgo-black',
+  /** 공진단 포장을 열어 환이 보이는 사진 — 공진단 안내 */
+  productGongjindanBox: 'product-gongjindan-box',
+  /** 시호 로고가 인쇄된 다이어트 캡슐 — 한방 다이어트 */
+  productDietCapsule: 'product-diet-capsule',
 
   /* ── 원내 시설 사진 ────────────────────────────────────────
      ⚠ 환자가 찍힌 사진, 이름·처방전·연락처가 보이는 사진은 올리지
@@ -80,11 +84,18 @@ export const photos = {
   /* ── 진료 장면 사진 ────────────────────────────────────────
      공간 사진(room-*)과 달리 실제 치료 모습입니다.
      ⚠ 환자가 등장하는 사진은 본인 동의를 받은 것만 올려주세요.
-        얼굴이나 신체 특징으로 알아볼 수 있으면 개인정보입니다. */
+        얼굴이나 신체 특징으로 알아볼 수 있으면 개인정보입니다.
+     지금 올라와 있는 care-* 사진의 모델은 원장의 동생이며 본인 동의를
+     받았습니다(원장 확인, 2026-09). 새 사진을 올릴 때도 같은 확인이
+     필요합니다. */
   /** 추나요법 시술 장면 — 체형교정 · 통증 */
   careChuna: 'care-chuna',
   /** 윈백 고주파 온열치료 장면 — 소화 · 월경통 · 통증 */
   careHighfreq: 'care-highfreq',
+  /** 메가약침 주입 장치 — 소화 */
+  careMegayakchim: 'care-megayakchim',
+  /** 복부 초음파로 자궁을 확인하는 장면 — 월경통 */
+  careUltrasoundGyn: 'care-ultrasound-gyn',
   /**
    * 원내 탕전실 사진 — 홈 하단 조제 현황 띠.
    * 네 장 모두 올려도 되고 한 장만 올려도 됩니다. 있는 것만 표시됩니다.

@@ -1,5 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
+import { photos } from '../lib/img';
+import Photos from '../components/Photos.astro';
 import { clinic } from '../data/clinic';
 import { dietPrograms } from '../data/diet-programs';
 
@@ -7,7 +9,9 @@ const title = '동탄 한방 다이어트 | 시호 다이어트 환·캡슐 안�
 const description =
   '동탄 시호한의원 한방 다이어트 안내. 환과 캡슐, 다이어트 보약의 차이와 복용 방법, 처방가를 정리했습니다.';
 
-// 원장 검수 완료. 제품명 '시선 캡슐'은 원장 확인 사항입니다.
+// 원장 검수 완료. 제품명 '시선 캡슐'과 인바디(InBody 580) 체성분
+// 검사를 상담 전에 항상 진행한다는 점은 원장 확인 사항입니다
+// (2026-09).
 // 처방가는 src/data/diet-programs.ts 에서 관리합니다. 변동 시 그 파일만 수정하세요.
 //
 // 자료에서 아래는 반영하지 않았습니다.
@@ -154,8 +158,9 @@ const faqLd = [
       <li>
         <strong>상담과 진찰</strong>
         <span
-          >체중과 체성분, 식사와 활동 습관, 수면 상태를 확인합니다. 복용 중인 약과
-          치료 중인 질환도 함께 확인합니다.</span
+          >체중과 함께 <strong>인바디(InBody 580)</strong>로 체성분을
+          확인합니다. 상담 전에 항상 진행합니다. 식사와 활동 습관, 수면 상태,
+          복용 중인 약과 치료 중인 질환도 함께 확인합니다.</span
         >
       </li>
       <li>
@@ -173,6 +178,19 @@ const faqLd = [
         >
       </li>
     </ol>
+    <Photos
+      items={[
+        {
+          name: photos.roomInbody,
+          alt: '시호한의원 검사·상담 공간. 인바디 체성분 분석기와 신장계, 상담 데스크가 있습니다',
+        },
+        {
+          name: photos.productDietCapsule,
+          alt: '시호한의원 로고가 인쇄된 다이어트 캡슐 포장과 면 파우치',
+        },
+      ]}
+      caption="상담 전에 인바디로 체성분을 확인합니다. 캡슐은 1개월분씩 준비됩니다."
+    />
     <p class="note">
       박종규 진료원장은 대한한방비만학회 인증 한의사입니다. 이력은{' '}
       <a href="/doctors/">의료진 소개</a>에 정리해 두었습니다.
