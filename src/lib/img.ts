@@ -31,8 +31,8 @@ export function img(name: string): string | null {
 export const photos = {
   /** 의료진 2인 사진 — 홈 히어로, 의료진 소개 */
   together: 'doctors-together',
-  /** 접수 데스크 — 오시는 길 */
-  reception: 'clinic-reception',
+  /** 접수 데스크와 대기 공간 — 오시는 길 */
+  roomReceptionDesk: 'room-reception',
   /** 진료실 상담 — 의료진 소개 */
   consult: 'consult-room',
   /** 김은미 대표원장 — 인물 사진 */
@@ -68,8 +68,12 @@ export const photos = {
   roomHallway: 'room-hallway',
   /** 세면대 — 오시는 길 */
   roomWashstand: 'room-washstand',
-  /** 진료실 책상과 서가 — 오시는 길 · 공진단 */
+  /** 진료실 책상과 서가 — 오시는 길 */
   roomConsultDesk: 'room-consult-desk',
+  /** 층 복도에서 본 입구 — 간판과 진료시간 안내판. 오시는 길 */
+  roomEntrance: 'room-entrance',
+  /** 시호한의원 간판 — 시호는 무슨 뜻인가요 */
+  roomSign: 'room-sign',
   /**
    * 원내 탕전실 사진 — 홈 하단 조제 현황 띠.
    * 네 장 모두 올려도 되고 한 장만 올려도 됩니다. 있는 것만 표시됩니다.
@@ -77,6 +81,8 @@ export const photos = {
    *   의료법 제19조(비밀 누설 금지), 개인정보보호법 제23조(민감정보).
    */
   decoctionRoom: 'decoction-room',
+  /** 조제탕전실 명패 */
+  decoctionSign: 'decoction-sign',
   decoctionWeighing: 'decoction-weighing',
   decoctionBrewing: 'decoction-brewing',
   decoctionPacked: 'decoction-packed',

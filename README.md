@@ -62,18 +62,21 @@ Worker 이름은 `thesiho` 이고, Astro 가 만든 `dist/` 를 그대로 서빙
 
 | 파일 이름 | 사진 | 표시되는 곳 |
 | --- | --- | --- |
-| `room-chuna` | 추나 치료실 (추나 베드) | 체형교정 |
-| `room-acupuncture` | 침 치료실 (커튼으로 나뉜 침대) | 통증 · 교통사고 · 오시는 길 |
+| `room-entrance` | 층 복도에서 본 입구 (간판 · 진료시간 안내판) | 오시는 길 맨 위 |
+| `room-reception` | 접수 데스크와 대기 공간 | 오시는 길 |
 | `room-hallway` | 원내 복도 | 오시는 길 |
 | `room-consult-desk` | 진료실 (책상 · 서가) | 오시는 길 |
+| `room-acupuncture` | 침 치료실 (커튼으로 나뉜 침대) | 통증 · 교통사고 · 오시는 길 |
+| `room-chuna` | 추나 치료실 (추나 베드) | 체형교정 · 오시는 길 |
 | `room-washstand` | 세면대 | 오시는 길 |
+| `room-sign` | 시호한의원 간판 | 시호는 무슨 뜻인가요 |
 | `product-bopyego` | 보폐고 제품 | 보폐고 |
 
-`room-*` 사진 다섯 장은 오시는 길의 「원내는 어떻게 되어 있나요?」에서
-격자로 함께 보이고, 추나·침 치료실은 해당 진료 페이지에도 한 장씩
-들어갑니다.
+오시는 길의 「원내는 어떻게 되어 있나요?」에서 `room-entrance` 를 뺀
+나머지 여섯 장이 격자로 함께 보이고, 추나·침 치료실은 해당 진료
+페이지에도 한 장씩 들어갑니다.
 
-이미 올라와 있는 사진: `doctors-together` `clinic-reception` `consult-room`
+이미 올라와 있는 사진: `doctors-together` `consult-room`
 `doctor-kim-eunmi` `doctor-park-jonggyu` `profile-*` `schedule`
 `ultrasound-*` `menstrual-pain-*` `product-gongjindan-red`
 `product-gyeongokgo-black`
@@ -90,7 +93,8 @@ Worker 이름은 `thesiho` 이고, Astro 가 만든 `dist/` 를 그대로 서빙
 
 | 파일 이름 | 내용 |
 | --- | --- |
-| `decoction-room` | 탕전실 전경 |
+| `decoction-room` | 조제탕전실 유리창 (약재 진열) |
+| `decoction-sign` | 조제탕전실 명패 |
 | `decoction-weighing` | 약재 계량·조제 |
 | `decoction-brewing` | 탕전 과정 |
 | `decoction-packed` | 조제를 마친 한약 |
