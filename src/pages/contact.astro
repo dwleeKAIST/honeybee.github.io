@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { clinic } from '../data/clinic';
+import Photos from '../components/Photos.astro';
 import { img, photos } from '../lib/img';
 const desc = `화성시 동탄구 목동 시호한의원 오시는 길과 주소, 전화번호, 예약 방법 안내.`;
 const reception = img(photos.reception);
@@ -63,6 +64,37 @@ const reception = img(photos.reception);
       </p>
     </>
   )}
+
+  <h2>원내는 어떻게 되어 있나요?</h2>
+  <p>
+    동탄리더스타워 2층 204~206호를 쓰고 있습니다. 접수 데스크에서 복도를 따라
+    진료실과 치료실이 이어집니다. 침 치료는 커튼으로 나뉜 개별 침대에서
+    진행하고, 추나요법은 별도의 치료실에서 진행합니다.
+  </p>
+  <Photos
+    items={[
+      {
+        name: photos.roomHallway,
+        alt: '시호한의원 원내 복도. 접수 데스크에서 진료실과 치료실로 이어집니다',
+      },
+      {
+        name: photos.roomConsultDesk,
+        alt: '시호한의원 진료실. 진료 책상과 의학 서적 서가가 있습니다',
+      },
+      {
+        name: photos.roomAcupuncture,
+        alt: '시호한의원 침 치료실. 커튼으로 나뉜 개별 침대와 물리치료 장비, 적외선 조사기가 있습니다',
+      },
+      {
+        name: photos.roomChuna,
+        alt: '시호한의원 추나 치료실. 추나요법용 치료 베드가 놓여 있습니다',
+      },
+      {
+        name: photos.roomWashstand,
+        alt: '시호한의원 원내 세면대',
+      },
+    ]}
+  />
 
   <style>
     table.hours { border-collapse: collapse; width: 100%; max-width: 32rem; }
