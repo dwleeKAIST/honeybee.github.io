@@ -1,6 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
 import { clinic } from '../data/clinic';
+import Photos from '../components/Photos.astro';
+import { photos } from '../lib/img';
 
 const title = '동탄 교통사고 한방치료 | 자동차보험 진료 안내';
 const description =
@@ -207,6 +209,15 @@ const care = [
       자세와 관련된 불편이 이어진다면 <a href="/posture/">체형교정 안내</a>도
       참고해 주세요.
     </p>
+    <Photos
+      items={[
+        {
+          name: photos.roomAcupuncture,
+          alt: '시호한의원 침 치료실. 커튼으로 나뉜 개별 침대와 물리치료 장비, 적외선 조사기가 있습니다',
+        },
+      ]}
+      caption="침 치료실 — 커튼으로 나뉜 개별 침대에서 진행합니다."
+    />
   </section>
 
   <section class="sec band">

@@ -1,6 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
+import Photos from '../components/Photos.astro';
 import { clinic } from '../data/clinic';
+import { photos } from '../lib/img';
 
 const title = '동탄 체형교정 | 거북목·라운드숄더·골반 추나';
 const description =
@@ -369,6 +371,15 @@ const care = [
         </div>
       ))}
     </div>
+    <Photos
+      items={[
+        {
+          name: photos.roomChuna,
+          alt: '시호한의원 추나 치료실. 추나요법용 치료 베드가 놓여 있습니다',
+        },
+      ]}
+      caption="추나 치료실 — 추나요법은 별도의 치료실에서 진행합니다."
+    />
   </section>
 
   <section class="sec">

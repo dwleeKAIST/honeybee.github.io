@@ -1,6 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
 import { clinic } from '../data/clinic';
+import Photos from '../components/Photos.astro';
+import { photos } from '../lib/img';
 
 const title = '동탄 목동 공진단 | 원내 직접 조제';
 const description =
@@ -267,6 +269,19 @@ const steps = [
         </tbody>
       </table>
     </div>
+    <Photos
+      items={[
+        {
+          name: photos.productGongjindan,
+          alt: '시호한의원 사향원방공진단 포장. 사향 공진단이라고 적힌 붉은 상자',
+        },
+        {
+          name: photos.productGyeongokgo,
+          alt: '시호한의원 경옥고 포장',
+        },
+      ]}
+      caption="원내에서 직접 조제해 위 포장에 담아 드립니다."
+    />
     <p>주요 구성 약재는 다음과 같습니다.</p>
     <ul class="herbs">
       <li>

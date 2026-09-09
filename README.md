@@ -54,6 +54,34 @@ Worker 이름은 `thesiho` 이고, Astro 가 만든 `dist/` 를 그대로 서빙
 포탈의 드롭다운 목록(`siho_portal` 의 `client/src/tabs/Decoction/decoctionKinds.js`)
 과 맞춰야 합니다. 한쪽에만 추가하면 띠에 나타나지 않습니다.
 
+## 원내 사진 올리기
+
+`public/images/` 에 아래 이름으로 올리면 해당 위치에 자동으로 표시됩니다.
+파일이 없으면 그 자리가 렌더되지 않으므로, 한 장만 올려도 됩니다.
+확장자는 `jpg` · `jpeg` · `png` · `webp` 무엇이든 됩니다.
+
+| 파일 이름 | 사진 | 표시되는 곳 |
+| --- | --- | --- |
+| `room-chuna` | 추나 치료실 (추나 베드) | 체형교정 |
+| `room-acupuncture` | 침 치료실 (커튼으로 나뉜 침대) | 통증 · 교통사고 · 오시는 길 |
+| `room-hallway` | 원내 복도 | 오시는 길 |
+| `room-consult-desk` | 진료실 (책상 · 서가) | 오시는 길 |
+| `room-washstand` | 세면대 | 오시는 길 |
+| `product-bopyego` | 보폐고 제품 | 보폐고 |
+
+`room-*` 사진 다섯 장은 오시는 길의 「원내는 어떻게 되어 있나요?」에서
+격자로 함께 보이고, 추나·침 치료실은 해당 진료 페이지에도 한 장씩
+들어갑니다.
+
+이미 올라와 있는 사진: `doctors-together` `clinic-reception` `consult-room`
+`doctor-kim-eunmi` `doctor-park-jonggyu` `profile-*` `schedule`
+`ultrasound-*` `menstrual-pain-*` `product-gongjindan-red`
+`product-gyeongokgo-black`
+
+⚠ 환자가 찍힌 사진, 환자 이름·처방전·연락처가 보이는 사진은 올리지
+마세요. 의료법 제19조(비밀 누설 금지)와 개인정보보호법 제23조(민감정보)에
+걸립니다.
+
 ### 원내 탕전실 사진 (선택)
 
 띠 안에 원내 탕전실 사진을 넣을 수 있습니다. `public/images/` 에 아래

@@ -51,6 +51,25 @@ export const photos = {
   menstrualInsurance: 'menstrual-pain-insurance',
   /** 보폐고 제품 사진 — 보폐고 안내. 실제 원내 제품 사진만 올립니다 */
   bopyego: 'product-bopyego',
+  /** 사향원방공진단 제품 사진 — 공진단 안내 */
+  productGongjindan: 'product-gongjindan-red',
+  /** 경옥고 제품 사진 — 공진단 안내 */
+  productGyeongokgo: 'product-gyeongokgo-black',
+
+  /* ── 원내 시설 사진 ────────────────────────────────────────
+     ⚠ 환자가 찍힌 사진, 이름·처방전·연락처가 보이는 사진은 올리지
+        마세요. 의료법 제19조(비밀 누설 금지), 개인정보보호법 제23조.
+     올린 것만 표시되고 없는 것은 그 자리가 렌더되지 않습니다. */
+  /** 추나 치료실 — 체형교정 · 추나요법 */
+  roomChuna: 'room-chuna',
+  /** 침 치료실 (커튼으로 나뉜 침대) — 통증 · 교통사고 */
+  roomAcupuncture: 'room-acupuncture',
+  /** 복도 — 오시는 길 */
+  roomHallway: 'room-hallway',
+  /** 세면대 — 오시는 길 */
+  roomWashstand: 'room-washstand',
+  /** 진료실 책상과 서가 — 오시는 길 · 공진단 */
+  roomConsultDesk: 'room-consult-desk',
   /**
    * 원내 탕전실 사진 — 홈 하단 조제 현황 띠.
    * 네 장 모두 올려도 되고 한 장만 올려도 됩니다. 있는 것만 표시됩니다.
