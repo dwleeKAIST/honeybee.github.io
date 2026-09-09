@@ -51,4 +51,14 @@ export const photos = {
   menstrualInsurance: 'menstrual-pain-insurance',
   /** 보폐고 제품 사진 — 보폐고 안내. 실제 원내 제품 사진만 올립니다 */
   bopyego: 'product-bopyego',
+  /**
+   * 원내 탕전실 사진 — 홈 하단 조제 현황 띠.
+   * 네 장 모두 올려도 되고 한 장만 올려도 됩니다. 있는 것만 표시됩니다.
+   * ⚠ 환자 이름·처방전·연락처가 찍힌 사진은 올리지 마세요.
+   *   의료법 제19조(비밀 누설 금지), 개인정보보호법 제23조(민감정보).
+   */
+  decoctionRoom: 'decoction-room',
+  decoctionWeighing: 'decoction-weighing',
+  decoctionBrewing: 'decoction-brewing',
+  decoctionPacked: 'decoction-packed',
 } as const;
