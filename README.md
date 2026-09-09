@@ -54,6 +54,24 @@ Worker 이름은 `thesiho` 이고, Astro 가 만든 `dist/` 를 그대로 서빙
 포탈의 드롭다운 목록(`siho_portal` 의 `client/src/tabs/Decoction/decoctionKinds.js`)
 과 맞춰야 합니다. 한쪽에만 추가하면 띠에 나타나지 않습니다.
 
+### 원내 탕전실 사진 (선택)
+
+띠 안에 원내 탕전실 사진을 넣을 수 있습니다. `public/images/` 에 아래
+이름으로 올리면 그 사진만 표시되고, 없으면 사진 영역 자체가 나오지
+않습니다. 네 장 중 한 장만 올려도 됩니다.
+
+| 파일 이름 | 내용 |
+| --- | --- |
+| `decoction-room` | 탕전실 전경 |
+| `decoction-weighing` | 약재 계량·조제 |
+| `decoction-brewing` | 탕전 과정 |
+| `decoction-packed` | 조제를 마친 한약 |
+
+확장자는 `jpg` · `jpeg` · `png` · `webp` 무엇이든 됩니다.
+
+⚠ 환자 이름·처방전·연락처가 찍힌 사진은 올리지 마세요. 의료법
+제19조(비밀 누설 금지)와 개인정보보호법 제23조(민감정보)에 걸립니다.
+
 ### 처음 켤 때
 
 Actions 시크릿 두 개가 필요합니다. 없으면 워크플로가 아무 일도 하지 않습니다.

@@ -26,8 +26,23 @@
 //   더 길게 걸칩니다. 실제로 조제일 7일이 달력 11일에 걸친 적이
 //   있습니다. 그래서 문장에 실제 기간을 함께 적습니다.
 import { decoctions, hasDecoctions, formatDay } from '../data/decoctions';
+import { img, photos } from '../lib/img';
 
 const { items, total } = decoctions;
+
+// 원내 탕전실 사진 — 자리만 준비해 둡니다.
+//
+// public/images/ 에 아래 이름으로 올리면 그 사진만 표시되고, 없으면
+// 마크업 자체가 렌더되지 않습니다(img() 가 null). 네 장 중 한 장만
+// 올려도 됩니다. 데이터 로직과 흐르는 띠는 건드리지 않았습니다.
+//
+// ⚠ 환자 이름·처방전·연락처가 찍힌 사진은 올리지 마세요.
+const roomPhotos = [
+  { src: img(photos.decoctionRoom), alt: '시호한의원 원내 탕전실 전경' },
+  { src: img(photos.decoctionWeighing), alt: '시호한의원 원내 탕전실에서 한약재를 계량하는 모습' },
+  { src: img(photos.decoctionBrewing), alt: '시호한의원 원내 탕전실에서 한약을 탕전하는 모습' },
+  { src: img(photos.decoctionPacked), alt: '시호한의원 원내 탕전실에서 조제를 마친 한약' },
+].filter((x) => x.src);
 
 // 조제일 수와 기간은 파일의 필드를 믿지 않고 items 에서 직접 셉니다.
 //
@@ -107,6 +122,14 @@ const byLabel = [...items
         ))}
       </div>
     </div>
+
+    {roomPhotos.length > 0 && (
+      <div class="ledger-photos">
+        {roomPhotos.map((ph) => (
+          <img src={ph.src} alt={ph.alt} loading="lazy" />
+        ))}
+      </div>
+    )}
 
     <details class="ledger-detail">
       <summary>종류별 조제 건수 보기</summary>
@@ -278,6 +301,26 @@ const byLabel = [...items
     color: var(--accent);
     font-size: 0.82rem;
     font-variant-numeric: tabular-nums;
+  }
+
+  /* 원내 탕전실 사진. 아래 띠가 '띠'로 남도록 작게 둡니다.
+     사진이 없으면 위 마크업이 렌더되지 않아 이 규칙도 쓰이지 않습니다. */
+  .ledger-photos {
+    max-width: var(--w, 64rem);
+    margin: 0 auto 0.9rem;
+    padding: 0 var(--pad, 1.25rem);
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+  }
+  .ledger-photos img {
+    flex: 0 0 auto;
+    height: 6.5rem;
+    width: auto;
+    border-radius: 8px;
+    border: 1px solid var(--line-soft);
+    background: var(--surface);
+    object-fit: cover;
   }
 
   /* 종류별 집계 표 — 접어 두고, 펼치면 보입니다.
