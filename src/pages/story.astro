@@ -1,5 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
+import Photos from '../components/Photos.astro';
+import { photos } from '../lib/img';
 import { clinic } from '../data/clinic';
 
 const title = '시호는 무슨 뜻인가요?';
@@ -154,6 +156,14 @@ const meanings = [
       지금은 이 이름을 설명하는 일이 진료를 설명하는 일과 크게 다르지 않다고
       느낍니다.
     </p>
+    <Photos
+      items={[
+        {
+          name: photos.roomSign,
+          alt: '시호한의원 간판. 한글 이름과 영문 Siho Korean Medicine Clinic 이 함께 적혀 있습니다',
+        },
+      ]}
+    />
     <p class="note">
       진료실 이야기와 소식은{' '}
       <a href={clinic.links.blog}>네이버 블로그</a>에 남기고 있습니다.

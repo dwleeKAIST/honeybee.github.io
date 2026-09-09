@@ -22,8 +22,10 @@ interface Props {
   items: Item[];
   /** 사진 아래 설명. 넣지 않아도 됩니다 */
   caption?: string;
+  /** 한 장을 본문 폭 전체로. 페이지 첫머리의 큰 사진에 씁니다 */
+  wide?: boolean;
 }
-const { items, caption } = Astro.props;
+const { items, caption, wide = false } = Astro.props;
 
 const shown = items
   .map((it) => ({ ...it, src: img(it.name) }))
@@ -35,7 +37,10 @@ const cols = Math.min(shown.length, 3);
 ---
 
 {shown.length > 0 && (
-  <figure class={many ? 'shots grid' : 'shots'} style={many ? `--cols:${cols}` : undefined}>
+  <figure
+    class={[ 'shots', many && 'grid', !many && wide && 'wide' ].filter(Boolean).join(' ')}
+    style={many ? `--cols:${cols}` : undefined}
+  >
     {shown.map((s) => <img src={s.src} alt={s.alt} loading="lazy" />)}
     {caption && <figcaption>{caption}</figcaption>}
   </figure>
@@ -53,9 +58,12 @@ const cols = Math.min(shown.length, 3);
     border-radius: 8px;
     background: var(--sunk);
   }
-  /* 한 장이면 본문 폭에 맞춰 원래 비율로 보여줍니다. */
+  /* 한 장이면 원래 비율로. 기본은 읽기 폭, wide 면 본문 폭 전체입니다. */
   .shots:not(.grid) {
     max-width: 34rem;
+  }
+  .shots.wide {
+    max-width: var(--w, 64rem);
   }
   /* 여러 장이면 격자로. 사진의 세로·가로 비율이 섞여 있어
      4:3 으로 잘라 줄을 맞춥니다. */

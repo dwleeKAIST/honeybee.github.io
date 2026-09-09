@@ -2,21 +2,22 @@
 import Base from '../layouts/Base.astro';
 import { clinic } from '../data/clinic';
 import Photos from '../components/Photos.astro';
-import { img, photos } from '../lib/img';
+import { photos } from '../lib/img';
 const desc = `화성시 동탄구 목동 시호한의원 오시는 길과 주소, 전화번호, 예약 방법 안내.`;
-const reception = img(photos.reception);
 ---
 <Base title="오시는 길 · 예약" description={desc}>
   <h1>오시는 길 · 예약</h1>
 
-  {reception && (
-    <img
-      class="place-photo"
-      src={reception}
-      alt="시호한의원 접수 데스크"
-      loading="lazy"
-    />
-  )}
+  <Photos
+    items={[
+      {
+        name: photos.roomEntrance,
+        alt: '동탄리더스타워 2층 복도에서 본 시호한의원 입구. 간판과 진료시간 안내판이 있습니다',
+      },
+    ]}
+    caption="동탄리더스타워 2층 복도에서 본 입구입니다."
+    wide
+  />
 
   <h2>주소</h2>
   <p>{clinic.address.full}</p>
@@ -73,6 +74,10 @@ const reception = img(photos.reception);
   </p>
   <Photos
     items={[
+      {
+        name: photos.roomReceptionDesk,
+        alt: '시호한의원 접수 데스크와 대기 공간',
+      },
       {
         name: photos.roomHallway,
         alt: '시호한의원 원내 복도. 접수 데스크에서 진료실과 치료실로 이어집니다',
