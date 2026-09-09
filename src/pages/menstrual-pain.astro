@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import Photos from '../components/Photos.astro';
 import { clinic } from '../data/clinic';
 import { chuppyak } from '../data/chuppyak';
 import { img, photos } from '../lib/img';
@@ -343,6 +344,15 @@ const faqLd = [
         </li>
       ))}
     </ul>
+    <Photos
+      items={[
+        {
+          name: photos.careHighfreq,
+          alt: '시호한의원에서 윈백 고주파 치료기로 복부에 온열치료를 진행하는 모습',
+        },
+      ]}
+      caption="윈백 고주파로 복부에 열을 전달하는 온열치료입니다."
+    />
     <p class="statement">
       모든 치료를 다 받아야 하는 것은 아닙니다. 어떤 조합이 필요한지는 진찰과
       초음파 확인 후 정합니다.

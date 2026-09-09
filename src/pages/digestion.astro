@@ -1,5 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
+import { photos } from '../lib/img';
+import Photos from '../components/Photos.astro';
 import { clinic } from '../data/clinic';
 import { chuppyak } from '../data/chuppyak';
 
@@ -308,6 +310,15 @@ const faqLd = [
         >
       </li>
     </ol>
+    <Photos
+      items={[
+        {
+          name: photos.careHighfreq,
+          alt: '시호한의원에서 윈백 고주파 치료기로 복부에 온열치료를 진행하는 모습. 옆에 ICT 물리치료기와 적외선 조사기가 있습니다',
+        },
+      ]}
+      caption="복부 고주파 온열치료 — 옆에 ICT 물리치료기가 함께 있습니다."
+    />
     <p class="note">
       세 가지를 모두 진행하지 않는 경우도 있습니다. 지금 상태에 무엇이 필요한지는
       진찰 후 정합니다.
