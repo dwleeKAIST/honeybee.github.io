@@ -57,6 +57,15 @@ export const photos = {
   productGyeongokgo: 'product-gyeongokgo-black',
   /** 공진단 포장을 열어 환이 보이는 사진 — 공진단 안내 */
   productGongjindanBox: 'product-gongjindan-box',
+  /**
+   * 사향 품질보증서와 CITES 인증 사향, 공진단 한 환 — 공진단 안내.
+   * ⚠ 사진 안의 안내 카드에 '효과가 탁월', '극대화하는 효과' 같은
+   *    문구가 읽힙니다. 원장이 확인한 뒤 그대로 쓰기로 했습니다
+   *    (2026-09). 다만 그 문구를 alt 나 본문으로 옮겨 적지 마세요.
+   *    사진 속 글자와 달리 사이트가 직접 하는 주장이 됩니다
+   *    (의료법 제56조).
+   */
+  productGongjindanSahyang: 'product-gongjindan-sahyang',
   /** 시호 로고가 인쇄된 다이어트 캡슐 — 한방 다이어트 */
   productDietCapsule: 'product-diet-capsule',
 
