@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import { clinic } from '../data/clinic';
 import { chuppyak } from '../data/chuppyak';
 
-const title = '동탄 비염 한의원 | 코편안 클리닉 · 알레르기비염 진료';
+const title = '동탄 비염 한의원 | 코편안 클리닉·알레르기비염';
 const description =
   '동탄 시호한의원 코편안 클리닉. 비내시경으로 코 안을 확인하고 비강 추나·비염침·한약으로 진료합니다.';
 
@@ -70,7 +70,7 @@ const care = [
 
 // 첫 화면 요약. AI가 페이지 주제를 한눈에 잡을 수 있도록 사실만 짧게 적습니다.
 const summary = [
-  '경기 화성시 동탄구 목동, 동탄리더스타워 2층',
+  clinic.address.short,
   '비내시경으로 비강 점막 상태를 직접 확인한 뒤 진료',
   '비강 추나 · 비염침 · 외용제(비염고 · 브레이니) · 약침 · 한약',
   '알레르기비염은 첩약 건강보험 적용 가능',
@@ -82,7 +82,7 @@ const faqs = [
   {
     q: '동탄 목동에서 비염을 진료하는 한의원인가요?',
     a: [
-      '네. 시호한의원 코편안 클리닉은 경기 화성시 동탄구 목동, 동탄신리천로 407 동탄리더스타워 2층에서 알레르기비염과 만성비염을 진료합니다.',
+      `네. 시호한의원 코편안 클리닉은 ${clinic.address.body}에서 알레르기비염과 만성비염을 진료합니다.`,
       '비내시경으로 코 안을 직접 확인한 뒤 비강 추나, 비염침, 외용제, 한약 중 지금 필요한 것을 정합니다. 미취학 아동부터 진료합니다.',
     ],
   },
@@ -111,7 +111,7 @@ const faqs = [
     q: '이비인후과에서 이미 진료를 받고 있는데 함께 다녀도 되나요?',
     a: [
       '네. 검사 결과나 처방받은 약이 있으면 알려주세요. 함께 확인한 뒤 안내해 드립니다.',
-      '기존 치료를 임의로 중단하지 마시고, 담당 선생님과 상의하시는 것이 좋습니다.',
+      clinic.currentTreatmentNote,
     ],
   },
   {
@@ -339,8 +339,8 @@ const faqLd = [
   <section class="sec band closing">
     <h2>상담과 예약</h2>
     <p>
-      시호한의원은 경기 화성시 동탄구 목동, 동탄신리천로 407 동탄리더스타워 2층에 있습니다.
-      비내시경으로 코 안을 먼저 확인한 뒤 무엇부터 다룰지 말씀드립니다. {clinic.firstVisitNote} 수요일은 21:00까지 야간진료를 운영합니다.
+      시호한의원은 {clinic.address.body}에 있습니다.
+      비내시경으로 코 안을 먼저 확인한 뒤 무엇부터 다룰지 말씀드립니다. {clinic.firstVisitNote} {clinic.nightNote}
     </p>
     <p class="cta-row">
       <a class="cta" href={clinic.links.naverBooking}>비염 상담하기</a>

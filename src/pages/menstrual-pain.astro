@@ -7,7 +7,7 @@ import { img, photos } from '../lib/img';
 
 const title = '동탄 목동 월경통 한의원';
 const description =
-  '화성시 동탄구 목동 시호한의원. 복부 초음파라 월경 중에도 내원 가능. 한약·침·뜸·약침·온열치료로 진료하며 첩약 건강보험 적용 대상입니다. 김은미 대표원장 진료.';
+  '화성시 동탄구 목동 시호한의원. 복부 초음파라 월경 중에도 내원 가능. 한약·침·뜸·약침·온열치료로 진료하며 첩약 건강보험 적용 대상입니다.';
 
 // 원장 확인 사항 (2026-09)
 //   - 복부 초음파로 자궁·난소 형태, 근종·낭종 유무, 자궁내막 두께를 확인
@@ -48,7 +48,7 @@ const mechanismFigure = img(photos.menstrualMechanism);
 const insuranceFigure = img(photos.menstrualInsurance);
 
 const summary = [
-  '경기 화성시 동탄구 목동, 동탄리더스타워 2층',
+  clinic.address.short,
   '복부 초음파로 확인 가능한 범위에서 자궁과 난소 주변을 살펴봅니다',
   '한약 · 침 · 뜸 · 약침 · 고주파 온열치료 · 온열돔',
   `월경통은 첩약 건강보험 적용 대상입니다 (한의원 본인부담 ${chuppyak.patientRate})`,
@@ -139,7 +139,7 @@ const faqs = [
   {
     q: '동탄 목동에서 월경통을 진료하는 한의원인가요?',
     a: [
-      '네. 시호한의원은 경기 화성시 동탄구 목동, 동탄신리천로 407 동탄리더스타워 2층에서 월경통을 진료합니다.',
+      `네. 시호한의원은 ${clinic.address.body}에서 월경통을 진료합니다.`,
       '복부 초음파로 확인 가능한 범위에서 자궁과 난소 주변을 살펴본 뒤 한약, 침, 뜸, 약침, 고주파 온열치료 가운데 필요한 것을 정합니다. 한방내과 전문의인 김은미 대표원장이 진료합니다.',
     ],
   },
@@ -453,8 +453,7 @@ const faqLd = [
   <section class="sec band closing">
     <h2>상담과 예약</h2>
     <p>
-      시호한의원은 <strong>경기도 화성시 동탄구 목동, 동탄신리천로 407
-      동탄리더스타워 2층</strong>에 있습니다. 산부인과 검사 결과지나 복용 중인
+      시호한의원은 <strong>{clinic.address.body}</strong>에 있습니다. 산부인과 검사 결과지나 복용 중인
       약이 있으시면 함께 가져와 주세요. 임신을 준비 중이시라면 그 점도 미리
       말씀해 주세요.
     </p>
@@ -463,7 +462,7 @@ const faqLd = [
       맞추어 오실 필요가 없습니다.
     </p>
     <p>
-      {clinic.firstVisitNote} 수요일은 21:00까지 야간진료를 운영합니다.
+      {clinic.firstVisitNote} {clinic.nightNote}
     </p>
     <p class="cta-row">
       <a class="cta" href={clinic.links.naverBooking}>네이버 예약</a>

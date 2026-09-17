@@ -18,7 +18,7 @@ const description =
 //   - 치료 효과가 아니라 제도와 절차를 안내하는 페이지입니다
 
 const summary = [
-  '경기 화성시 동탄구 목동, 동탄리더스타워 2층',
+  clinic.address.short,
   '시호한의원은 첩약 건강보험 시범사업 참여 한의원입니다',
   `적용 질환 6가지 — 알레르기비염 · 기능성 소화불량 · 월경통 등`,
   `한의원 본인부담률 ${chuppyak.patientRate}, ${chuppyak.amount} 기준 약 ${chuppyak.patientPay}`,
@@ -72,7 +72,7 @@ const faqs = [
   {
     q: '동탄 목동에서 첩약 건강보험이 되는 한의원인가요?',
     a: [
-      '네. 시호한의원은 경기 화성시 동탄구 목동, 동탄신리천로 407 동탄리더스타워 2층에 있으며 첩약 건강보험 시범사업에 참여하고 있습니다.',
+      `네. 시호한의원은 ${clinic.address.body}에 있으며 첩약 건강보험 시범사업에 참여하고 있습니다.`,
       '첩약 건강보험은 시범사업에 참여하는 의료기관에서 처방받으실 수 있습니다.',
     ],
   },
@@ -200,7 +200,7 @@ const faqLd = [
   <section class="sec band">
     <h2>본인부담은 얼마인가요?</h2>
     <p>
-      한의원 기준 본인부담률은 <strong>{chuppyak.patientRate}</strong>이며,
+      한의원 기준 본인부담률은 <strong>{chuppyak.patientRate}</strong>이며,{' '}
       {chuppyak.amount} 기준 본인부담은 약 <strong>{chuppyak.patientPay}</strong>입니다.
       처방 구성과 약재에 따라 달라지므로 진찰 후 정확한 금액을 안내해 드립니다.
     </p>
@@ -290,12 +290,11 @@ const faqLd = [
   <section class="sec band closing">
     <h2>상담과 예약</h2>
     <p>
-      시호한의원은 <strong>경기도 화성시 동탄구 목동, 동탄신리천로 407
-      동탄리더스타워 2층</strong>에 있습니다. 첩약 건강보험 적용 여부는 진찰 후
+      시호한의원은 <strong>{clinic.address.body}</strong>에 있습니다. 첩약 건강보험 적용 여부는 진찰 후
       말씀드립니다.
     </p>
     <p>
-      {clinic.firstVisitNote} 수요일은 21:00까지 야간진료를 운영합니다.
+      {clinic.firstVisitNote} {clinic.nightNote}
     </p>
     <p class="cta-row">
       <a class="cta" href={clinic.links.naverBooking}>네이버 예약</a>
