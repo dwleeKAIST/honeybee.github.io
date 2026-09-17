@@ -4,7 +4,7 @@ import { getCollection } from 'astro:content';
 const treatments = (await getCollection('treatments')).sort((a, b) => a.data.order - b.data.order);
 const desc = '시호한의원의 진료 항목 안내 — 추나, 도침, 약침, 매선, 맞춤 클리닉.';
 ---
-<Base title="진료 안내" description={desc}>
+<Base title="동탄 한의원 진료 안내" description={desc}>
   <h1>진료 안내</h1>
   <ul class="plain">
     {treatments.map((t) => (

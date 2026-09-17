@@ -1,4 +1,10 @@
 // 한의원 기본 정보 — 이 파일만 수정하면 전 페이지와 구조화 데이터에 반영됩니다.
+
+// 진료 마감 시각. hours 표와 본문 안내 문장 양쪽에 들어가 어긋나기
+// 쉬워, 여기서 한 번만 적습니다.
+const WEEKDAY_CLOSE = '20:00'; // 월·화·목·금
+const WED_CLOSE = '21:00'; // 수요일 야간진료
+
 export const clinic = {
   name: '시호한의원',
   nameEn: 'SIHO Korean Medicine Clinic',
@@ -27,6 +33,13 @@ export const clinic = {
     /** 법정동. 본문에서 '동탄구 목동'처럼 풀어 쓸 때 사용합니다. */
     district: '동탄구',
     dong: '목동',
+    // 본문·FAQ 에 쓰는 두 형태. 20곳 넘게 복사돼 있었고 실제로
+    // '경기 화성시'와 '경기도 화성시'로 갈려 있었습니다. 호수(204~206호)는
+    // 본문에서는 빼고 오시는 길에서만 안내합니다.
+    /** 본문에 풀어 쓸 때. 도로명까지 넣습니다 */
+    body: '경기 화성시 동탄구 목동, 동탄신리천로 407 동탄리더스타워 2층',
+    /** 첫 화면 요약 줄처럼 짧게 쓸 때. 도로명은 생략합니다 */
+    short: '경기 화성시 동탄구 목동, 동탄리더스타워 2층',
     postalCode: '',
     country: 'KR',
   },
@@ -41,28 +54,30 @@ export const clinic = {
   },
   // 진료시간 — 출처: 네이버 플레이스(시호한의원) 등록 정보
   // schema는 schema.org openingHours 형식. 점심시간은 두 구간으로 분리해 표기합니다.
+  // ⚠ src/content/faq/opening-hours.md 에 같은 시간이 글로 적혀 있습니다.
+  //    마크다운에서는 변수를 못 쓰므로 여기를 고치면 그 파일도 함께 고치세요.
   hours: [
     {
       days: '월·화·목',
       open: '09:30',
-      close: '20:00',
+      close: WEEKDAY_CLOSE,
       lunch: '12:30–14:00',
-      schema: ['Mo,Tu,Th 09:30-12:30', 'Mo,Tu,Th 14:00-20:00'],
+      schema: ['Mo,Tu,Th 09:30-12:30', `Mo,Tu,Th 14:00-${WEEKDAY_CLOSE}`],
     },
     {
       days: '수',
       open: '09:30',
-      close: '21:00',
+      close: WED_CLOSE,
       lunch: '12:30–14:00',
       note: '야간진료',
-      schema: ['We 09:30-12:30', 'We 14:00-21:00'],
+      schema: ['We 09:30-12:30', `We 14:00-${WED_CLOSE}`],
     },
     {
       days: '금',
       open: '09:30',
-      close: '20:00',
+      close: WEEKDAY_CLOSE,
       lunch: '12:30–14:20',
-      schema: ['Fr 09:30-12:30', 'Fr 14:20-20:00'],
+      schema: ['Fr 09:30-12:30', `Fr 14:20-${WEEKDAY_CLOSE}`],
     },
     {
       days: '토',
@@ -87,4 +102,18 @@ export const clinic = {
   // '처음 상담은'). 한 곳에서 관리해 다시 갈리지 않게 합니다.
   firstVisitNote:
     '처음 상담을 오시는 분은 검사 및 상담 시간이 1시간 이상 소요될 수 있어 예약 후 내원하시기를 권장드립니다.',
+  /** 월·화·목·금 진료 마감 시각. 문장을 직접 이어 쓸 때 씁니다 */
+  weekdayClose: WEEKDAY_CLOSE,
+  /** 수요일 야간진료 마감 시각. 문장을 직접 이어 쓸 때 씁니다 */
+  wednesdayClose: WED_CLOSE,
+  // 15곳에 같은 문장이 복사돼 있었습니다. '…운영하여 퇴근 후에도
+  // 내원하실 수 있습니다' 처럼 뒤를 이어 쓰는 페이지는 문장을 그대로
+  // 쓰되 시각만 wednesdayClose 로 넣으세요.
+  nightNote: `수요일은 ${WED_CLOSE}까지 야간진료를 운영합니다.`,
+  // 복용 중인 약이 있는 분께 드리는 안내. 6곳에 복사돼 있었습니다.
+  currentTreatmentNote:
+    '기존 치료를 임의로 중단하지 마시고, 담당 선생님과 상의하시는 것이 좋습니다.',
+  // 김은미 대표원장 임상 경력 연수. 본문 5곳에 '9년 이상'이 적혀
+  // 있었습니다. 해가 바뀌면 낡는 값이라(2026년 기준) 여기만 고치세요.
+  leadDoctorYears: '9년 이상',
 };

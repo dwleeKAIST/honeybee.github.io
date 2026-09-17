@@ -5,7 +5,7 @@ import Photos from '../components/Photos.astro';
 import { photos } from '../lib/img';
 const desc = `화성시 동탄구 목동 시호한의원 오시는 길과 주소, 전화번호, 예약 방법 안내.`;
 ---
-<Base title="오시는 길 · 예약" description={desc}>
+<Base title="동탄 목동 오시는 길 · 예약" description={desc}>
   <h1>오시는 길 · 예약</h1>
 
   {/*
@@ -29,7 +29,7 @@ const desc = `화성시 동탄구 목동 시호한의원 오시는 길과 주소
   <h2>주소</h2>
   <p>{clinic.address.full}</p>
   <p>
-    시호한의원은 <strong>경기도 화성시 동탄구 목동</strong>, 동탄2신도시 동탄리더스타워
+    시호한의원은 <strong>경기 화성시 동탄구 목동</strong>, 동탄2신도시 동탄리더스타워
     2층에 있습니다. 동탄구와 인근 지역에서 오시는 분들이 많습니다.
   </p>
   <p>
@@ -67,7 +67,7 @@ const desc = `화성시 동탄구 목동 시호한의원 오시는 길과 주소
       </table>
       <p class="lead">{clinic.closedDays}. {clinic.lastReception}</p>
       <p>
-        수요일은 21:00까지 야간진료를 운영합니다. 공휴일 휴진과 임시 휴진 일정은{' '}
+        {clinic.nightNote} 공휴일 휴진과 임시 휴진 일정은{' '}
         <a href={clinic.links.naverBooking}>네이버 예약</a>에서 확인하실 수 있습니다.
       </p>
     </>

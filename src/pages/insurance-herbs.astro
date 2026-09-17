@@ -32,7 +32,7 @@ const description =
 
 // 첫 화면 요약. AI가 페이지 주제를 한눈에 잡을 수 있도록 사실만 짧게 적습니다.
 const summary = [
-  '경기 화성시 동탄구 목동, 동탄리더스타워 2층',
+  clinic.address.short,
   '건강보험이 적용되는 한약제제(보험한약)를 처방합니다',
   `아래 ${insuranceHerbs.length}종은 처방하는 보험한약의 일부 예시입니다`,
   '짜서 먹는 시럽(연조엑스)과 과립제 형태가 있습니다',
@@ -277,10 +277,9 @@ const faqLd = [
   <section class="sec band closing">
     <h2>상담과 예약</h2>
     <p>
-      시호한의원은 경기 화성시 동탄구 목동, 동탄신리천로 407 동탄리더스타워 2층에
+      시호한의원은 {clinic.address.body}에
       있습니다. 지금 증상에 보험한약이 맞는지, 맞춤 한약이 필요한지는 진찰 후
-      말씀드립니다. {clinic.firstVisitNote} 수요일은 21:00까지 야간진료를
-      운영합니다.
+      말씀드립니다. {clinic.firstVisitNote} {clinic.nightNote}
     </p>
     <p class="cta-row">
       <a class="cta" href={clinic.links.naverBooking}>한약 상담하기</a>
