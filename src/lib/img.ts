@@ -51,12 +51,9 @@ export const photos = {
   menstrualInsurance: 'menstrual-pain-insurance',
   /** 보폐고 제품 사진 — 보폐고 안내. 실제 원내 제품 사진만 올립니다 */
   bopyego: 'product-bopyego',
-  /** 사향원방공진단 제품 사진 — 공진단 안내 */
-  productGongjindan: 'product-gongjindan-red',
-  /** 경옥고 제품 사진 — 공진단 안내 */
-  productGyeongokgo: 'product-gyeongokgo-black',
-  /** 공진단 포장을 열어 환이 보이는 사진 — 공진단 안내 */
-  productGongjindanBox: 'product-gongjindan-box',
+  /* 공진단·경옥고 케이스 사진 자리를 뺐습니다. 붉은 공진단 케이스와
+     검정 경옥고 케이스는 더 이상 쓰지 않습니다(원장 확인, 2026-09).
+     지금 쓰는 포장 사진이 생기면 새 이름으로 다시 넣으세요. */
   /**
    * 사향 품질보증서와 CITES 인증 사향, 공진단 한 환 — 공진단 안내.
    * ⚠ 사진 안의 안내 카드에 '효과가 탁월', '극대화하는 효과' 같은

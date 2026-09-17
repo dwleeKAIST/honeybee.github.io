@@ -75,12 +75,16 @@ Worker 이름은 `thesiho` 이고, Astro 가 만든 `dist/` 를 그대로 서빙
 | `care-highfreq` | 윈백 고주파 온열치료 장면 | 소화 · 월경통 · 통증 |
 | `care-megayakchim` | 메가약침 주입 장치 | 소화 |
 | `care-ultrasound-gyn` | 복부 초음파로 자궁을 확인하는 장면 | 월경통 |
-| `product-gongjindan-box` | 공진단 포장을 열어 환이 보이는 사진 | 공진단 |
 | `product-gongjindan-sahyang` | 사향 품질보증서 · CITES 인증 사향 · 공진단 한 환 | 공진단 |
 | `product-diet-capsule` | 시호 로고 다이어트 캡슐 | 한방 다이어트 |
 | `product-bopyego` | 보폐고 제품 | 보폐고 |
 
 `room-*` 은 공간, `care-*` 는 실제 치료 모습, `product-*` 는 제품입니다.
+
+⚠ 공진단·경옥고 **케이스 사진은 올리지 마세요**. 붉은 공진단 케이스와
+검정 경옥고 케이스는 더 이상 쓰지 않아 내렸습니다(원장 확인, 2026-09).
+지금 쓰는 포장 사진이 생기면 새 이름으로 `src/lib/img.ts` 에 자리를
+만들고 이 표에 추가해 주세요.
 
 ⚠ 환자가 등장하는 사진은 **본인 동의를 받은 것만** 올려주세요. 얼굴이나
 신체 특징으로 알아볼 수 있으면 개인정보입니다. 지금 자리를 잡아 둔
@@ -93,8 +97,7 @@ Worker 이름은 `thesiho` 이고, Astro 가 만든 `dist/` 를 그대로 서빙
 
 이미 올라와 있는 사진: `doctors-together` `consult-room`
 `doctor-kim-eunmi` `doctor-park-jonggyu` `profile-*` `schedule`
-`ultrasound-*` `menstrual-pain-*` `product-gongjindan-red`
-`product-gyeongokgo-black`
+`ultrasound-*` `menstrual-pain-*`
 
 ⚠ 환자가 찍힌 사진, 환자 이름·처방전·연락처가 보이는 사진은 올리지
 마세요. 의료법 제19조(비밀 누설 금지)와 개인정보보호법 제23조(민감정보)에
