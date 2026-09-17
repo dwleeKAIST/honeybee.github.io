@@ -22,8 +22,6 @@
 | --- | --- | --- |
 | `images/doctor-kim-eunmi.jpg` | 995×1327 | 원장 프로필 (흰 가운) |
 | `images/doctor-2.png` | 121×161 | 다른 의료진 프로필. 원본이 작아 확대에 부적합 |
-| `images/product-gongjindan-red.jpeg` | 735×704 | 붉은 포장 제품 |
-| `images/product-gyeongokgo-black.jpeg` | 731×694 | 검정 포장 제품 |
 
 사진 파일명은 추정으로 붙였습니다. 인물과 제품이 맞는지 확인이 필요합니다.
 
