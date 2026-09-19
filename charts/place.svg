@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="834" height="358" viewBox="0 0 834 358" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" role="img" aria-label="네이버 플레이스 순위">
+<style>@media (prefers-color-scheme: dark){.s{fill:#1a1a19}.t1{fill:#ffffff}.t2{fill:#c3c2b7}.g{stroke:#2c2c2a}.ax{stroke:#383835}.k{stroke:#3987e5}.kf{fill:#3987e5}.r{stroke:#1a1a19}.up{fill:#0ca30c}}</style>
+<rect class="s" width="834" height="358" rx="10" fill="#fcfcfb"/>
+<text class="t1" x="20" y="30" font-size="15" font-weight="600" fill="#0b0b0b">네이버 플레이스 순위</text>
+<text class="t2" x="20" y="48" font-size="11" fill="#52514e">2026-09-08 ~ 2026-09-19 (12일) · 위로 갈수록 상위 · 칸마다 세로 눈금이 다릅니다 · 끊긴 구간은 미노출</text>
+<text class="t1" x="42" y="75" font-size="12" font-weight="600" fill="#0b0b0b">동탄 한의원</text>
+<text x="278" y="75" font-size="12" text-anchor="end" style="font-variant-numeric:tabular-nums"><tspan class="t1" fill="#0b0b0b">3위</tspan><tspan dx="5" fill="#898781">–</tspan></text>
+<line class="g" x1="42" y1="86.0" x2="278" y2="86.0" stroke="#e1e0d9" stroke-width="1"/>
+<text x="35" y="89.5" font-size="10" text-anchor="end" fill="#898781" style="font-variant-numeric:tabular-nums">2</text>
+<line class="g" x1="42" y1="162.0" x2="278" y2="162.0" stroke="#e1e0d9" stroke-width="1"/>
+<text x="35" y="165.5" font-size="10" text-anchor="end" fill="#898781" style="font-variant-numeric:tabular-nums">7</text>
+<line class="ax" x1="42" y1="162" x2="278" y2="162" stroke="#c3c2b7" stroke-width="1"/>
+<rect x="233.1" y="171" width="4" height="4" rx="1" fill="#898781"/>
+<path class="k" d="M42.0 116.4 L63.5 116.4 L84.9 116.4 L106.4 116.4 L127.8 131.6 L149.3 131.6 L170.7 131.6 L192.2 116.4 L213.6 116.4" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<path class="k" d="M256.5 101.2 L278.0 101.2" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle class="r" cx="278.0" cy="101.2" r="4" fill="none" stroke="#fcfcfb" stroke-width="2"/>
+<circle class="kf" cx="278.0" cy="101.2" r="4" fill="#2a78d6"/>
+<text x="33" y="177" font-size="9" text-anchor="end" fill="#898781">미노출</text>
+<text class="t1" x="310" y="75" font-size="12" font-weight="600" fill="#0b0b0b">동탄 목동 한의원</text>
+<text x="546" y="75" font-size="12" text-anchor="end" style="font-variant-numeric:tabular-nums"><tspan class="t1" fill="#0b0b0b">2위</tspan><tspan dx="5" fill="#898781">–</tspan></text>
+<line class="g" x1="310" y1="86.0" x2="546" y2="86.0" stroke="#e1e0d9" stroke-width="1"/>
+<text x="303" y="89.5" font-size="10" text-anchor="end" fill="#898781" style="font-variant-numeric:tabular-nums">1</text>
+<line class="g" x1="310" y1="162.0" x2="546" y2="162.0" stroke="#e1e0d9" stroke-width="1"/>
+<text x="303" y="165.5" font-size="10" text-anchor="end" fill="#898781" style="font-variant-numeric:tabular-nums">6</text>
+<line class="ax" x1="310" y1="162" x2="546" y2="162" stroke="#c3c2b7" stroke-width="1"/>
+<path class="k" d="M310.0 101.2 L331.5 101.2 L352.9 101.2 L374.4 101.2 L395.8 101.2 L417.3 101.2 L438.7 101.2 L460.2 101.2 L481.6 101.2 L503.1 101.2 L524.5 101.2 L546.0 101.2" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle class="r" cx="546.0" cy="101.2" r="4" fill="none" stroke="#fcfcfb" stroke-width="2"/>
+<circle class="kf" cx="546.0" cy="101.2" r="4" fill="#2a78d6"/>
+<text class="t1" x="578" y="75" font-size="12" font-weight="600" fill="#0b0b0b">동탄 교통사고 추나</text>
+<text x="814" y="75" font-size="12" text-anchor="end" style="font-variant-numeric:tabular-nums"><tspan class="t1" fill="#0b0b0b">9위</tspan><tspan dx="5" fill="#d03b3b">▼1</tspan></text>
+<line class="g" x1="578" y1="86.0" x2="814" y2="86.0" stroke="#e1e0d9" stroke-width="1"/>
+<text x="571" y="89.5" font-size="10" text-anchor="end" fill="#898781" style="font-variant-numeric:tabular-nums">7</text>
+<line class="g" x1="578" y1="162.0" x2="814" y2="162.0" stroke="#e1e0d9" stroke-width="1"/>
+<text x="571" y="165.5" font-size="10" text-anchor="end" fill="#898781" style="font-variant-numeric:tabular-nums">14</text>
+<line class="ax" x1="578" y1="162" x2="814" y2="162" stroke="#c3c2b7" stroke-width="1"/>
+<path class="k" d="M578.0 107.7 L599.5 129.4 L620.9 140.3 L642.4 118.6 L663.8 129.4 L685.3 129.4 L706.7 151.1 L728.2 151.1 L749.6 118.6 L771.1 118.6 L792.5 96.9 L814.0 107.7" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle class="r" cx="814.0" cy="107.7" r="4" fill="none" stroke="#fcfcfb" stroke-width="2"/>
+<circle class="kf" cx="814.0" cy="107.7" r="4" fill="#2a78d6"/>
+<text x="578.0" y="191" font-size="9" fill="#898781" text-anchor="start" style="font-variant-numeric:tabular-nums">09-08</text>
+<text x="663.8" y="191" font-size="9" fill="#898781" text-anchor="middle" style="font-variant-numeric:tabular-nums">09-12</text>
+<text x="749.6" y="191" font-size="9" fill="#898781" text-anchor="middle" style="font-variant-numeric:tabular-nums">09-16</text>
+<text x="814.0" y="191" font-size="9" fill="#898781" text-anchor="end" style="font-variant-numeric:tabular-nums">09-19</text>
+<text class="t1" x="42" y="225" font-size="12" font-weight="600" fill="#0b0b0b">동탄 수험생 보약</text>
+<text x="278" y="225" font-size="12" text-anchor="end" style="font-variant-numeric:tabular-nums"><tspan class="t1" fill="#0b0b0b">4위</tspan><tspan class="up" dx="5" fill="#006300">▲1</tspan></text>
+<line class="g" x1="42" y1="236.0" x2="278" y2="236.0" stroke="#e1e0d9" stroke-width="1"/>
+<text x="35" y="239.5" font-size="10" text-anchor="end" fill="#898781" style="font-variant-numeric:tabular-nums">3</text>
+<line class="g" x1="42" y1="289.2" x2="278" y2="289.2" stroke="#e1e0d9" stroke-width="1"/>
+<text x="35" y="292.7" font-size="10" text-anchor="end" fill="#898781" style="font-variant-numeric:tabular-nums">10</text>
+<line class="g" x1="42" y1="312.0" x2="278" y2="312.0" stroke="#e1e0d9" stroke-width="1"/>
+<text x="35" y="315.5" font-size="10" text-anchor="end" fill="#898781" style="font-variant-numeric:tabular-nums">13</text>
+<line class="ax" x1="42" y1="312" x2="278" y2="312" stroke="#c3c2b7" stroke-width="1"/>
+<rect x="40.0" y="321" width="4" height="4" rx="1" fill="#898781"/>
+<rect x="61.5" y="321" width="4" height="4" rx="1" fill="#898781"/>
+<rect x="82.9" y="321" width="4" height="4" rx="1" fill="#898781"/>
+<rect x="104.4" y="321" width="4" height="4" rx="1" fill="#898781"/>
+<rect x="125.8" y="321" width="4" height="4" rx="1" fill="#898781"/>
+<path class="k" d="M149.3 281.6 L170.7 304.4 L192.2 304.4 L213.6 296.8 L235.1 281.6 L256.5 251.2 L278.0 243.6" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle class="r" cx="278.0" cy="243.6" r="4" fill="none" stroke="#fcfcfb" stroke-width="2"/>
+<circle class="kf" cx="278.0" cy="243.6" r="4" fill="#2a78d6"/>
+<text x="33" y="327" font-size="9" text-anchor="end" fill="#898781">미노출</text>
+<text x="42.0" y="341" font-size="9" fill="#898781" text-anchor="start" style="font-variant-numeric:tabular-nums">09-08</text>
+<text x="127.8" y="341" font-size="9" fill="#898781" text-anchor="middle" style="font-variant-numeric:tabular-nums">09-12</text>
+<text x="213.6" y="341" font-size="9" fill="#898781" text-anchor="middle" style="font-variant-numeric:tabular-nums">09-16</text>
+<text x="278.0" y="341" font-size="9" fill="#898781" text-anchor="end" style="font-variant-numeric:tabular-nums">09-19</text>
+<text class="t1" x="310" y="225" font-size="12" font-weight="600" fill="#0b0b0b">동탄 공진단</text>
+<text x="546" y="225" font-size="12" text-anchor="end" style="font-variant-numeric:tabular-nums"><tspan class="t1" fill="#0b0b0b">7위</tspan><tspan dx="5" fill="#898781">–</tspan></text>
+<line class="g" x1="310" y1="236.0" x2="546" y2="236.0" stroke="#e1e0d9" stroke-width="1"/>
+<text x="303" y="239.5" font-size="10" text-anchor="end" fill="#898781" style="font-variant-numeric:tabular-nums">5</text>
+<line class="g" x1="310" y1="312.0" x2="546" y2="312.0" stroke="#e1e0d9" stroke-width="1"/>
+<text x="303" y="315.5" font-size="10" text-anchor="end" fill="#898781" style="font-variant-numeric:tabular-nums">10</text>
+<line class="ax" x1="310" y1="312" x2="546" y2="312" stroke="#c3c2b7" stroke-width="1"/>
+<path class="k" d="M310.0 266.4 L331.5 266.4 L352.9 266.4 L374.4 251.2 L395.8 266.4 L417.3 251.2 L438.7 251.2 L460.2 251.2 L481.6 266.4 L503.1 251.2 L524.5 266.4 L546.0 266.4" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle class="r" cx="546.0" cy="266.4" r="4" fill="none" stroke="#fcfcfb" stroke-width="2"/>
+<circle class="kf" cx="546.0" cy="266.4" r="4" fill="#2a78d6"/>
+<text x="310.0" y="341" font-size="9" fill="#898781" text-anchor="start" style="font-variant-numeric:tabular-nums">09-08</text>
+<text x="395.8" y="341" font-size="9" fill="#898781" text-anchor="middle" style="font-variant-numeric:tabular-nums">09-12</text>
+<text x="481.6" y="341" font-size="9" fill="#898781" text-anchor="middle" style="font-variant-numeric:tabular-nums">09-16</text>
+<text x="546.0" y="341" font-size="9" fill="#898781" text-anchor="end" style="font-variant-numeric:tabular-nums">09-19</text>
+</svg>
