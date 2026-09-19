@@ -34,5 +34,6 @@ ChatGPT나 Claude가 실제 답변에서 시호한의원을 인용하는지는 �
 
 ### 히스토리
 
-루틴이 `seo-history` 브랜치의 `rank-history.jsonl`에 매일 한 줄씩 적재합니다.
-데이터 전용 브랜치이므로 main에 머지하지 않습니다.
+루틴이 `seo-history` 브랜치의 `rank-history.jsonl`에 매일 한 줄씩 적재한 뒤,
+그 브랜치의 `render-readme.py`로 순위 추이 차트(`charts/*.svg`)와 브랜치
+README를 다시 그립니다. 데이터 전용 브랜치이므로 main에 머지하지 않습니다.

@@ -11,6 +11,18 @@ Worker 이름은 `thesiho` 이고, Astro 가 만든 `dist/` 를 그대로 서빙
 - main 에 push 하면 2~3분 뒤 thesiho.kr 에 반영됩니다
 - 배포 후 확인: `/sitemap-index.xml`, `/robots.txt`, `/llms.txt`
 
+## 검색 노출 추이
+
+매일 아침 루틴이 네이버 순위를 재서 `seo-history` 브랜치에 쌓고 차트를 다시
+그립니다. 키워드별 순위와 전일 대비, AI 크롤러 상태는
+[seo-history 브랜치](https://github.com/dwleeKAIST/honeybee.github.io/tree/seo-history)
+에서 봅니다. 데이터 전용 브랜치라 main 에 머지하지 않습니다.
+
+![네이버 플레이스 순위 추이](https://raw.githubusercontent.com/dwleeKAIST/honeybee.github.io/seo-history/charts/place.svg)
+
+측정은 `tools/seo-report.py`, 차트와 그 브랜치의 README 는 거기 있는
+`render-readme.py` 가 그립니다.
+
 ## 탕전 실적 띠 (홈 하단)
 
 "원내 탕전실 · 최근 조제일 7일 · N건" 이라는 흐르는 띠입니다. 숫자는 매일
