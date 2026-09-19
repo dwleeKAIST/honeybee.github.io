@@ -75,16 +75,17 @@ Worker 이름은 `thesiho` 이고, Astro 가 만든 `dist/` 를 그대로 서빙
 | `care-highfreq` | 윈백 고주파 온열치료 장면 | 소화 · 월경통 · 통증 |
 | `care-megayakchim` | 메가약침 주입 장치 | 소화 |
 | `care-ultrasound-gyn` | 복부 초음파로 자궁을 확인하는 장면 | 월경통 |
+| `product-gongjindan-package` | 공진단 선물 포장 상자 (올라와 있음) | 공진단 |
 | `product-gongjindan-sahyang` | 사향 품질보증서 · CITES 인증 사향 · 공진단 한 환 | 공진단 |
 | `product-diet-capsule` | 시호 로고 다이어트 캡슐 | 한방 다이어트 |
 | `product-bopyego` | 보폐고 제품 | 보폐고 |
 
 `room-*` 은 공간, `care-*` 는 실제 치료 모습, `product-*` 는 제품입니다.
 
-⚠ 공진단·경옥고 **케이스 사진은 올리지 마세요**. 붉은 공진단 케이스와
-검정 경옥고 케이스는 더 이상 쓰지 않아 내렸습니다(원장 확인, 2026-09).
-지금 쓰는 포장 사진이 생기면 새 이름으로 `src/lib/img.ts` 에 자리를
-만들고 이 표에 추가해 주세요.
+⚠ 예전 **붉은 공진단 케이스**(`product-gongjindan-red`)와 **검정 경옥고
+케이스**(`product-gyeongokgo-black`)는 더 이상 쓰지 않는 포장입니다
+(원장 확인, 2026-09). 다시 올리지 마세요. 지금 쓰는 포장은
+`product-gongjindan-package` 입니다.
 
 ⚠ 환자가 등장하는 사진은 **본인 동의를 받은 것만** 올려주세요. 얼굴이나
 신체 특징으로 알아볼 수 있으면 개인정보입니다. 지금 자리를 잡아 둔
