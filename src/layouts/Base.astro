@@ -1,6 +1,13 @@
 ---
 import { clinic } from '../data/clinic';
 import DecoctionTicker from '../components/DecoctionTicker.astro';
+import { img } from '../lib/img';
+
+// 헤더 좌상단 로고. 가로형 로고(logo-horizontal)에 들어 있는 마크와 같은
+// 것입니다. 파일이 없으면 글자만 나오고 깨진 이미지가 뜨지 않습니다.
+// ⚠ 로고로 글자를 대신하지 않습니다 — '시호한의원'은 사람들이 실제로
+//    검색하는 말이라, 이미지로 바꾸면 30개 페이지에서 그 글자가 사라집니다.
+const brandMark = img('logo-mark-square');
 
 interface Props {
   title: string;
@@ -96,8 +103,20 @@ const isCurrent = (href: string) =>
     <header class="site-header">
       <div class="header-inner">
         <a class="brand" href="/">
-          <span class="brand-ko">시호한의원</span>
-          <span class="brand-en">SIHO Korean Medicine Clinic</span>
+          {brandMark && (
+            <img
+              class="brand-mark"
+              src={brandMark}
+              alt=""
+              width="251"
+              height="250"
+              decoding="async"
+            />
+          )}
+          <span class="brand-text">
+            <span class="brand-ko">시호한의원</span>
+            <span class="brand-en">SIHO Korean Medicine Clinic</span>
+          </span>
         </a>
         <a class="header-cta" href={clinic.links.naverBooking}>예약하기</a>
       </div>
@@ -246,7 +265,14 @@ const isCurrent = (href: string) =>
         padding: 1rem var(--pad) 0.75rem;
         display: flex; align-items: center; justify-content: space-between; gap: 1rem;
       }
-      .brand { text-decoration: none; line-height: 1.25; }
+      .brand {
+        display: flex; align-items: center; gap: 0.55rem;
+        min-width: 0;
+        text-decoration: none; line-height: 1.25;
+      }
+      /* 글자 두 줄(1.28rem + 0.68rem)과 같은 높이라 헤더가 커지지 않습니다. */
+      .brand-mark { flex: none; width: 2.35rem; height: 2.35rem; }
+      .brand-text { min-width: 0; }
       .brand-ko {
         display: block;
         font-family: var(--serif); font-weight: 700; font-size: 1.28rem;
@@ -582,6 +608,10 @@ const isCurrent = (href: string) =>
 
       @media (max-width: 34rem) {
         html { font-size: 16.5px; }
+        /* 좁은 화면에서는 마크를 조금 줄입니다. 로고가 자리를 차지해
+           'SIHO KOREAN MEDICINE CLINIC' 이 두 줄로 접히는 폭을 낮춥니다. */
+        .brand { gap: 0.4rem; }
+        .brand-mark { width: 2rem; height: 2rem; }
         h1 { font-size: 1.6rem; }
         .hero h1 { font-size: 1.55rem; }
         .statement { font-size: 1.04rem; }
