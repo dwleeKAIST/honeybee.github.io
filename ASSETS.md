@@ -23,6 +23,10 @@
 | `images/doctor-kim-eunmi.jpg` | 995×1327 | 원장 프로필 (흰 가운) |
 | `images/doctor-2.png` | 121×161 | 다른 의료진 프로필. 원본이 작아 확대에 부적합 |
 | `images/product-gongjindan-package.webp` | 1080×1080 | 공진단 선물 포장. 원장이 미리캔버스에서 만든 이미지 |
+| `images/product-gongjindan-open.webp` | 1600×1200 | 공진단 상자를 열어 금박 환 10개가 보이는 사진 |
+| `images/product-gongjindan-sahyang.webp` | 1600×1200 | 사향 품질보증서 · CITES 인증 사향 · 공진단 한 환 |
+| `images/product-diet-capsule.webp` | 1600×1200 | 시호 로고 캡슐과 면 파우치 |
+| `images/care-ultrasound-gyn.webp` | 1600×1200 | 복부 초음파 검사 장면. 배경의 수리기사 명함을 지웠음 |
 
 사진 파일명은 추정으로 붙였습니다. 인물과 제품이 맞는지 확인이 필요합니다.
 

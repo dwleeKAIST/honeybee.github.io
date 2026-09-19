@@ -74,10 +74,11 @@ Worker 이름은 `thesiho` 이고, Astro 가 만든 `dist/` 를 그대로 서빙
 | `care-chuna` | 추나요법 시술 장면 | 체형교정 · 통증 |
 | `care-highfreq` | 윈백 고주파 온열치료 장면 | 소화 · 월경통 · 통증 |
 | `care-megayakchim` | 메가약침 주입 장치 | 소화 |
-| `care-ultrasound-gyn` | 복부 초음파로 자궁을 확인하는 장면 | 월경통 |
+| `care-ultrasound-gyn` | 복부 초음파로 자궁을 확인하는 장면 (올라와 있음) | 월경통 |
 | `product-gongjindan-package` | 공진단 선물 포장 상자 (올라와 있음) | 공진단 |
-| `product-gongjindan-sahyang` | 사향 품질보증서 · CITES 인증 사향 · 공진단 한 환 | 공진단 |
-| `product-diet-capsule` | 시호 로고 다이어트 캡슐 | 한방 다이어트 |
+| `product-gongjindan-open` | 상자를 열어 금박 환 열 개가 보이는 사진 (올라와 있음) | 공진단 |
+| `product-gongjindan-sahyang` | 사향 품질보증서 · CITES 인증 사향 · 공진단 한 환 (올라와 있음) | 공진단 |
+| `product-diet-capsule` | 시호 로고 다이어트 캡슐과 면 파우치 (올라와 있음) | 한방 다이어트 |
 | `product-bopyego` | 보폐고 제품 | 보폐고 |
 
 `room-*` 은 공간, `care-*` 는 실제 치료 모습, `product-*` 는 제품입니다.
@@ -86,6 +87,12 @@ Worker 이름은 `thesiho` 이고, Astro 가 만든 `dist/` 를 그대로 서빙
 케이스**(`product-gyeongokgo-black`)는 더 이상 쓰지 않는 포장입니다
 (원장 확인, 2026-09). 다시 올리지 마세요. 지금 쓰는 포장은
 `product-gongjindan-package` 입니다.
+
+⚠ **배경에 찍힌 남의 개인정보도 지우고 올려주세요.** `care-ultrasound-gyn`
+원본에는 기기 옆에 수리기사 명함(이름 · 휴대전화 · 개인 이메일)이 찍혀
+있어 지운 뒤 올렸습니다(2026-09). 화면에서는 작아 안 보여도 파일을
+내려받아 확대하면 읽힙니다. 명함 · 처방전 · 접수 명단 · 모니터의 환자
+정보가 배경에 없는지 확인해 주세요.
 
 ⚠ 환자가 등장하는 사진은 **본인 동의를 받은 것만** 올려주세요. 얼굴이나
 신체 특징으로 알아볼 수 있으면 개인정보입니다. 지금 자리를 잡아 둔

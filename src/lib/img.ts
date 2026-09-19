@@ -65,6 +65,13 @@ export const photos = {
    */
   productGongjindanPackage: 'product-gongjindan-package',
   /**
+   * 공진단 상자를 열어 금박 환 열 개가 담긴 모습 — 공진단 안내.
+   * ⚠ 상자 뚜껑 안쪽의 한문 문구(百病不生 등)를 alt 나 본문으로 옮겨
+   *    적지 마세요. 사진 속 글자와 달리 사이트가 직접 하는 주장이
+   *    됩니다(의료법 제56조).
+   */
+  productGongjindanOpen: 'product-gongjindan-open',
+  /**
    * 사향 품질보증서와 CITES 인증 사향, 공진단 한 환 — 공진단 안내.
    * ⚠ 사진 안의 안내 카드에 '효과가 탁월', '극대화하는 효과' 같은
    *    문구가 읽힙니다. 원장이 확인한 뒤 그대로 쓰기로 했습니다
@@ -111,6 +118,11 @@ export const photos = {
   /** 메가약침 주입 장치 — 소화 */
   careMegayakchim: 'care-megayakchim',
   /** 복부 초음파로 자궁을 확인하는 장면 — 월경통 */
+  /**
+   * ⚠ 원본 사진에는 기기 옆에 수리기사 명함(이름·휴대전화·개인 이메일)이
+   *    찍혀 있었습니다. 올린 파일에서는 지웠습니다(2026-09).
+   *    원본으로 덮어쓰지 마세요. 개인정보보호법 제15조·제17조.
+   */
   careUltrasoundGyn: 'care-ultrasound-gyn',
   /**
    * 원내 탕전실 사진 — 홈 하단 조제 현황 띠.
