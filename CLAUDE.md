@@ -9,6 +9,7 @@ Astro 기반 정적 사이트. Cloudflare Workers(정적 자산)에 연결되어
 - **보험한약 목록 수정**: `src/data/insurance-herbs.ts`
 - **주소/전화/링크/진료시간 수정**: `src/data/clinic.ts` (전 페이지 + JSON-LD에 반영됨). 진료시간을 고치면 `src/content/faq/opening-hours.md` 도 함께 고치세요 — 마크다운에서는 변수를 못 씁니다
 - **새 페이지**: `src/pages/*.astro`, 레이아웃은 `src/layouts/Base.astro` 사용
+- **폰트 변경**: `src/layouts/Base.astro` 의 `--sans`(본문)와 `--head`(제목) 두 변수. 지금은 둘 다 Noto Sans KR(SIL OFL, 무료)이며 Google Fonts 에서 `wght@400..800` 가변 폰트 한 벌로 받습니다. 굵기를 `400;500;700` 처럼 나열해 받으면 내려받는 파일이 다섯 배가 되니 범위(`..`) 표기를 유지하세요
 - **탕전 실적 띠에 한약 종류 추가**: `src/data/decoction-labels.json` — 포탈의 분류를 공개 이름으로 바꾸는 표. 등록된 것만 표시되고 나머지는 버립니다. 자세한 내용은 README 참고
 - **`src/data/decoctions.json` 은 사람이 고치지 마세요** — 매일 아침 워크플로가 씁니다
 

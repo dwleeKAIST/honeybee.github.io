@@ -85,14 +85,20 @@ const isCurrent = (href: string) =>
     <meta property="og:locale" content="ko_KR" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    {/*
+      본문·제목 모두 Noto Sans KR 한 벌을 씁니다(SIL OFL, 상업적 사용 무료).
+      wght@400..800 은 가변 폰트 한 벌로 400~800 굵기를 모두 담습니다.
+      굵기를 400;500;600;700;800 처럼 나열하면 @font-face 가 124개에서
+      620개로 늘어 내려받는 파일이 다섯 배가 됩니다. 한글 폰트는 용량이
+      커서 이 차이가 모바일 첫 화면 속도에 그대로 나타납니다.
+      gstatic 의 preconnect 에는 crossorigin 이 있어야 합니다(폰트 파일은
+      CORS 로 받습니다). 빠지면 연결을 두 번 맺어 오히려 느려집니다.
+    */}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400..800&display=swap"
     />
     {allLd.map((ld) => (
       <script type="application/ld+json" set:html={JSON.stringify(ld)} />
@@ -203,9 +209,13 @@ const isCurrent = (href: string) =>
         --accent: #8a6018; /* 시호 꽃의 짙은 황금빛 */
         --accent-ink: #6d4a10;
 
-        /* 폰트 */
-        --serif: 'Noto Serif KR', serif;
-        --sans: 'Pretendard Variable', Pretendard, -apple-system, sans-serif;
+        /* 폰트 — 본문과 제목이 같은 글꼴 한 벌을 씁니다.
+           ⚠ --head 는 '제목용' 자리입니다. 지금은 본문과 같지만, 나중에
+              제목만 다른 글꼴로 바꾸고 싶을 때 여기 한 줄만 고치면
+              20곳에 한꺼번에 반영됩니다. */
+        --sans: 'Noto Sans KR', -apple-system, BlinkMacSystemFont,
+          'Apple SD Gothic Neo', sans-serif;
+        --head: var(--sans);
 
         /* 레이아웃 — 헤더·본문·푸터가 같은 폭과 여백을 씁니다 */
         --w: 52rem;
@@ -232,8 +242,9 @@ const isCurrent = (href: string) =>
       }
       :target { scroll-margin-top: calc(var(--header-h) + 1rem); }
 
-      h1, h2, h3 { font-family: var(--serif); line-height: 1.4; }
-      h1 { font-size: 1.95rem; margin: 0 0 1rem; letter-spacing: -0.01em; }
+      /* 산세리프는 명조보다 글자가 벌어 보여 자간을 조금 좁힙니다. */
+      h1, h2, h3 { font-family: var(--head); line-height: 1.4; letter-spacing: -0.02em; }
+      h1 { font-size: 1.95rem; margin: 0 0 1rem; font-weight: 800; }
       h2 { font-size: 1.32rem; margin: 2.5rem 0 0.75rem; }
       h3 { font-size: 1.08rem; }
       p { overflow-wrap: break-word; }
@@ -275,8 +286,8 @@ const isCurrent = (href: string) =>
       .brand-text { min-width: 0; }
       .brand-ko {
         display: block;
-        font-family: var(--serif); font-weight: 700; font-size: 1.28rem;
-        letter-spacing: -0.01em;
+        font-family: var(--head); font-weight: 800; font-size: 1.28rem;
+        letter-spacing: -0.03em;
       }
       .brand-en {
         display: block; font-size: 0.68rem; color: var(--ink-soft);
@@ -344,7 +355,7 @@ const isCurrent = (href: string) =>
         margin: 1.75rem 0 0;
         padding: 0.1rem 0 0.1rem 1.15rem;
         border-left: 3px solid var(--accent);
-        font-family: var(--serif); font-size: 1.1rem; line-height: 1.7;
+        font-family: var(--head); font-size: 1.1rem; line-height: 1.7;
       }
 
       /* ── 랜딩 페이지 공통 구조 ────────────────────────────── */
@@ -404,7 +415,7 @@ const isCurrent = (href: string) =>
       }
       .card strong {
         display: block;
-        font-family: var(--serif); font-size: 1.05rem;
+        font-family: var(--head); font-size: 1.05rem;
         color: var(--accent); margin-bottom: 0.2rem;
       }
       .card em {
@@ -467,10 +478,10 @@ const isCurrent = (href: string) =>
       .steps li::before {
         content: counter(step);
         position: absolute; left: 1.15rem; top: 1.05rem;
-        font-family: var(--serif); font-weight: 700; color: var(--accent);
+        font-family: var(--head); font-weight: 700; color: var(--accent);
       }
       .steps strong {
-        display: block; font-family: var(--serif);
+        display: block; font-family: var(--head);
         font-size: 1.05rem; margin-bottom: 0.15rem;
       }
       .steps span { color: var(--ink-soft); font-size: 0.96rem; }
@@ -491,7 +502,7 @@ const isCurrent = (href: string) =>
         text-align: left; vertical-align: top;
       }
       .table-wrap thead th {
-        background: var(--sunk); font-family: var(--serif);
+        background: var(--sunk); font-family: var(--head);
         color: var(--accent); white-space: nowrap;
       }
       .table-wrap tbody th {
@@ -534,7 +545,7 @@ const isCurrent = (href: string) =>
         margin: 1.5rem 0; padding-left: 1rem;
         border-left: 3px solid var(--accent); color: var(--ink-soft);
       }
-      dl.herbs dt { font-family: var(--serif); font-weight: 700; margin-top: 1.5rem; }
+      dl.herbs dt { font-family: var(--head); font-weight: 700; margin-top: 1.5rem; }
       dl.herbs dd { margin: 0.25rem 0 0; color: var(--ink-soft); }
 
       /* 첫 화면 요약 — 페이지 주제를 사실만으로 짧게 나열 */
@@ -585,7 +596,7 @@ const isCurrent = (href: string) =>
       }
       .footer-h {
         margin: 0 0 0.6rem;
-        font-family: var(--serif); font-size: 0.95rem; font-weight: 700;
+        font-family: var(--head); font-size: 0.95rem; font-weight: 700;
         color: var(--accent);
       }
       .footer-col ul { list-style: none; margin: 0; padding: 0; }
@@ -602,7 +613,7 @@ const isCurrent = (href: string) =>
         font-size: 0.9rem; color: var(--ink-soft);
       }
       .footer-base p { margin: 0 0 0.3rem; }
-      .footer-name { font-family: var(--serif); font-weight: 700; color: var(--ink); }
+      .footer-name { font-family: var(--head); font-weight: 700; color: var(--ink); }
       .footer-actions { display: flex; gap: 1.25rem; flex-wrap: wrap; margin-top: 0.9rem; }
       .footer-actions a { font-weight: 600; color: var(--ink); }
 
