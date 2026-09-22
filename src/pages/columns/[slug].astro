@@ -1,0 +1,106 @@
+---
+import Base from '../../layouts/Base.astro';
+import { clinic } from '../../data/clinic';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const columns = await getCollection('columns');
+  return columns.map((c) => ({ params: { slug: c.id }, props: { entry: c } }));
+}
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const { title, summary, date, author, category, related } = entry.data;
+
+const url = new URL(`/columns/${entry.id}/`, Astro.site).href;
+const iso = date.toISOString().slice(0, 10);
+const shown = `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
+
+// 글이라는 것을 검색엔진에 알립니다. 진료 페이지의 MedicalClinic 과 달리
+// BlogPosting 을 씁니다. 저자를 사람으로 적어야 누가 쓴 글인지 전달됩니다.
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: title,
+    description: summary,
+    inLanguage: 'ko-KR',
+    datePublished: iso,
+    dateModified: iso,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+    author: { '@type': 'Person', name: author, jobTitle: '한의사' },
+    publisher: {
+      '@type': 'MedicalClinic',
+      name: clinic.name,
+      url: new URL('/', Astro.site).href,
+      telephone: clinic.phoneIntl,
+    },
+  },
+];
+---
+
+<Base title={title} description={summary} jsonLd={jsonLd}>
+  <p class="crumb"><a href="/columns/">← 건강칼럼 목록</a></p>
+
+  <article class="prose">
+    <h1>{title}</h1>
+    <p class="byline">
+      <time datetime={iso}>{shown}</time>
+      <span class="dot">·</span>
+      <span>{category}</span>
+      <span class="dot">·</span>
+      <span>{clinic.name} {author}</span>
+    </p>
+    <Content />
+  </article>
+
+  {related.length > 0 && (
+    <section class="sec">
+      <h2>함께 보시면 좋은 안내</h2>
+      <ul class="plain">
+        {related.map((r) => (
+          <li><a href={r.href}>{r.label}</a></li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  <section class="sec">
+    <h2>상담과 예약</h2>
+    <p>
+      시호한의원은 {clinic.address.body}에 있습니다. 이 글의 내용이 지금
+      상태에 해당하는지는 진찰로 확인해야 합니다.{' '}
+      {clinic.firstVisitNote} {clinic.nightNote}
+    </p>
+    <p class="cta-row">
+      <a class="cta" href={clinic.links.naverBooking}>네이버 예약</a>
+      <a class="cta ghost" href={`tel:${clinic.phone}`}>전화 {clinic.phone}</a>
+    </p>
+  </section>
+
+  <hr class="rule" />
+  <p><a href="/columns/">← 건강칼럼 목록</a> · <a href="/faq/">자주 묻는 질문</a></p>
+
+  <style>
+    .crumb {
+      margin: 0 0 1.25rem;
+      font-size: 0.9rem;
+      color: var(--ink-soft);
+    }
+    .byline {
+      margin: -0.4rem 0 1.75rem;
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+    }
+    .byline .dot {
+      margin: 0 0.4rem;
+      color: var(--line);
+    }
+    /* 마크다운으로 쓴 번호 목록 — 진료 과정 순서 */
+    article.prose ol {
+      padding-left: 1.3rem;
+    }
+    article.prose ol li {
+      margin: 0.55rem 0;
+    }
+  </style>
+</Base>

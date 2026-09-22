@@ -1,0 +1,74 @@
+---
+import Base from '../../layouts/Base.astro';
+import { clinic } from '../../data/clinic';
+import { getCollection } from 'astro:content';
+
+// 건강칼럼 목록. src/content/columns/*.md 를 추가하면 여기에 자동으로
+// 들어가고 sitemap 에도 포함됩니다. 최신 글이 위로 옵니다.
+//
+// ⚠ 치료 전후 사진과 환자 후기(치료경험담)는 올리지 마세요.
+//    의료법 제56조 제2항이 금지합니다. 이 게시판은 '진료실에서 무엇을
+//    확인하는지'를 설명하는 글을 두는 곳입니다.
+
+const title = '동탄 한의원 건강칼럼';
+const description =
+  '동탄 시호한의원 원장이 쓰는 건강칼럼. 진료실에서 자주 듣는 질문과 무엇을 확인하는지 정리했습니다.';
+
+const columns = (await getCollection('columns')).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+
+const fmt = (d: Date) =>
+  `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일`;
+const iso = (d: Date) => d.toISOString().slice(0, 10);
+---
+
+<Base title={title} description={description}>
+  <h1>시호한의원 건강칼럼</h1>
+  <p class="lead">
+    진료실에서 자주 듣는 질문과, 그때 무엇을 확인하는지를 원장이 직접
+    씁니다. 특정 치료를 권하는 글이 아니라 어떤 기준으로 살펴보는지를
+    설명하는 글입니다.
+  </p>
+
+  {columns.length === 0 ? (
+    <p class="note">아직 올린 글이 없습니다.</p>
+  ) : (
+    <ul class="plain">
+      {columns.map((c) => (
+        <li>
+          <p class="col-meta">
+            <time datetime={iso(c.data.date)}>{fmt(c.data.date)}</time>
+            <span class="dot">·</span>
+            <span>{c.data.category}</span>
+          </p>
+          <a href={`/columns/${c.id}/`}>{c.data.title}</a>
+          <span class="summary">{c.data.summary}</span>
+        </li>
+      ))}
+    </ul>
+  )}
+
+  <h2>상담과 예약</h2>
+  <p>
+    시호한의원은 {clinic.address.body}에 있습니다. 글에서 본 내용이 지금
+    상태에 해당하는지는 진찰로 확인해야 합니다.{' '}
+    {clinic.firstVisitNote} {clinic.nightNote}
+  </p>
+  <p class="cta-row">
+    <a class="cta" href={clinic.links.naverBooking}>네이버 예약</a>
+    <a class="cta ghost" href={`tel:${clinic.phone}`}>전화 {clinic.phone}</a>
+  </p>
+
+  <style>
+    .col-meta {
+      margin: 0 0 0.2rem;
+      font-size: 0.85rem;
+      color: var(--ink-soft);
+    }
+    .col-meta .dot {
+      margin: 0 0.4rem;
+      color: var(--line);
+    }
+  </style>
+</Base>
