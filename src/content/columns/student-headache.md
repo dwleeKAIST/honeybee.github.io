@@ -12,6 +12,8 @@ related:
     label: 관절 · 근육 통증 진료 안내
   - href: /autonomic/
     label: 자율신경 · 번아웃 진료 안내
+  - href: /columns/student-neck-shoulder/
+    label: 건강칼럼 — 수험생 목·어깨 통증, 공부할수록 뻐근하고 머리까지 아프다면?
 ---
 
 "책상에 오래 앉아 있으면 머리가 지끈거려요."

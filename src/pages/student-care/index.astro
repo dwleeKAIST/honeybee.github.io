@@ -43,11 +43,14 @@ const details = [
     ],
     // 선택. 지정하면 진료 방식 아래에 링크로 표시됩니다.
     more: { href: '/rhinitis/', label: '코편안 클리닉 · 비염 진료 안내' },
-    // 밤 코막힘을 다룬 건강칼럼. more 는 한 개만 받으므로 별도 필드로 둡니다.
-    column: {
-      href: '/columns/student-rhinitis-sleep/',
-      label: '건강칼럼 — 밤마다 코가 막혀 잠을 설친다면?',
-    },
+    // 이 증상을 다룬 건강칼럼. more 는 한 개만 받으므로 별도 필드로 두고,
+    // 한 증상에 글이 여러 편일 수 있으니 배열입니다.
+    columns: [
+      {
+        href: '/columns/student-rhinitis-sleep/',
+        label: '건강칼럼 — 밤마다 코가 막혀 잠을 설친다면?',
+      },
+    ],
   },
   {
     id: 'digestion',
@@ -61,10 +64,12 @@ const details = [
     care: [
       '평소 식사량, 식후 증상, 배변 상태와 스트레스에 따른 변화를 함께 확인하여 치료 방향을 결정합니다.',
     ],
-    column: {
-      href: '/columns/student-indigestion/',
-      label: '건강칼럼 — 밥만 먹으면 더부룩하고 졸리다면?',
-    },
+    columns: [
+      {
+        href: '/columns/student-indigestion/',
+        label: '건강칼럼 — 밥만 먹으면 더부룩하고 졸리다면?',
+      },
+    ],
   },
   {
     id: 'sleep',
@@ -76,10 +81,12 @@ const details = [
     care: [
       '시호한의원에서는 수면, 소화, 스트레스 반응과 평소 체력 등을 함께 살펴 현재 학생에게 부족한 부분과 컨디션을 방해하는 요인을 구분하여 한약을 처방합니다.',
     ],
-    column: {
-      href: '/columns/student-insomnia/',
-      label: '건강칼럼 — 잠이 안 오거나 자도 피곤하다면?',
-    },
+    columns: [
+      {
+        href: '/columns/student-insomnia/',
+        label: '건강칼럼 — 잠이 안 오거나 자도 피곤하다면?',
+      },
+    ],
   },
   {
     id: 'pain',
@@ -93,10 +100,16 @@ const details = [
       '증상과 진찰 결과에 따라 필요한 경우 초음파를 활용하여 병변 부위를 확인하고, 도침이나 초음파 유도하 약침치료 등 보다 적극적인 통증치료를 고려할 수 있습니다.',
     ],
     more: { href: '/pain/', label: '관절 · 근육 통증 진료 안내' },
-    column: {
-      href: '/columns/student-headache/',
-      label: '건강칼럼 — 공부할 때마다 머리가 아프다면',
-    },
+    columns: [
+      {
+        href: '/columns/student-neck-shoulder/',
+        label: '건강칼럼 — 공부할수록 목과 어깨가 뻐근하다면',
+      },
+      {
+        href: '/columns/student-headache/',
+        label: '건강칼럼 — 공부할 때마다 머리가 아프다면',
+      },
+    ],
   },
   {
     id: 'menstrual',
@@ -113,10 +126,12 @@ const details = [
       '단순히 월경통이라는 하나의 증상만 보는 것이 아니라 현재 학생의 월경 상태와 전반적인 컨디션을 함께 고려하여 진료합니다.',
     ],
     more: { href: '/menstrual-pain/', label: '월경통 · PMS 진료 안내' },
-    column: {
-      href: '/columns/student-menstrual-pain/',
-      label: '건강칼럼 — 시험 기간마다 생리통이 심해진다면',
-    },
+    columns: [
+      {
+        href: '/columns/student-menstrual-pain/',
+        label: '건강칼럼 — 시험 기간마다 생리통이 심해진다면',
+      },
+    ],
   },
   {
     id: 'skin',
@@ -390,9 +405,9 @@ const faqLd = [
             {d.more && (
               <p class="more"><a href={d.more.href}>{d.more.label}</a></p>
             )}
-            {d.column && (
-              <p class="more"><a href={d.column.href}>{d.column.label}</a></p>
-            )}
+            {d.columns?.map((c) => (
+              <p class="more"><a href={c.href}>{c.label}</a></p>
+            ))}
           </div>
         </article>
       ))}
