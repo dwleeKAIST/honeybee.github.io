@@ -10,6 +10,8 @@ related:
     label: 속편안 클리닉 · 소화불량 진료 안내
   - href: /student-care/
     label: 수험생 클리닉 진료 안내
+  - href: /columns/student-stamina/
+    label: 건강칼럼 — 수험생 체력 저하, 보약부터 먹으면 될까요?
 ---
 
 "조금만 먹어도 배가 꽉 찬 것 같아요."
