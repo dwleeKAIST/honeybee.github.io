@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import { clinic } from '../../data/clinic';
 import { getCollection, render } from 'astro:content';
+import { isoDate, koreanDate } from '../../lib/date';
 
 export async function getStaticPaths() {
   const columns = await getCollection('columns');
@@ -12,8 +13,8 @@ const { Content } = await render(entry);
 const { title, seoTitle, summary, date, author, category, related } = entry.data;
 
 const url = new URL(`/columns/${entry.id}/`, Astro.site).href;
-const iso = date.toISOString().slice(0, 10);
-const shown = `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
+const iso = isoDate(date);
+const shown = koreanDate(date);
 
 // 글이라는 것을 검색엔진에 알립니다. 진료 페이지의 MedicalClinic 과 달리
 // BlogPosting 을 씁니다. 저자를 사람으로 적어야 누가 쓴 글인지 전달됩니다.

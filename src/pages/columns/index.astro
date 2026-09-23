@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import { clinic } from '../../data/clinic';
 import { getCollection } from 'astro:content';
+import { isoDate, koreanDate } from '../../lib/date';
 
 // 건강칼럼 목록. src/content/columns/*.md 를 추가하면 여기에 자동으로
 // 들어가고 sitemap 에도 포함됩니다. 최신 글이 위로 옵니다.
@@ -17,10 +18,6 @@ const description =
 const columns = (await getCollection('columns')).sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime(),
 );
-
-const fmt = (d: Date) =>
-  `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일`;
-const iso = (d: Date) => d.toISOString().slice(0, 10);
 ---
 
 <Base title={title} description={description}>
@@ -38,7 +35,7 @@ const iso = (d: Date) => d.toISOString().slice(0, 10);
       {columns.map((c) => (
         <li>
           <p class="col-meta">
-            <time datetime={iso(c.data.date)}>{fmt(c.data.date)}</time>
+            <time datetime={isoDate(c.data.date)}>{koreanDate(c.data.date)}</time>
             <span class="dot">·</span>
             <span>{c.data.category}</span>
           </p>
