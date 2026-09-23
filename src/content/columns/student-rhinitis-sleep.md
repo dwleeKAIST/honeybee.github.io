@@ -9,6 +9,8 @@ related:
     label: 코편안 클리닉 · 비염 진료 안내
   - href: /student-care/
     label: 수험생 클리닉 진료 안내
+  - href: /columns/student-insomnia/
+    label: 건강칼럼 — 수험생 불면증, 잠이 안 오거나 자도 피곤하다면?
 ---
 
 "낮에는 괜찮은데, 누우면 코가 막혀서 잠들기 힘들어요."
