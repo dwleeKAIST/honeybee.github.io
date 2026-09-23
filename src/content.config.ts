@@ -33,7 +33,10 @@ const faq = defineCollection({
 const columns = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/columns' }),
   schema: z.object({
-    title: z.string(), // 글 제목. H1 과 <title> 에 함께 쓰입니다
+    title: z.string(), // 글 제목. H1 과 목록에 그대로 쓰입니다
+    // <title> 태그에만 쓰는 짧은 제목(선택). 뒤에 '| 시호한의원'(8자)이
+    // 붙어 35자를 넘으면 구글이 잘라 버립니다. title 이 길 때만 채우세요.
+    seoTitle: z.string().optional(),
     summary: z.string(), // 목록과 meta description. 80자 이내로 씁니다
     date: z.coerce.date(), // 발행일 'YYYY-MM-DD'
     author: z.string().default('김은미 대표원장'),
