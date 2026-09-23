@@ -13,6 +13,8 @@ related:
     label: 건강칼럼 — 수험생 비염, 밤마다 코가 막혀 잠을 설친다면?
   - href: /columns/student-headache/
     label: 건강칼럼 — 수험생 두통, 공부할 때마다 머리가 아픈 이유는 무엇일까요?
+  - href: /columns/student-stamina/
+    label: 건강칼럼 — 수험생 체력 저하, 보약부터 먹으면 될까요?
 ---
 
 "누우면 생각이 많아져서 한 시간 넘게 잠들지 못해요."
