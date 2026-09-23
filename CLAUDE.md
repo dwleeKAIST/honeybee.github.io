@@ -5,7 +5,7 @@ Astro 기반 정적 사이트. Cloudflare Workers(정적 자산)에 연결되어
 ## 자주 하는 작업
 
 - **진료 항목 추가/수정**: `src/content/treatments/*.md` — frontmatter는 `title`, `summary`(1–2문장, 메타 설명에 사용), `order`, `faqs`(선택). `faqs`에 `q`/`a` 쌍을 넣으면 페이지 하단에 아코디언으로 표시되고 FAQPage 구조화 데이터가 자동 생성됨
-- **건강칼럼 글 추가**: `src/content/columns/*.md` — frontmatter는 `title`(글 제목, H1과 `<title>`에 함께 쓰임), `summary`(목록과 메타 설명, 80자 이내), `date`(`YYYY-MM-DD`), `author`, `category`, `related`(관련 페이지 링크 배열). 파일 이름이 주소가 되고 목록·sitemap에 자동 반영됨. BlogPosting 구조화 데이터도 자동 생성됨. **⚠ 치료 전후 사진과 환자 후기(치료경험담)는 올리지 마세요 — 의료법 제56조 제2항 금지**
+- **건강칼럼 글 추가**: `src/content/columns/*.md` — frontmatter는 `title`(글 제목, H1과 `<title>`에 함께 쓰임), `summary`(목록과 메타 설명, 80자 이내), `date`(`YYYY-MM-DD`), `author`, `category`, `related`(관련 페이지 링크 배열), `seoTitle`(선택). **제목이 27자를 넘으면 `seoTitle`에 짧은 제목을 적으세요** — 뒤에 `| 시호한의원`(8자)이 붙어 35자를 넘으면 구글이 자릅니다. `seoTitle`은 `<title>`에만 쓰이고 화면의 H1은 `title` 그대로입니다. 파일 이름이 주소가 되고 목록·sitemap에 자동 반영됨. BlogPosting 구조화 데이터도 자동 생성됨. **⚠ 치료 전후 사진과 환자 후기(치료경험담)는 올리지 마세요 — 의료법 제56조 제2항 금지**
 - **FAQ 추가**: `src/content/faq/*.md` — frontmatter는 `question`(환자가 실제 검색할 법한 질문형 문장), `category`, `order`. FAQPage 구조화 데이터는 자동 생성됨
 - **보험한약 목록 수정**: `src/data/insurance-herbs.ts`
 - **주소/전화/링크/진료시간 수정**: `src/data/clinic.ts` (전 페이지 + JSON-LD에 반영됨). 진료시간을 고치면 `src/content/faq/opening-hours.md` 도 함께 고치세요 — 마크다운에서는 변수를 못 씁니다

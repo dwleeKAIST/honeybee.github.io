@@ -9,7 +9,7 @@ export async function getStaticPaths() {
 }
 const { entry } = Astro.props;
 const { Content } = await render(entry);
-const { title, summary, date, author, category, related } = entry.data;
+const { title, seoTitle, summary, date, author, category, related } = entry.data;
 
 const url = new URL(`/columns/${entry.id}/`, Astro.site).href;
 const iso = date.toISOString().slice(0, 10);
@@ -38,7 +38,7 @@ const jsonLd = [
 ];
 ---
 
-<Base title={title} description={summary} jsonLd={jsonLd}>
+<Base title={seoTitle ?? title} description={summary} jsonLd={jsonLd}>
   <p class="crumb"><a href="/columns/">← 건강칼럼 목록</a></p>
 
   <article class="prose">
