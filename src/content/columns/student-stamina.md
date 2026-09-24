@@ -15,6 +15,8 @@ related:
     label: 건강칼럼 — 수험생 불면증, 잠이 안 오거나 자도 피곤하다면?
   - href: /columns/student-indigestion/
     label: 건강칼럼 — 수험생 소화불량, 밥만 먹으면 더부룩하고 졸리다면?
+  - href: /columns/student-concentration/
+    label: 건강칼럼 — 수험생 집중력 저하, 집중력 강화 한약보다 먼저 확인할 것은?
 ---
 
 "충분히 쉬어도 계속 피곤하다고 해요."
