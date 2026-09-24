@@ -12,6 +12,8 @@ related:
     label: 수험생 클리닉 진료 안내
   - href: /columns/student-stamina/
     label: 건강칼럼 — 수험생 체력 저하, 보약부터 먹으면 될까요?
+  - href: /columns/student-abdominal-pain/
+    label: 건강칼럼 — 시험 전마다 배가 아픈 수험생, 긴장 때문이라고 넘겨도 될까요?
 ---
 
 "조금만 먹어도 배가 꽉 찬 것 같아요."

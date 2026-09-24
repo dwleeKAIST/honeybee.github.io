@@ -26,6 +26,7 @@
 //   - <h1> 이 정확히 한 개인지
 //   - 페이지마다 <title> 과 <h1> 이 겹치지 않는지 (같은 검색어를 두
 //     페이지가 나눠 가지면 둘 다 밀립니다)
+//   - 닫는 따옴표 자리에 여는 따옴표가 찍히지 않았는지
 
 import { readdir, readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
@@ -74,6 +75,13 @@ const textNodes = (html) =>
 // 문장부호 바로 뒤에 글자가 붙은 자리. 소수점(21.5)과 자릿수 쉼표
 // (1,000)는 뒤가 숫자라 걸리지 않습니다.
 const GLUED = /[가-힣a-zA-Z0-9)\]][.,][가-힣a-zA-Z(]/g;
+
+// 닫혀야 할 자리에 찍힌 여는 따옴표. 마크다운의 smartypants 는
+// "...할까요?"라는 처럼 물음표 뒤에서 닫는 따옴표를 여는 따옴표로
+// 뒤집습니다. 화면으로는 잘 안 보이고 글을 뽑으면 인용이 안 닫힙니다.
+// 고치는 방법은 마크다운에 닫는 따옴표(”)를 직접 적는 것입니다.
+// 여는 따옴표는 공백·줄 시작·여는 괄호 뒤에만 올 수 있습니다.
+const OPEN_QUOTE = /[^\s(\[\u2018]\u201c/g;
 
 const files = await filesWithExt(dist, '.html');
 if (files.length === 0) {
@@ -170,6 +178,14 @@ for (const f of files) {
     for (const m of node.matchAll(GLUED)) {
       const around = node.slice(Math.max(0, m.index - 35), m.index + 35).replace(/\s+/g, ' ');
       say(`글자가 붙었습니다 — 줄 끝에 {' '} 가 빠졌는지 보세요\n    …${around}…`);
+    }
+  }
+
+  // 닫는 따옴표 자리에 여는 따옴표가 찍힌 곳
+  for (const node of textNodes(html)) {
+    for (const m of node.matchAll(OPEN_QUOTE)) {
+      const around = node.slice(Math.max(0, m.index - 30), m.index + 30).replace(/\s+/g, ' ');
+      say(`닫는 따옴표 자리에 여는 따옴표(“)가 찍혔습니다 — 마크다운에 ” 를 직접 적으세요\n    …${around}…`);
     }
   }
 
