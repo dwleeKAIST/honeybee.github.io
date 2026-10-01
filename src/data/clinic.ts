@@ -5,6 +5,11 @@
 const WEEKDAY_CLOSE = '20:00'; // 월·화·목·금
 const WED_CLOSE = '21:00'; // 수요일 야간진료
 
+// 카카오톡 채널. 지금 쓰는 유일한 상담 채널입니다(네이버 톡톡은 없고,
+// naverBooking 은 예약 링크입니다). 핸들을 두 번 적어 어긋나지 않도록
+// 채팅 주소는 여기서 만들어 씁니다.
+const KAKAO_CHANNEL = 'http://pf.kakao.com/_LxdhFG';
+
 export const clinic = {
   name: '시호한의원',
   nameEn: 'SIHO Korean Medicine Clinic',
@@ -48,7 +53,9 @@ export const clinic = {
     naverMap: 'https://naver.me/Fyn3KnhN',
     tMap: 'https://tmap.life/fc669a1f',
     googleMap: 'https://maps.app.goo.gl/kSMzv5j38YLKJhce7',
-    kakaoChannel: 'http://pf.kakao.com/_LxdhFG',
+    kakaoChannel: KAKAO_CHANNEL,
+    /** 채널 채팅 화면을 바로 엽니다. 공진단 비대면 진료 문의 버튼이 씁니다 */
+    kakaoChat: `${KAKAO_CHANNEL}/chat`,
     naverBooking: 'http://naver.me/GgBsC8Nk',
     blog: 'https://blog.naver.com/hani_mei',
   },

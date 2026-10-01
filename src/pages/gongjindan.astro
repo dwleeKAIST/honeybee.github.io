@@ -4,9 +4,31 @@ import { clinic } from '../data/clinic';
 import Photos from '../components/Photos.astro';
 import { photos } from '../lib/img';
 
-const title = '동탄 목동 공진단 | 원내 직접 조제';
+const title = '동탄 공진단 | 원내 조제·비대면 진료 문의';
 const description =
-  '화성시 동탄구 목동 시호한의원 공진단. 사향원방공진단과 녹용두배공진단을 진찰 후 원내에서 직접 조제합니다.';
+  '화성시 동탄구 목동 시호한의원 공진단. 진찰 후 원내에서 직접 조제하며, 비대면 진료 가능 여부도 안내해 드립니다.';
+
+// 비대면 진료 문의 과정. 상담 채널로 연결하기 전에 무엇을 확인하는지
+// 먼저 보여 드리는 자리입니다. 수령 방법은 진료 후 개별 안내이므로
+// 여기에 배송·택배 관련 문구는 넣지 않습니다.
+const remoteFlow = [
+  '비대면 진료 문의',
+  '건강 상태 및 복용약 확인',
+  '한의사 진료',
+  '처방 및 비용 안내',
+  '조제 후 수령 안내',
+];
+
+// 상담 채널에 붙여 보내실 수 있는 문의 양식. 카카오톡 채널은 주소로
+// 문구를 미리 넣어 줄 수 없어, 버튼 옆에서 복사하도록 둡니다.
+// ⚠ 이 글은 빈 양식일 뿐입니다. 홈페이지는 건강정보를 받지도, 저장하지도
+//    않습니다. 적어 보내신 내용은 상담 채널에만 남습니다.
+const askTemplate = `공진단 비대면 진료를 문의드립니다.
+- 복용하실 분의 연령:
+- 주요 불편 증상:
+- 현재 복용 중인 약:
+- 희망 수량 또는 복용 목적:
+- 초진/재진 여부:`;
 
 // 원장 검수 완료. 내용은 원장이 직접 확인한 것입니다.
 // AI 검색이 그대로 인용할 수 있도록 답변의 첫 문장에서 바로 결론을 말합니다.
@@ -219,7 +241,11 @@ const steps = [
     </p>
     <ul class="hero-summary">{summary.map((s) => <li>{s}</li>)}</ul>
     <p class="cta-row">
-      <a class="cta" href={clinic.links.naverBooking}>공진단 상담하기</a>
+      <a class="cta" href={clinic.links.kakaoChat}>공진단 비대면 진료 문의</a>
+      <a class="cta ghost" href={clinic.links.naverBooking}>내원 진료 예약</a>
+    </p>
+    <p class="cta-sub">
+      비대면 진료 가능 여부는 상태를 확인한 뒤 안내해 드립니다.
     </p>
   </section>
 
@@ -307,6 +333,49 @@ const steps = [
         >
       </li>
     </ul>
+  </section>
+
+  <section class="sec" id="remote">
+    <h2>직접 방문이 어려우신가요?</h2>
+    <p>
+      시호한의원에서는 공진단 복용이 필요한 이유와 현재 건강 상태, 복용 중인 약을
+      확인한 뒤 비대면 진료 가능 여부를 안내해드립니다.
+    </p>
+    <p>
+      정해진 제품을 단순히 판매하는 방식이 아니라, 한의사가 직접 상태를 확인하고
+      적합한 처방과 복용 방법을 설명드립니다.
+    </p>
+    <p class="statement">
+      진료 결과에 따라 내원 진료가 필요하거나 처방이 어려울 수 있습니다.
+    </p>
+
+    <div class="remote-box">
+      <p class="cta-row">
+        <a class="cta" href={clinic.links.kakaoChat}>공진단 비대면 진료 문의</a>
+        <a class="cta ghost" href={clinic.links.naverBooking}>내원 진료 예약</a>
+      </p>
+      <p class="remote-hint">
+        카카오톡 채널 상담으로 연결됩니다. 아래 내용을 함께 적어 보내 주시면
+        확인이 빠릅니다.
+      </p>
+      <pre id="ask-text" class="ask">{askTemplate}</pre>
+      <p class="ask-row">
+        <button type="button" id="ask-copy" class="ask-copy">문의 양식 복사</button>
+        <span id="ask-said" class="ask-said" role="status" aria-live="polite"></span>
+      </p>
+    </div>
+
+    <h3>비대면 진료 문의는 이렇게 진행됩니다</h3>
+    <ol class="flow">{remoteFlow.map((t) => <li>{t}</li>)}</ol>
+    <p class="note">
+      비대면 진료가 모든 분께 가능한 것은 아닙니다. 상태에 따라 내원 진찰이
+      필요하거나 처방을 드리기 어려운 경우가 있고, 그때는 그 이유를 말씀드립니다.
+      조제한 한약을 받으시는 방법은 진료 후 개별적으로 안내해 드립니다.
+    </p>
+    <p class="note">
+      홈페이지는 건강정보를 받거나 저장하지 않습니다. 위 양식은 상담 채널에 적어
+      보내실 내용을 복사하기 쉽도록 둔 것입니다. {clinic.currentTreatmentNote}
+    </p>
   </section>
 
   <section class="sec band">
@@ -466,13 +535,22 @@ const steps = [
       말씀드립니다. {clinic.firstVisitNote} {clinic.nightNote}
     </p>
     <p class="cta-row">
-      <a class="cta" href={clinic.links.naverBooking}>공진단 상담하기</a>
+      <a class="cta" href={clinic.links.kakaoChat}>공진단 비대면 진료 문의</a>
+      <a class="cta ghost" href={clinic.links.naverBooking}>내원 진료 예약</a>
       <a class="cta ghost" href={`tel:${clinic.phone}`}>전화 {clinic.phone}</a>
     </p>
     <p class="cta-sub">
-      <a href={clinic.links.kakaoChannel}>카카오톡 문의</a> · <a href="/contact/">오시는 길</a>
+      <a href={clinic.links.kakaoChannel}>카카오톡 채널</a> · <a href="/contact/">오시는 길</a>
     </p>
   </section>
+
+  {/* 모바일에서만 화면 아래에 붙는 상담 띠. 이 페이지에만 들어갑니다.
+      홈의 PromoBanner 와 달리 같은 화면에 겹치지 않습니다(그 배너는
+      index.astro 에만 있습니다). */}
+  <aside class="remote-bar" aria-label="공진단 상담">
+    <a class="rb rb-primary" href={clinic.links.kakaoChat}>비대면 진료 문의</a>
+    <a class="rb rb-ghost" href={`tel:${clinic.phone}`}>전화 상담</a>
+  </aside>
 
   <style>
     /* 약재 구성 카드 */
@@ -499,5 +577,172 @@ const steps = [
       margin-bottom: 0.2rem;
     }
     .herbs span { color: var(--ink-soft); font-size: 0.96rem; }
+
+    /* ── 비대면 진료 문의 안내 ────────────────────────────── */
+    /* 띠 배너가 아니라 '안내 상자'로 보이도록 카드 모양만 씁니다.
+       색·여백·버튼은 전부 공용 토큰과 .cta 를 그대로 가져옵니다. */
+    .remote-box {
+      max-width: var(--read);
+      margin: 1.75rem 0 0;
+      padding: 1.25rem 1.35rem 1.35rem;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    .remote-box .cta-row { margin: 0 0 0.75rem; }
+    .remote-hint {
+      margin: 0 0 0.8rem;
+      font-size: 0.92rem;
+      color: var(--ink-soft);
+    }
+
+    /* 상담 채널에 붙여 보내실 문의 양식 */
+    .ask {
+      margin: 0;
+      padding: 0.9rem 1rem;
+      background: var(--sunk);
+      border-radius: 6px;
+      font-family: var(--sans);
+      font-size: 0.93rem;
+      line-height: 1.75;
+      color: var(--ink);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .ask-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem 0.75rem;
+      margin: 0.75rem 0 0;
+    }
+    .ask-copy {
+      padding: 0.5rem 1.05rem;
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 999px;
+      font: 600 0.92rem var(--sans);
+      cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease;
+    }
+    .ask-copy:hover { background: var(--accent); color: #fff; }
+    .ask-copy:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+    .ask-said { font-size: 0.9rem; color: var(--ink-soft); }
+
+    /* 진행 과정 — 모바일 세로, 넓은 화면에서 가로 */
+    .flow {
+      list-style: none;
+      counter-reset: flow;
+      margin: 1.25rem 0 1.5rem;
+      padding: 0;
+      display: grid;
+      gap: 0.6rem;
+      max-width: var(--read);
+    }
+    .flow li {
+      counter-increment: flow;
+      position: relative;
+      padding: 0.85rem 1rem 0.85rem 2.6rem;
+      background: var(--surface);
+      border: 1px solid var(--line-soft);
+      border-radius: 6px;
+      font-size: 0.96rem;
+    }
+    .flow li::before {
+      content: counter(flow);
+      position: absolute;
+      left: 1rem;
+      top: 0.85rem;
+      font-family: var(--head);
+      font-weight: 700;
+      color: var(--accent);
+    }
+    @media (min-width: 46rem) {
+      .flow {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 0.5rem;
+        max-width: none;
+      }
+      .flow li {
+        padding: 2.2rem 0.75rem 0.9rem;
+        text-align: center;
+        font-size: 0.9rem;
+      }
+      .flow li::before {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+    }
+
+    /* ── 모바일 고정 상담 띠 ──────────────────────────────── */
+    .remote-bar { display: none; }
+    @media (max-width: 46rem) {
+      .remote-bar {
+        position: fixed;
+        inset: auto 0 0 0;
+        z-index: 80;
+        display: flex;
+        gap: 0.5rem;
+        padding: 0.6rem var(--pad);
+        padding-bottom: calc(0.6rem + env(safe-area-inset-bottom, 0px));
+        background: var(--surface);
+        border-top: 1px solid var(--line);
+        box-shadow: 0 -6px 24px rgb(20 26 22 / 0.1);
+      }
+      .rb {
+        flex: 1;
+        padding: 0.72rem 0.5rem;
+        border-radius: 999px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        text-align: center;
+        text-decoration: none;
+      }
+      .rb-primary { flex: 1.45; background: var(--accent); color: #fff; }
+      .rb-ghost {
+        background: transparent;
+        color: var(--accent);
+        border: 1px solid var(--accent);
+      }
+    }
   </style>
+
+  {/* 고정 띠가 꼬리말 마지막 줄을 가리지 않도록 아래 여백을 둡니다.
+      이 페이지에서만 쓰는 규칙입니다. */}
+  <style is:global>
+    @media (max-width: 46rem) {
+      /* 띠 높이(약 74px)보다 넉넉하게. 모자라면 꼬리말 마지막 줄이
+         띠 아래로 들어갑니다 — 4.2rem 으로 뒀다가 4px 가렸습니다. */
+      body { padding-bottom: calc(5.2rem + env(safe-area-inset-bottom, 0px)); }
+    }
+  </style>
+
+  <script>
+    // 문의 양식 복사. 홈페이지는 적어 주신 내용을 받지도 저장하지도
+    // 않습니다. 여기서는 빈 양식을 클립보드에 넣는 일만 합니다.
+    // 복사가 막힌 환경에서는 직접 선택해 복사하도록 안내만 띄웁니다.
+    (() => {
+      const btn = document.getElementById('ask-copy');
+      const src = document.getElementById('ask-text');
+      const said = document.getElementById('ask-said');
+      if (!btn || !src || !said) return;
+
+      let timer: number | undefined;
+      btn.addEventListener('click', async () => {
+        const text = src.textContent ?? '';
+        try {
+          await navigator.clipboard.writeText(text);
+          said.textContent = '복사했습니다. 상담 채널에 붙여 보내 주세요.';
+        } catch {
+          said.textContent = '복사가 안 되면 위 내용을 직접 선택해 복사해 주세요.';
+        }
+        window.clearTimeout(timer);
+        timer = window.setTimeout(() => { said.textContent = ''; }, 6000);
+      });
+    })();
+  </script>
 </Base>
