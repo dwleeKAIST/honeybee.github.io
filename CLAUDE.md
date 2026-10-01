@@ -33,6 +33,14 @@ Astro 기반 정적 사이트. Cloudflare Workers(정적 자산)에 연결되어
   Cloudflare 대시보드의 Compute → thesiho → Deployments에서 확인해야 하며,
   `workers.dev` 서브도메인이 꺼져 있으면 미리보기 주소 자체가 없습니다
 
+## 화면 보여 드리기
+
+- **고치고 나면 그 화면을 캡처해서 보여 드립니다.** 글로 설명하는 것보다 원장님이 직접 보시는 편이 빠릅니다. 손댄 페이지를 **모바일(430px)과 PC(1280px)** 로 찍고, 바뀐 자리가 보이도록 그 위치까지 스크롤해서 찍으세요
+- 캡처는 `npm run build` 뒤 `dist/` 를 로컬 서버로 띄워서 찍습니다. **브라우저는 바깥 네트워크에 못 나갑니다**. 배포본을 찍고 싶으면 `curl` 로 받아 로컬 빌드와 같은지 확인한 뒤 로컬을 찍고, 같다는 사실을 함께 말씀드리세요
+- `python3 -m http.server` 로 띄우세요. `npx serve -s` 는 SPA 모드라 하위 주소를 홈으로 돌려보내 엉뚱한 화면을 찍습니다 (실제로 겪었습니다)
+- Playwright 브라우저는 `/opt/pw-browsers/chromium-1194/chrome-linux/chrome` 에 있습니다. `playwright` 패키지는 프로젝트에 없으니 스크래치패드에 `--no-save` 로 설치해 쓰세요
+- ⚠ 워크트리 안에 `node_modules` 를 심볼릭 링크로 걸지 마세요. `git worktree remove --force` 가 링크를 따라가 원본을 지웁니다 (실제로 지워 `npm ci` 로 복구했습니다)
+
 ## 명령어
 
 - `npm run dev` — 로컬 개발 서버
