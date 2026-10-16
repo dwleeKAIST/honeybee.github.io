@@ -1,9 +1,9 @@
 ---
-import Base from '../layouts/Base.astro';
-import Photos from '../components/Photos.astro';
-import { clinic } from '../data/clinic';
-import { chuppyak } from '../data/chuppyak';
-import { img, photos } from '../lib/img';
+import Base from '../../layouts/Base.astro';
+import Photos from '../../components/Photos.astro';
+import { clinic } from '../../data/clinic';
+import { chuppyak } from '../../data/chuppyak';
+import { img, photos } from '../../lib/img';
 
 const title = '동탄 목동 월경통 한의원';
 const description =
@@ -217,6 +217,7 @@ const faqs = [
     a: [
       '네. 월경 전후로 나타나는 두통, 부종, 소화불량, 피로, 감정 기복도 함께 확인합니다.',
       '통증 하나만 따로 보지 않고 지금 몸 전체가 어떤 상태인지부터 확인합니다.',
+      'PMS 와 월경통의 차이, 무엇을 확인하는지, 건강보험 적용 여부는 월경전증후군(PMS) 안내에 따로 정리해 두었습니다.',
     ],
   },
   {
@@ -388,7 +389,9 @@ const faqLd = [
     </ul>
     <p class="note">
       {chuppyak.privateInsuranceNote} 절차와 조건은{' '}
-      <a href="/chuppyak/">첩약 건강보험 안내</a>에 정리해 두었습니다.
+      <a href="/chuppyak/">첩약 건강보험 안내</a>에 정리해 두었습니다. 월경 전에
+      나타나는 부종·피로·감정 변화는{' '}
+      <a href="/menstrual-pain/pms/">월경전증후군(PMS) 안내</a>에서 따로 다룹니다.
     </p>
     {insuranceFigure && (
       <figure class="fig">
