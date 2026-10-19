@@ -15,6 +15,9 @@ const treatments = (await getCollection('treatments')).sort(
 // 실제로 있는 사진만 씁니다. 없으면 null 이 돌아와 촬영 안내 자리로 바뀝니다.
 const heroPhoto = img(photos.consult);
 const kimPhoto = img(photos.kimEunmi);
+// 복부 초음파 검사 장면. /menstrual-pain/ 에 이미 올라가 있는 실제 사진이고
+// 환자 얼굴이 나오지 않으며 화면에 환자 이름도 없습니다.
+const gynPhoto = img(photos.careUltrasoundGyn);
 // ⚠ public/images/ultrasound-*.webp 네 장은 초음파 화면이 아니라 「어깨 관절」
 //    같은 글자가 박힌 홍보용 썸네일입니다(img.ts 에 등록돼 있지도 않습니다).
 //    임상 화면처럼 보여 주면 사실과 달라 쓰지 않습니다. 실제 초음파 화면을
@@ -70,7 +73,11 @@ const fields = [
     kicker: '월경통 · PMS',
     t: '매달 반복된다면 참는 것을 목표로 삼지 않습니다',
     body: '복부 초음파로 확인 가능한 범위를 살펴본 뒤 한약, 침, 뜸, 약침, 온열치료 가운데 지금 필요한 것을 정합니다. 월경 중에도 검사할 수 있습니다.',
-    photo: null,
+    photo: gynPhoto,
+    photoAlt:
+      '시호한의원에서 복부 초음파로 자궁을 확인하는 모습. 화면에 초음파 영상이 보입니다',
+    photoW: 1600,
+    photoH: 1200,
     need: '복부 초음파 검사 장면 (환자 식별 불가 각도) · 가로 3:2',
   },
   {
@@ -127,7 +134,13 @@ const fields = [
       <article class={`field${i % 2 ? ' flip' : ''}`}>
         <div class="field-media">
           {f.photo ? (
-            <img src={f.photo} alt="" width="1200" height="800" loading="lazy" />
+            <img
+              src={f.photo}
+              alt={f.photoAlt}
+              width={f.photoW}
+              height={f.photoH}
+              loading="lazy"
+            />
           ) : (
             <div class="shoot" style="aspect-ratio:3/2"><span>{f.need}</span></div>
           )}
@@ -367,7 +380,13 @@ const fields = [
     .field { display: grid; gap: 1.5rem; margin: 0 0 3.5rem; align-items: center; }
     /* height:auto 가 없으면 width/height 속성의 1200·800 이 그대로 고정 높이가
        됩니다. Base.astro 에 전역 img 규칙이 없어 페이지마다 적어 줘야 합니다. */
-    .field-media img, .field-media .shoot { width: 100%; height: auto; display: block; }
+    /* height:auto 가 빠지면 width/height 속성값이 그대로 고정 높이가 되고
+       aspect-ratio 는 무시됩니다. Base.astro 에 전역 img 규칙이 없습니다. */
+    .field-media img {
+      width: 100%; height: auto; display: block;
+      aspect-ratio: 3 / 2; object-fit: cover;
+    }
+    .field-media .shoot { width: 100%; height: auto; display: block; }
     .field h3 {
       font-size: clamp(1.25rem, 2.6vw, 1.6rem); line-height: 1.45;
       letter-spacing: -0.02em; margin: 0 0 0.8rem;
