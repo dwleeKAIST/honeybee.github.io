@@ -15,6 +15,41 @@ const treatments = (await getCollection('treatments')).sort(
 // 실제로 있는 사진만 씁니다. 없으면 null 이 돌아와 촬영 안내 자리로 바뀝니다.
 const heroPhoto = img(photos.consult);
 const kimPhoto = img(photos.kimEunmi);
+
+// 두 원장. 이력과 학회는 /doctors/ 에 올라가 있는 내용을 그대로 가져왔습니다.
+// 홈에는 길게 늘어놓지 않고 각 네 줄까지만 보여 주고 나머지는 링크로 넘깁니다.
+const doctors = [
+  {
+    name: '김은미',
+    role: '대표원장',
+    credential: '한방내과 전문의 (보건복지부)',
+    photo: img(photos.kimEunmi),
+    need: '김은미 대표원장 인물 사진',
+    file: photos.kimEunmi,
+    body: `보건복지부 한방내과 전문의로, 한의원 및 한방병원에서 ${clinic.leadDoctorYears} 근무했습니다. 입원환자를 대상으로 한 한약의 안전성 평가 다기관 임상연구에 시험담당자로 참여했습니다.`,
+    points: [
+      '대전대학교 한의예과 · 한의학과 졸업',
+      '세명대학교 부속 제천한방병원 한방내과 전문수련의',
+      '대한한방내과학회 · 대한약침학회 회원',
+      '대한여한의사회 기획이사',
+    ],
+  },
+  {
+    name: '박종규',
+    role: '진료원장',
+    credential: '미국근골격계초음파사 (RMSK)',
+    photo: img(photos.parkJonggyu),
+    need: '박종규 진료원장 인물 사진',
+    file: photos.parkJonggyu,
+    body: '근골격계 초음파와 추나를 함께 봅니다. 어깨·목·허리·무릎처럼 아픈 자리가 분명한 경우, 초음파로 해당 부위를 확인한 뒤 침·약침·도침·추나 가운데 무엇이 필요한지 정합니다.',
+    points: [
+      '대전대학교 청주한방병원 일반수련의 수료',
+      '척추신경추나의학회 정회원',
+      '시리악스 정형의학회 KMD 과정 수료',
+      'TBT 턱관절균형요법 전문과정 수료',
+    ],
+  },
+];
 // 복부 초음파 검사 장면. /menstrual-pain/ 에 이미 올라가 있는 실제 사진이고
 // 환자 얼굴이 나오지 않으며 화면에 환자 이름도 없습니다.
 const gynPhoto = img(photos.careUltrasoundGyn);
@@ -25,18 +60,40 @@ const gynPhoto = img(photos.careUltrasoundGyn);
 
 // 주요 진료 네 분야. 사진이 아직 없어 need 에 촬영할 사진과 권장 비율을 적어
 // 두었습니다. AI 생성 이미지는 넣지 않습니다.
-// 초음파 화면 네 장과 원내 사진 석 장. 무엇을 찍어야 하는지 자리마다
-// 적어 둡니다. 사진이 들어오면 이 배열을 이미지로 바꿉니다.
+// 사진 자리는 모두 img.ts 의 이름을 거칩니다. public/images/ 에 그 이름으로
+// 파일을 올리면 자동으로 들어가고, 없으면 「무엇을 어떤 비율로 찍어 어떤
+// 이름으로 올리면 되는지」가 적힌 자리가 대신 나옵니다.
+//   slot('room-entrance', '입구와 간판', '16:9')
+function slot(name: string, what: string, ratio: string) {
+  return { src: img(name), what, ratio, name };
+}
+
+// 원내 둘러보기 — 참고 사이트처럼 작은 사진을 여러 장 늘어놓습니다.
+const rooms = [
+  slot(photos.roomEntrance, '층 복도에서 본 입구와 간판', '4:3'),
+  slot(photos.roomReceptionDesk, '접수 데스크와 대기 공간', '4:3'),
+  slot(photos.roomConsultDesk, '진료실 책상과 서가', '4:3'),
+  slot(photos.roomAcupuncture, '침 치료실', '4:3'),
+  slot(photos.roomChuna, '추나 치료실', '4:3'),
+  slot(photos.roomInbody, '인바디와 신장계가 있는 검사 공간', '4:3'),
+  slot(photos.roomHallway, '복도', '4:3'),
+  slot(photos.roomWashstand, '세면대', '4:3'),
+];
+
+// 원내 탕전실 — 아래 조제 현황 띠와 짝이 되는 사진입니다.
+const decoctions = [
+  slot(photos.decoctionSign, '조제탕전실 명패', '4:3'),
+  slot(photos.decoctionWeighing, '약재를 계량하는 모습', '4:3'),
+  slot(photos.decoctionBrewing, '탕전기', '4:3'),
+  slot(photos.decoctionPacked, '포장된 한약', '4:3'),
+];
+
+// 초음파 화면 네 장. 글자가 박히지 않은 원본 캡처여야 합니다.
 const scanShots = [
   '어깨 초음파 화면 · 1:1',
   '무릎 초음파 화면 · 1:1',
   '성장판 초음파 화면 · 1:1',
   '복부 초음파 화면 · 1:1',
-];
-const roomShots = [
-  '원내 전경 · 16:9',
-  '접수 데스크 · 16:9',
-  '치료실 · 16:9',
 ];
 
 // 네 분야 아래에 조용히 두는 나머지 일곱 진료. 카드로 깔지는 않지만
@@ -168,31 +225,44 @@ const fields = [
     </p>
   </section>
 
-  {/* ── 3. 의료진 ──────────────────────────────────────── */}
+  {/* ── 3. 의료진 — 두 원장을 같은 무게로 ────────────── */}
   <section class="band-soft">
-    <div class="doctor">
-      <div class="doctor-media">
-        {kimPhoto ? (
-          <img src={kimPhoto} alt="시호한의원 김은미 대표원장" width="995" height="1327" loading="lazy" />
-        ) : (
-          <div class="shoot" style="aspect-ratio:3/4"><span>대표원장 인물 사진 · 세로 3:4</span></div>
-        )}
-      </div>
-      <div class="doctor-text">
-        <p class="kicker">의료진</p>
-        <h2>김은미 대표원장</h2>
-        <p>
-          보건복지부 한방내과 전문의로, 한의원 및 한방병원에서{' '}
-          {clinic.leadDoctorYears} 근무했습니다. 입원환자를 대상으로 한 한약의
-          안전성 평가 다기관 임상연구에 시험담당자로 참여했습니다.
-        </p>
-        <p>
-          한 분의 환자를 두 의료진이 함께 살펴보는 협진 방식으로 진료의 연속성을
-          유지합니다.
-        </p>
-        <p class="more"><a href="/doctors/">두 원장의 이력과 진료 요일</a></p>
-      </div>
-    </div>
+    <p class="sec-label">의료진</p>
+    <h2 class="sec-h">어떤 한의사가 진료하나요?</h2>
+    <p class="wide-lead">
+      한 분의 환자를 두 의료진이 함께 살펴보는 협진 방식으로 진료의 연속성을
+      유지합니다.
+    </p>
+    {doctors.map((d, i) => (
+      <article class={`doctor${i % 2 ? ' flip' : ''}`}>
+        <div class="doctor-media">
+          {d.photo ? (
+            <img
+              src={d.photo}
+              alt={`시호한의원 ${d.name} ${d.role}`}
+              loading="lazy"
+            />
+          ) : (
+            <div class="shoot" style="aspect-ratio:3/4">
+              <span>{d.need} · 세로 3:4<b class="file">{`↳ ${d.file}`}</b></span>
+            </div>
+          )}
+        </div>
+        <div class="doctor-text">
+          <h3>
+            {d.name} {d.role}
+            {d.credential && <em>{d.credential}</em>}
+          </h3>
+          <p>{d.body}</p>
+          <ul class="points">
+            {d.points.map((t) => <li>{t}</li>)}
+          </ul>
+        </div>
+      </article>
+    ))}
+    <p class="more center">
+      <a href="/doctors/">두 원장의 이력과 학회 활동, 진료 요일</a>
+    </p>
   </section>
 
   {/* ── 4. 원내에서 직접 확인합니다 ─────────────────────── */}
@@ -213,9 +283,53 @@ const fields = [
       <a href="/rhinitis/endoscopy/">비내시경 안내</a> ·{' '}
       <a href="/pediatrics/">소아 진료 안내</a>
     </p>
-    <div class="shoot-grid three">
-      {roomShots.map((t) => (
-        <div class="shoot" style="aspect-ratio:16/9"><span>{t}</span></div>
+  </section>
+
+  {/* ── 4-2. 원내 둘러보기 — 참고 사이트의 썸네일 줄 ───── */}
+  <section class="sec-wide">
+    <p class="sec-label">원내 둘러보기</p>
+    <h2 class="sec-h">한의원은 어떻게 생겼나요?</h2>
+    <p class="wide-lead">
+      처음 오시는 분이 어디에서 접수하고 어디에서 치료받는지 미리 보실 수
+      있도록 올려 둡니다. 아직 없는 자리에는 어떤 사진을 어떤 이름으로
+      올리면 되는지 적어 두었습니다. 확장자는 jpg·png·webp 무엇이든 됩니다.
+    </p>
+    <div class="thumbs">
+      {rooms.map((r) => (
+        r.src ? (
+          <figure class="thumb">
+            <img src={r.src} alt={`시호한의원 ${r.what}`} loading="lazy" />
+            <figcaption>{r.what}</figcaption>
+          </figure>
+        ) : (
+          <div class="shoot thumb-shoot" style="aspect-ratio:4/3">
+            <span>{r.what} · {r.ratio}<b class="file">{`↳ ${r.name}`}</b></span>
+          </div>
+        )
+      ))}
+    </div>
+  </section>
+
+  {/* ── 4-3. 원내 탕전실 ───────────────────────────────── */}
+  <section class="sec-wide">
+    <p class="sec-label">원내 탕전실</p>
+    <h2 class="sec-h">한약은 어디에서 조제하나요?</h2>
+    <p class="wide-lead">
+      맞춤 한약은 원내 조제탕전실에서 한의사가 직접 조제합니다. 아래 띠에
+      최근 조제 현황이 매일 아침 올라옵니다.
+    </p>
+    <div class="thumbs four-up">
+      {decoctions.map((r) => (
+        r.src ? (
+          <figure class="thumb">
+            <img src={r.src} alt={`시호한의원 원내 탕전실 — ${r.what}`} loading="lazy" />
+            <figcaption>{r.what}</figcaption>
+          </figure>
+        ) : (
+          <div class="shoot thumb-shoot" style="aspect-ratio:4/3">
+            <span>{r.what} · {r.ratio}<b class="file">{`↳ ${r.name}`}</b></span>
+          </div>
+        )
       ))}
     </div>
   </section>
@@ -402,10 +516,54 @@ const fields = [
       padding: 3.5rem calc(50vw - 50% + var(--pad));
       background: #faf7f0;
     }
-    .doctor { display: grid; gap: 1.75rem; align-items: center; }
-    .doctor-media img, .doctor-media .shoot { width: 100%; height: auto; display: block; }
-    .doctor h2 { font-size: clamp(1.3rem, 2.8vw, 1.7rem); margin: 0 0 0.9rem; }
-    .doctor-text p { color: var(--ink-soft); line-height: 1.9; margin: 0 0 0.9rem; }
+    .doctor {
+      display: grid; gap: 1.5rem; align-items: center;
+      margin: 0 0 3rem; padding: 0 0 3rem;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .doctor:last-of-type { margin-bottom: 1.5rem; padding-bottom: 0; border-bottom: 0; }
+    .doctor-media img {
+      width: 100%; height: auto; display: block;
+      aspect-ratio: 3 / 4; object-fit: cover; object-position: 50% 20%;
+    }
+    .doctor-media .shoot { width: 100%; height: auto; display: block; }
+    .doctor h3 { font-size: clamp(1.25rem, 2.8vw, 1.5rem); margin: 0 0 0.9rem; }
+    /* 자격은 이름보다 한 톤 작게, 줄을 바꿔서 */
+    .doctor h3 em {
+      display: block; margin-top: 0.35rem;
+      font-size: 0.88rem; font-weight: 600; font-style: normal;
+      letter-spacing: 0.02em; color: var(--accent);
+    }
+    .doctor-text p { color: var(--ink-soft); line-height: 1.9; margin: 0 0 1rem; }
+    .points { margin: 0; padding: 0; list-style: none; }
+    .points li {
+      position: relative; padding-left: 0.85rem;
+      font-size: 0.94rem; line-height: 1.95; color: var(--ink-soft);
+    }
+    .points li::before {
+      content: ''; position: absolute; left: 0; top: 0.9em;
+      width: 4px; height: 4px; border-radius: 50%; background: var(--accent);
+    }
+    .more.center { text-align: center; margin: 0; }
+
+    /* 원내 사진 썸네일 줄 — 참고 사이트처럼 작게 여러 장 */
+    .thumbs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.7rem; }
+    .thumb { margin: 0; }
+    .thumb img {
+      width: 100%; height: auto; display: block;
+      aspect-ratio: 4 / 3; object-fit: cover;
+    }
+    .thumb figcaption {
+      margin-top: 0.45rem;
+      font-size: 0.84rem; color: var(--ink-soft);
+    }
+    .thumb-shoot { font-size: 0.8rem; }
+    /* 올릴 파일 이름. 줄을 바꿔 보여 주되 <br> 로 붙이지 않습니다
+       (검색엔진이 「3:4doctor-park-jonggyu.jpg」 로 붙여 읽습니다). */
+    .file {
+      display: block; margin-top: 0.3rem;
+      font-weight: 400; font-size: 0.78rem; opacity: 0.75;
+    }
 
     /* 4. 원내 확인 */
     .sec-wide { margin: 0 0 4.5rem; }
@@ -430,7 +588,9 @@ const fields = [
     @media (min-width: 46rem) {
       .field { grid-template-columns: 1fr 1fr; gap: 3rem; }
       .field.flip .field-media { order: 2; }
-      .doctor { grid-template-columns: 0.8fr 1.2fr; gap: 3rem; }
+      .doctor { grid-template-columns: 0.72fr 1.28fr; gap: 3rem; }
+      .doctor.flip .doctor-media { order: 2; }
+      .thumbs { grid-template-columns: repeat(4, 1fr); gap: 1rem; }
       .shoot-grid.four { grid-template-columns: repeat(4, 1fr); }
       .shoot-grid.three { grid-template-columns: repeat(3, 1fr); }
       .visit { grid-template-columns: 1fr 1fr; gap: 4rem; }
