@@ -29,25 +29,43 @@ const doctors = [
     body: `보건복지부 한방내과 전문의로, 한의원 및 한방병원에서 ${clinic.leadDoctorYears} 근무했습니다. 입원환자를 대상으로 한 한약의 안전성 평가 다기관 임상연구에 시험담당자로 참여했습니다.`,
     points: [
       '대전대학교 한의예과 · 한의학과 졸업',
+      '청연한방병원 일반수련의 / 전문수련의',
       '세명대학교 부속 제천한방병원 한방내과 전문수련의',
-      '대한한방내과학회 · 대한약침학회 회원',
+      '한국방송통신대학교 경영대학원 석사 (테크노경영 전공)',
+      '前 대구 이웃집한의원 진료원장',
+      '前 부산 경희림다한의원 진료원장',
+      '네이버 지식iN 상담 한의사',
+      '통증치료사관학교 8기 수료',
+      '맞춤형 화장품 조제관리사',
+      '부산광역시 한의사회 홍보위원',
+      '대한한방내과학회 회원',
       '대한여한의사회 기획이사',
     ],
+    // 증례보고와 임상연구는 홈에 제목까지 늘어놓지 않고 편수만 적습니다.
+    // 전체 목록은 /doctors/ 에 있습니다.
+    note: '증례보고와 임상연구 11편에 참여했습니다.',
   },
   {
     name: '박종규',
     role: '진료원장',
-    credential: '미국근골격계초음파사 (RMSK)',
+    credential: '근골격계 초음파 · 추나',
     photo: img(photos.parkJonggyu),
     need: '박종규 진료원장 인물 사진',
     file: photos.parkJonggyu,
     body: '근골격계 초음파와 추나를 함께 봅니다. 어깨·목·허리·무릎처럼 아픈 자리가 분명한 경우, 초음파로 해당 부위를 확인한 뒤 침·약침·도침·추나 가운데 무엇이 필요한지 정합니다.',
     points: [
       '대전대학교 청주한방병원 일반수련의 수료',
+      '前 명작한의원 진료원장',
+      '前 분당삼성한의원 진료원장',
+      '前 이현한방병원 진료원장',
       '척추신경추나의학회 정회원',
+      '대한한방비만학회 인증 한의사',
       '시리악스 정형의학회 KMD 과정 수료',
+      '미국근골격계초음파사 (RMSK)',
       'TBT 턱관절균형요법 전문과정 수료',
+      '대한스포츠한의학회 팀닥터 수료',
     ],
+    note: null,
   },
 ];
 // 복부 초음파 검사 장면. /menstrual-pain/ 에 이미 올라가 있는 실제 사진이고
@@ -257,6 +275,7 @@ const fields = [
           <ul class="points">
             {d.points.map((t) => <li>{t}</li>)}
           </ul>
+          {d.note && <p class="papers">{d.note}</p>}
         </div>
       </article>
     ))}
@@ -517,7 +536,9 @@ const fields = [
       background: #faf7f0;
     }
     .doctor {
-      display: grid; gap: 1.5rem; align-items: center;
+      /* 약력이 열 줄이라 글이 사진보다 깁니다. 가운데 정렬하면 사진 위에
+         빈 칸이 생겨서 위를 맞춥니다. */
+      display: grid; gap: 1.5rem; align-items: start;
       margin: 0 0 3rem; padding: 0 0 3rem;
       border-bottom: 1px solid var(--line-soft);
     }
@@ -544,6 +565,7 @@ const fields = [
       content: ''; position: absolute; left: 0; top: 0.9em;
       width: 4px; height: 4px; border-radius: 50%; background: var(--accent);
     }
+    .papers { margin: 1rem 0 0; font-size: 0.9rem; color: var(--ink-soft); }
     .more.center { text-align: center; margin: 0; }
 
     /* 원내 사진 썸네일 줄 — 참고 사이트처럼 작게 여러 장 */
@@ -589,6 +611,9 @@ const fields = [
       .field { grid-template-columns: 1fr 1fr; gap: 3rem; }
       .field.flip .field-media { order: 2; }
       .doctor { grid-template-columns: 0.72fr 1.28fr; gap: 3rem; }
+      /* order 만 바꾸면 사진이 넓은 칸으로 가 두 원장 사진 크기가 달라집니다
+         (269px 대 479px 이었습니다). 칸 너비도 같이 뒤집습니다. */
+      .doctor.flip { grid-template-columns: 1.28fr 0.72fr; }
       .doctor.flip .doctor-media { order: 2; }
       .thumbs { grid-template-columns: repeat(4, 1fr); gap: 1rem; }
       .shoot-grid.four { grid-template-columns: repeat(4, 1fr); }
