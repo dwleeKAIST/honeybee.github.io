@@ -95,8 +95,10 @@ export const photos = {
   roomHallway: 'room-hallway',
   /** 세면대 — 오시는 길 */
   roomWashstand: 'room-washstand',
-  /** 진료실 책상과 서가 — 오시는 길 */
+  /** 진료실 전경 (책상·서가·상담용 스툴) — 오시는 길, 홈 원내 둘러보기 */
   roomConsultDesk: 'room-consult-desk',
+  /** 「1 진료실」 입구에서 본 책상과 서가 — 홈 원내 둘러보기 */
+  roomConsultEntry: 'room-consult-entry',
   /** 층 복도에서 본 입구 — 간판과 진료시간 안내판. 오시는 길 */
   roomEntrance: 'room-entrance',
   /** 시호한의원 간판 — 시호는 무슨 뜻인가요 */
