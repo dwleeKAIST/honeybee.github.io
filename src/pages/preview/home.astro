@@ -570,7 +570,10 @@ const fields = [
     .more.center { text-align: center; margin: 0; }
 
     /* 원내 사진 썸네일 줄 — 참고 사이트처럼 작게 여러 장 */
-    .thumbs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.7rem; }
+    /* 1fr 은 칸 안의 가장 긴 낱말보다 좁아지지 않습니다. 촬영 안내에 적힌
+       room-consult-entry 같은 파일 이름이 길어 430px 화면에서 22px 가로
+       스크롤이 생겼습니다. minmax(0,1fr) 로 눌러 둡니다. */
+    .thumbs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.7rem; }
     .thumb { margin: 0; }
     .thumb img {
       width: 100%; height: auto; display: block;
@@ -586,13 +589,14 @@ const fields = [
     .file {
       display: block; margin-top: 0.3rem;
       font-weight: 400; font-size: 0.78rem; opacity: 0.75;
+      overflow-wrap: anywhere;
     }
 
     /* 4. 원내 확인 */
     .sec-wide { margin: 0 0 4.5rem; }
     .wide-lead { color: var(--ink-soft); line-height: 1.9; max-width: var(--read); margin: 0 0 1.5rem; }
     .shoot-grid { display: grid; gap: 0.6rem; margin: 0 0 1.5rem; }
-    .shoot-grid.four { grid-template-columns: repeat(2, 1fr); }
+    .shoot-grid.four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .shoot-grid.three { grid-template-columns: 1fr; margin: 1.5rem 0 0; }
 
     /* 5. 진료시간 · 오시는 길 */
@@ -616,9 +620,9 @@ const fields = [
          (269px 대 479px 이었습니다). 칸 너비도 같이 뒤집습니다. */
       .doctor.flip { grid-template-columns: 1.28fr 0.72fr; }
       .doctor.flip .doctor-media { order: 2; }
-      .thumbs { grid-template-columns: repeat(4, 1fr); gap: 1rem; }
-      .shoot-grid.four { grid-template-columns: repeat(4, 1fr); }
-      .shoot-grid.three { grid-template-columns: repeat(3, 1fr); }
+      .thumbs { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+      .shoot-grid.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .shoot-grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .visit { grid-template-columns: 1fr 1fr; gap: 4rem; }
       .herb-grid { grid-template-columns: 1fr 1fr; gap: 3rem; }
       .opener { margin: 4rem auto 3.5rem; }
