@@ -91,12 +91,16 @@ export const photos = {
   roomChuna: 'room-chuna',
   /** 침 치료실 (커튼으로 나뉜 침대) — 통증 · 교통사고 */
   roomAcupuncture: 'room-acupuncture',
-  /** 복도 — 오시는 길 */
+  /** 대기 공간 (긴 벤치가 있는 안쪽) — 홈 원내 둘러보기 */
   roomHallway: 'room-hallway',
+  /** 건물 층 복도에서 본 입구 — 홈 원내 둘러보기 */
+  roomCorridor: 'room-corridor',
   /** 세면대 — 오시는 길 */
   roomWashstand: 'room-washstand',
-  /** 진료실 책상과 서가 — 오시는 길 */
+  /** 진료실 전경 (책상·서가·상담용 스툴) — 오시는 길, 홈 원내 둘러보기 */
   roomConsultDesk: 'room-consult-desk',
+  /** 「1 진료실」 입구에서 본 책상과 서가 — 홈 원내 둘러보기 */
+  roomConsultEntry: 'room-consult-entry',
   /** 층 복도에서 본 입구 — 간판과 진료시간 안내판. 오시는 길 */
   roomEntrance: 'room-entrance',
   /** 시호한의원 간판 — 시호는 무슨 뜻인가요 */
@@ -117,6 +121,10 @@ export const photos = {
   careHighfreq: 'care-highfreq',
   /** 메가약침 주입 장치 — 소화 */
   careMegayakchim: 'care-megayakchim',
+  /** 복부에 침을 놓는 장면. 얼굴도, 알아볼 만한 신체 특징도 없습니다 */
+  careAcupuncture: 'care-acupuncture',
+  /** 원내 혈액검사 장비와 측정항목 안내 — 자율신경 · 갱년기 */
+  careBloodtest: 'care-bloodtest',
   /** 복부 초음파로 자궁을 확인하는 장면 — 월경통 */
   /**
    * ⚠ 원본 사진에는 기기 옆에 수리기사 명함(이름·휴대전화·개인 이메일)이
@@ -133,6 +141,8 @@ export const photos = {
   decoctionRoom: 'decoction-room',
   /** 조제탕전실 명패 */
   decoctionSign: 'decoction-sign',
+  /** 조제탕전실 명패와 안을 볼 수 있는 창 */
+  decoctionWindow: 'decoction-window',
   decoctionWeighing: 'decoction-weighing',
   decoctionBrewing: 'decoction-brewing',
   decoctionPacked: 'decoction-packed',
