@@ -24,17 +24,10 @@ const doctors = [
     photo: img(photos.kimEunmi),
     file: photos.kimEunmi,
     body: `보건복지부 한방내과 전문의로, 한의원 및 한방병원에서 ${clinic.leadDoctorYears} 근무했습니다. 입원환자를 대상으로 한 한약의 안전성 평가 다기관 임상연구에 시험담당자로 참여했습니다.`,
+    // 홈에서는 네 줄까지만. 열두 줄 전부는 /doctors/ 에 있습니다.
     points: [
       '대전대학교 한의예과 · 한의학과 졸업',
-      '청연한방병원 일반수련의 / 전문수련의',
       '세명대학교 부속 제천한방병원 한방내과 전문수련의',
-      '한국방송통신대학교 경영대학원 석사 (테크노경영 전공)',
-      '前 대구 이웃집한의원 진료원장',
-      '前 부산 경희림다한의원 진료원장',
-      '네이버 지식iN 상담 한의사',
-      '통증치료사관학교 8기 수료',
-      '맞춤형 화장품 조제관리사',
-      '부산광역시 한의사회 홍보위원',
       '대한한방내과학회 회원',
       '대한여한의사회 기획이사',
     ],
@@ -51,14 +44,8 @@ const doctors = [
     body: '근골격계 초음파와 추나를 함께 봅니다. 어깨·목·허리·무릎처럼 아픈 자리가 분명한 경우, 초음파로 해당 부위를 확인한 뒤 침·약침·도침·추나 가운데 무엇이 필요한지 정합니다.',
     points: [
       '대전대학교 청주한방병원 일반수련의 수료',
-      '前 명작한의원 진료원장',
-      '前 분당삼성한의원 진료원장',
-      '前 이현한방병원 진료원장',
       '척추신경추나의학회 정회원',
-      '대한한방비만학회 인증 한의사',
-      '시리악스 정형의학회 KMD 과정 수료',
       '미국근골격계초음파사 (RMSK)',
-      'TBT 턱관절균형요법 전문과정 수료',
       '대한스포츠한의학회 팀닥터 수료',
     ],
     note: null,
@@ -72,6 +59,10 @@ const acuPhoto = img(photos.careAcupuncture);
 // 원내 혈액검사 장비. /autonomic/ 과 /menopause/ 에 이미 글로 적혀 있는
 // 검사라 사진이 그 설명을 뒷받침합니다.
 const bloodPhoto = img(photos.careBloodtest);
+// ④ 화면 끝까지 가는 사진을 세 번으로 늘립니다. 아래 두 장은 둘러보기
+//    격자에서 빼고 큰 사진으로 돌렸습니다.
+const hallPhoto = img(photos.roomHallway);
+const signPhoto = img(photos.decoctionSign);
 // ⚠ public/images/ultrasound-*.webp 네 장은 초음파 화면이 아니라 「어깨 관절」
 //    같은 글자가 박힌 홍보용 썸네일입니다(img.ts 에 등록돼 있지도 않습니다).
 //    임상 화면처럼 보여 주면 사실과 달라 쓰지 않습니다. 실제 초음파 화면을
@@ -90,7 +81,6 @@ const rooms = [
   slot(photos.roomEntrance, '입구와 진료시간 안내'),
   slot(photos.roomSign, '시호한의원 간판'),
   slot(photos.roomReceptionDesk, '접수 데스크'),
-  slot(photos.roomHallway, '대기 공간'),
   slot(photos.roomConsultDesk, '진료실 전경'),
   slot(photos.roomConsultEntry, '진료실 입구에서 본 책상과 서가'),
   slot(photos.roomAcupuncture, '침 치료실'),
@@ -101,7 +91,6 @@ const rooms = [
 
 // 원내 탕전실 — 아래 조제 현황 띠와 짝이 되는 사진입니다.
 const decoctions = [
-  slot(photos.decoctionSign, '조제탕전실 명패'),
   slot(photos.decoctionWindow, '밖에서 안을 볼 수 있는 창'),
   slot(photos.decoctionBrewing, '탕전기'),
   slot(photos.decoctionWeighing, '약재를 계량하는 모습'),
@@ -184,7 +173,7 @@ const fields = [
   )}
 
   {/* ── 2. 주요 진료 네 분야 — 좌우 교차 ───────────────── */}
-  <section class="fields">
+  <section class="fields wide-out">
     <p class="sec-label">주요 진료</p>
     <h2 class="sec-h">어떤 진료를 찾으시나요?</h2>
     {fields.map((f, i) => (
@@ -224,7 +213,7 @@ const fields = [
   </section>
 
   {/* ── 3. 의료진 — 두 원장을 같은 무게로 ────────────── */}
-  <section class="band-soft">
+  <section class="band-soft wide-out">
     <p class="sec-label">의료진</p>
     <h2 class="sec-h">어떤 한의사가 진료하나요?</h2>
     <p class="wide-lead">
@@ -260,6 +249,12 @@ const fields = [
     </p>
   </section>
 
+  {hallPhoto && (
+    <figure class="bleed">
+      <img src={hallPhoto} alt="시호한의원 대기 공간" width="2000" height="1333" loading="lazy" />
+    </figure>
+  )}
+
   {/* ── 4. 원내에서 직접 확인합니다 ─────────────────────── */}
   <section class="sec-wide">
     <p class="sec-label">원내 확인</p>
@@ -291,7 +286,7 @@ const fields = [
   </section>
 
   {/* ── 4-2. 원내 둘러보기 — 참고 사이트의 썸네일 줄 ───── */}
-  <section class="sec-wide">
+  <section class="sec-wide wide-out">
     <p class="sec-label">원내 둘러보기</p>
     <h2 class="sec-h">한의원은 어떻게 생겼나요?</h2>
     <p class="wide-lead">
@@ -308,8 +303,20 @@ const fields = [
     </div>
   </section>
 
+  {signPhoto && (
+    <figure class="bleed">
+      <img
+        src={signPhoto}
+        alt="시호한의원 조제탕전실 명패"
+        width="2000"
+        height="1333"
+        loading="lazy"
+      />
+    </figure>
+  )}
+
   {/* ── 4-3. 원내 탕전실 ───────────────────────────────── */}
-  <section class="sec-wide">
+  <section class="sec-wide wide-out">
     <p class="sec-label">원내 탕전실</p>
     <h2 class="sec-h">한약은 어디에서 조제하나요?</h2>
     <p class="wide-lead">
@@ -365,7 +372,7 @@ const fields = [
 
   {/* ── 6. 한약 두 가지 ────────────────────────────────
       공진단과 보폐고는 클리닉이 아니라 한약이라 지금 홈과 같이 따로 둡니다.
-      전용 페이지로 가는 유일한 홈 링크라 시안에서도 빠뜨리지 않습니다. */}
+      전용 페이지로 가는 유일한 홈 링크라 빠뜨리지 않습니다. */}
   <section class="sec-wide herbs">
     <p class="sec-label">원내 조제 한약</p>
     <div class="herb-grid">
@@ -412,6 +419,14 @@ const fields = [
   </section>
 
   <style>
+    /* ① 글은 읽기 좋은 폭(52rem)을 그대로 두고, 사진이 주인공인 칸만
+       76rem 까지 넓힙니다. main 바깥으로 나갔다가 안쪽 여백으로 다시
+       가둬 두는 방식이라 가로 스크롤이 생기지 않습니다. */
+    .wide-out {
+      margin-inline: calc(50% - 50vw);
+      padding-inline: max(var(--pad), calc(50vw - 38rem));
+    }
+
     /* 1. 첫 화면 — 가운데 정렬, 넓은 여백, 카드 없음 */
     .opener { max-width: 40rem; margin: 2.5rem auto 3rem; text-align: center; }
     .opener h1 {
@@ -457,7 +472,7 @@ const fields = [
     .herbs { margin-bottom: 4rem; }
     .herb-grid { display: grid; gap: 2.5rem; }
     .herb p { color: var(--ink-soft); line-height: 1.9; margin: 0 0 0.9rem; }
-    .fields { margin: 0 0 4.5rem; }
+    .fields { margin-block: 0 4.5rem; }
     .field { display: grid; gap: 1.5rem; margin: 0 0 3.5rem; align-items: center; }
     /* 아직 사진이 없는 분야. 빈 자리를 두지 않고 글만 한 칸으로 둡니다. */
     .field.text-only {
@@ -483,10 +498,13 @@ const fields = [
     .rest { color: var(--ink-soft); line-height: 1.9; max-width: var(--read); }
 
     /* 3. 의료진 */
+    /* ② 바탕색을 사이트 공통 색(--sunk)으로 맞춥니다. 크림색(#faf7f0)과
+       페이지 바탕(#f6f8f4)이 각각 따뜻한 색·차가운 색이라 섞이면
+       의도한 대비가 아니라 어긋난 것처럼 보였습니다. */
     .band-soft {
-      margin: 0 calc(50% - 50vw) 4.5rem;
-      padding: 3.5rem calc(50vw - 50% + var(--pad));
-      background: #faf7f0;
+      margin-block: 0 4.5rem;
+      padding-block: 3.5rem;
+      background: var(--sunk);
     }
     .doctor {
       /* 약력이 열 줄이라 글이 사진보다 깁니다. 가운데 정렬하면 사진 위에
@@ -507,7 +525,7 @@ const fields = [
       font-size: 0.88rem; font-weight: 600; font-style: normal;
       letter-spacing: 0.02em; color: var(--accent);
     }
-    .doctor-text p { color: var(--ink-soft); line-height: 1.9; margin: 0 0 1rem; }
+    .doctor-text p { color: var(--ink-soft); line-height: 1.9; margin: 0 0 1rem; max-width: var(--read); }
     .points { margin: 0; padding: 0; list-style: none; }
     .points li {
       position: relative; padding-left: 0.85rem;
@@ -535,7 +553,7 @@ const fields = [
       font-size: 0.84rem; color: var(--ink-soft);
     }
     /* 4. 원내 확인 */
-    .sec-wide { margin: 0 0 4.5rem; }
+    .sec-wide { margin-block: 0 4.5rem; }
     .wide-lead { color: var(--ink-soft); line-height: 1.9; max-width: var(--read); margin: 0 0 1.5rem; }
     /* 세로 사진 한 장을 본문 폭 안에서 적당한 크기로 */
     .wide-fig { margin: 1.5rem 0 0; }
@@ -564,10 +582,11 @@ const fields = [
       .field { grid-template-columns: 1fr 1fr; gap: 3rem; }
       .field.text-only { grid-template-columns: 1fr; }
       .field.flip .field-media { order: 2; }
-      .doctor { grid-template-columns: 0.72fr 1.28fr; gap: 3rem; }
-      /* order 만 바꾸면 사진이 넓은 칸으로 가 두 원장 사진 크기가 달라집니다
-         (269px 대 479px 이었습니다). 칸 너비도 같이 뒤집습니다. */
-      .doctor.flip { grid-template-columns: 1.28fr 0.72fr; }
+      /* 칸을 비율(fr)로 주면 영역이 넓어질수록 사진만 커져서, 글 330px
+         옆에 사진 596px 이 서 있었습니다. 사진 폭을 고정합니다. */
+      .doctor { grid-template-columns: 17rem 1fr; gap: 3.5rem; }
+      /* order 만 바꾸면 사진이 넓은 칸으로 갑니다. 칸 너비도 같이 뒤집습니다. */
+      .doctor.flip { grid-template-columns: 1fr 17rem; }
       .doctor.flip .doctor-media { order: 2; }
       .thumbs { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
       .visit { grid-template-columns: 1fr 1fr; gap: 4rem; }
