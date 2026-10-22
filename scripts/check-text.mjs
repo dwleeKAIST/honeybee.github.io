@@ -222,7 +222,10 @@ for (const f of files) {
   if (!t) say('<title> 이 없습니다');
   else {
     if ([...t].length > TITLE_MAX) say(`<title> ${[...t].length}자 (${TITLE_MAX}자 이내) — ${t}`);
-    if (titles.has(t)) say(`<title> 이 ${titles.get(t)} 와 같습니다 — ${t}`);
+    // /preview/ 는 운영 중인 쪽을 그대로 베껴 비교하는 시안이라 제목이
+    // 겹치는 것이 정상입니다. noindex 이고 sitemap 에도 없습니다.
+    if (titles.has(t) && !url.startsWith('/preview/'))
+      say(`<title> 이 ${titles.get(t)} 와 같습니다 — ${t}`);
     else titles.set(t, url);
   }
 
@@ -234,7 +237,8 @@ for (const f of files) {
   const heads = [...html.matchAll(/<h1[^>]*>([\s\S]*?)<\/h1>/g)].map((m) => plain(m[1]));
   if (heads.length !== 1) say(`<h1> 이 ${heads.length}개입니다 (1개여야 합니다)`);
   for (const h of heads) {
-    if (h1s.has(h)) say(`<h1> 이 ${h1s.get(h)} 와 같습니다 — ${h}`);
+    if (h1s.has(h) && !url.startsWith('/preview/'))
+      say(`<h1> 이 ${h1s.get(h)} 와 같습니다 — ${h}`);
     else h1s.set(h, url);
   }
 }
