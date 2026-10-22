@@ -121,6 +121,10 @@ export const photos = {
   careHighfreq: 'care-highfreq',
   /** 메가약침 주입 장치 — 소화 */
   careMegayakchim: 'care-megayakchim',
+  /** 복부에 침을 놓는 장면. 얼굴도, 알아볼 만한 신체 특징도 없습니다 */
+  careAcupuncture: 'care-acupuncture',
+  /** 원내 혈액검사 장비와 측정항목 안내 — 자율신경 · 갱년기 */
+  careBloodtest: 'care-bloodtest',
   /** 복부 초음파로 자궁을 확인하는 장면 — 월경통 */
   /**
    * ⚠ 원본 사진에는 기기 옆에 수리기사 명함(이름·휴대전화·개인 이메일)이
