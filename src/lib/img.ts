@@ -91,8 +91,10 @@ export const photos = {
   roomChuna: 'room-chuna',
   /** 침 치료실 (커튼으로 나뉜 침대) — 통증 · 교통사고 */
   roomAcupuncture: 'room-acupuncture',
-  /** 복도 — 오시는 길 */
+  /** 대기 공간 (긴 벤치가 있는 안쪽) — 홈 원내 둘러보기 */
   roomHallway: 'room-hallway',
+  /** 건물 층 복도에서 본 입구 — 홈 원내 둘러보기 */
+  roomCorridor: 'room-corridor',
   /** 세면대 — 오시는 길 */
   roomWashstand: 'room-washstand',
   /** 진료실 전경 (책상·서가·상담용 스툴) — 오시는 길, 홈 원내 둘러보기 */
@@ -135,6 +137,8 @@ export const photos = {
   decoctionRoom: 'decoction-room',
   /** 조제탕전실 명패 */
   decoctionSign: 'decoction-sign',
+  /** 조제탕전실 명패와 안을 볼 수 있는 창 */
+  decoctionWindow: 'decoction-window',
   decoctionWeighing: 'decoction-weighing',
   decoctionBrewing: 'decoction-brewing',
   decoctionPacked: 'decoction-packed',

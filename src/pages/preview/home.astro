@@ -88,22 +88,25 @@ function slot(name: string, what: string, ratio: string) {
 
 // 원내 둘러보기 — 참고 사이트처럼 작은 사진을 여러 장 늘어놓습니다.
 const rooms = [
-  slot(photos.roomEntrance, '층 복도에서 본 입구와 간판', '4:3'),
-  slot(photos.roomReceptionDesk, '접수 데스크와 대기 공간', '4:3'),
+  slot(photos.roomCorridor, '건물 복도에서 본 입구', '4:3'),
+  slot(photos.roomEntrance, '입구와 진료시간 안내', '4:3'),
+  slot(photos.roomSign, '시호한의원 간판', '4:3'),
+  slot(photos.roomReceptionDesk, '접수 데스크', '4:3'),
+  slot(photos.roomHallway, '대기 공간', '4:3'),
   slot(photos.roomConsultDesk, '진료실 전경', '4:3'),
   slot(photos.roomConsultEntry, '진료실 입구에서 본 책상과 서가', '4:3'),
   slot(photos.roomAcupuncture, '침 치료실', '4:3'),
   slot(photos.roomChuna, '추나 치료실', '4:3'),
   slot(photos.roomInbody, '인바디와 신장계가 있는 검사 공간', '4:3'),
-  slot(photos.roomHallway, '복도', '4:3'),
   slot(photos.roomWashstand, '세면대', '4:3'),
 ];
 
 // 원내 탕전실 — 아래 조제 현황 띠와 짝이 되는 사진입니다.
 const decoctions = [
   slot(photos.decoctionSign, '조제탕전실 명패', '4:3'),
-  slot(photos.decoctionWeighing, '약재를 계량하는 모습', '4:3'),
+  slot(photos.decoctionWindow, '밖에서 안을 볼 수 있는 창', '4:3'),
   slot(photos.decoctionBrewing, '탕전기', '4:3'),
+  slot(photos.decoctionWeighing, '약재를 계량하는 모습', '4:3'),
   slot(photos.decoctionPacked, '포장된 한약', '4:3'),
 ];
 
