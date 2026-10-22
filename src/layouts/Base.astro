@@ -335,10 +335,15 @@ const isCurrent = (href: string) =>
         border-bottom-color: var(--accent);
       }
 
+      /* 가로 스크롤은 여기서 막습니다. main 에 걸면 .band 나 홈의 풀블리드
+         사진이 글 칸 너비에서 잘려 나갑니다(1280px 화면에서 198~1082px).
+         실제로 그동안 진료시간·예약과 문의의 회색 띠가 화면 끝까지
+         칠해지지 않고 있었습니다. */
+      html { overflow-x: clip; }
+
       main {
         max-width: var(--w); margin: 0 auto;
         padding: 2.75rem var(--pad) 5rem;
-        overflow-x: clip; /* .band 풀블리드가 가로 스크롤을 만들지 않도록 */
       }
 
       /* ── 공용 텍스트 ──────────────────────────────────────── */

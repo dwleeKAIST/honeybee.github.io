@@ -4,140 +4,398 @@ import { clinic } from '../data/clinic';
 import { img, photos } from '../lib/img';
 import { getCollection } from 'astro:content';
 import PromoBanner from '../components/PromoBanner.astro';
+
 const treatments = (await getCollection('treatments')).sort(
   (a, b) => a.data.order - b.data.order,
 );
 
-// 클리닉 카드. 앞의 세 개(수험생·비염·월경통)는 이번에 힘을 싣기로 한
-// 진료 영역이라 위로 올렸습니다. 그다음이 통증이며, 원장이 주로 보는
-// 진료 순은 그 아래부터입니다.
-const heroPhoto = img(photos.together);
+// 실제로 있는 사진만 씁니다. 파일이 없으면 img() 가 null 을 돌려주고
+// 그 자리는 아예 렌더되지 않습니다. 사진을 올리면 자동으로 들어갑니다.
+const heroPhoto = img(photos.consult);
+const kimPhoto = img(photos.kimEunmi);
 
-const clinics = [
+// 두 원장. 이력과 학회는 /doctors/ 에 올라가 있는 내용을 그대로 가져왔습니다.
+// 홈에는 길게 늘어놓지 않고 각 네 줄까지만 보여 주고 나머지는 링크로 넘깁니다.
+const doctors = [
+  {
+    name: '김은미',
+    role: '대표원장',
+    credential: '한방내과 전문의 (보건복지부)',
+    photo: img(photos.kimEunmi),
+    file: photos.kimEunmi,
+    body: `보건복지부 한방내과 전문의로, 한의원 및 한방병원에서 ${clinic.leadDoctorYears} 근무했습니다. 입원환자를 대상으로 한 한약의 안전성 평가 다기관 임상연구에 시험담당자로 참여했습니다.`,
+    points: [
+      '대전대학교 한의예과 · 한의학과 졸업',
+      '청연한방병원 일반수련의 / 전문수련의',
+      '세명대학교 부속 제천한방병원 한방내과 전문수련의',
+      '한국방송통신대학교 경영대학원 석사 (테크노경영 전공)',
+      '前 대구 이웃집한의원 진료원장',
+      '前 부산 경희림다한의원 진료원장',
+      '네이버 지식iN 상담 한의사',
+      '통증치료사관학교 8기 수료',
+      '맞춤형 화장품 조제관리사',
+      '부산광역시 한의사회 홍보위원',
+      '대한한방내과학회 회원',
+      '대한여한의사회 기획이사',
+    ],
+    // 증례보고와 임상연구는 홈에 제목까지 늘어놓지 않고 편수만 적습니다.
+    // 전체 목록은 /doctors/ 에 있습니다.
+    note: '증례보고와 임상연구 11편에 참여했습니다.',
+  },
+  {
+    name: '박종규',
+    role: '진료원장',
+    credential: '근골격계 초음파 · 추나',
+    photo: img(photos.parkJonggyu),
+    file: photos.parkJonggyu,
+    body: '근골격계 초음파와 추나를 함께 봅니다. 어깨·목·허리·무릎처럼 아픈 자리가 분명한 경우, 초음파로 해당 부위를 확인한 뒤 침·약침·도침·추나 가운데 무엇이 필요한지 정합니다.',
+    points: [
+      '대전대학교 청주한방병원 일반수련의 수료',
+      '前 명작한의원 진료원장',
+      '前 분당삼성한의원 진료원장',
+      '前 이현한방병원 진료원장',
+      '척추신경추나의학회 정회원',
+      '대한한방비만학회 인증 한의사',
+      '시리악스 정형의학회 KMD 과정 수료',
+      '미국근골격계초음파사 (RMSK)',
+      'TBT 턱관절균형요법 전문과정 수료',
+      '대한스포츠한의학회 팀닥터 수료',
+    ],
+    note: null,
+  },
+];
+// 복부 초음파 검사 장면. /menstrual-pain/ 에 이미 올라가 있는 실제 사진이고
+// 환자 얼굴이 나오지 않으며 화면에 환자 이름도 없습니다.
+const gynPhoto = img(photos.careUltrasoundGyn);
+// 복부에 침을 놓는 장면. 얼굴도 알아볼 만한 특징도 찍히지 않았습니다.
+const acuPhoto = img(photos.careAcupuncture);
+// 원내 혈액검사 장비. /autonomic/ 과 /menopause/ 에 이미 글로 적혀 있는
+// 검사라 사진이 그 설명을 뒷받침합니다.
+const bloodPhoto = img(photos.careBloodtest);
+// ⚠ public/images/ultrasound-*.webp 네 장은 초음파 화면이 아니라 「어깨 관절」
+//    같은 글자가 박힌 홍보용 썸네일입니다(img.ts 에 등록돼 있지도 않습니다).
+//    임상 화면처럼 보여 주면 사실과 달라 쓰지 않습니다. 실제 초음파 화면을
+//    받으면 그때 넣으세요.
+
+// 사진 자리는 모두 img.ts 의 이름을 거칩니다. public/images/ 에 그 이름으로
+// 파일을 올리면 자동으로 들어가고, 없으면 그 칸이 빠집니다.
+// AI 로 만든 이미지는 쓰지 않습니다.
+function slot(name: string, what: string) {
+  return { src: img(name), what };
+}
+
+// 원내 둘러보기 — 참고 사이트처럼 작은 사진을 여러 장 늘어놓습니다.
+const rooms = [
+  slot(photos.roomCorridor, '건물 복도에서 본 입구'),
+  slot(photos.roomEntrance, '입구와 진료시간 안내'),
+  slot(photos.roomSign, '시호한의원 간판'),
+  slot(photos.roomReceptionDesk, '접수 데스크'),
+  slot(photos.roomHallway, '대기 공간'),
+  slot(photos.roomConsultDesk, '진료실 전경'),
+  slot(photos.roomConsultEntry, '진료실 입구에서 본 책상과 서가'),
+  slot(photos.roomAcupuncture, '침 치료실'),
+  slot(photos.roomChuna, '추나 치료실'),
+  slot(photos.roomInbody, '인바디와 신장계가 있는 검사 공간'),
+  slot(photos.roomWashstand, '세면대'),
+];
+
+// 원내 탕전실 — 아래 조제 현황 띠와 짝이 되는 사진입니다.
+const decoctions = [
+  slot(photos.decoctionSign, '조제탕전실 명패'),
+  slot(photos.decoctionWindow, '밖에서 안을 볼 수 있는 창'),
+  slot(photos.decoctionBrewing, '탕전기'),
+  slot(photos.decoctionWeighing, '약재를 계량하는 모습'),
+  slot(photos.decoctionPacked, '포장된 한약'),
+];
+
+
+// 네 분야 아래에 조용히 두는 나머지 일곱 진료. 카드로 깔지는 않지만
+// 링크는 지금 홈과 똑같이 유지합니다.
+const rest = [
+  { href: '/autonomic/', t: '자율신경·번아웃' },
+  { href: '/digestion/', t: '속편안 클리닉' },
+  { href: '/pediatrics/', t: '소아 진료' },
+  { href: '/posture/', t: '체형교정' },
+  { href: '/menopause/', t: '갱년기' },
+  { href: '/car-accident/', t: '교통사고 한방치료' },
+  { href: '/skin-care/', t: '피부미용' },
+];
+
+const fields = [
   {
     href: '/student-care/',
-    t: '수험생 클리닉',
-    d: '비염, 소화, 수면과 체력, 통증. 공부를 방해하는 문제부터 살펴봅니다.',
+    kicker: '수험생',
+    t: '채우는 것보다 먼저, 공부를 방해하는 것부터',
+    body: '비염으로 밤에 깨고, 식후에 처지고, 오래 앉아 있기 힘든 상태라면 보약이 첫 번째 답이 아닐 수 있습니다. 무엇이 가장 방해가 되는지부터 확인합니다.',
+    photo: null,
   },
   {
     href: '/rhinitis/',
-    t: '코편안 클리닉',
-    d: '코막힘, 콧물, 알레르기비염, 코골이. 비내시경으로 코 안을 직접 확인합니다.',
+    kicker: '코편안 클리닉 · 비염',
+    t: '코 안을 보고 나서 정합니다',
+    body: '같은 코막힘이라도 점막이 부은 경우와 콧물이 고인 경우, 공간이 좁은 경우가 다릅니다. 비내시경으로 확인한 화면을 함께 보면서 설명드립니다.',
+    photo: null,
   },
   {
     href: '/menstrual-pain/',
-    t: '월경통 · PMS',
-    d: '매달 반복되는 월경 통증과 월경 전 증후군. 첩약 건강보험이 적용됩니다.',
+    kicker: '월경통 · PMS',
+    t: '매달 반복된다면 참는 것을 목표로 삼지 않습니다',
+    body: '복부 초음파로 확인 가능한 범위를 살펴본 뒤 한약, 침, 뜸, 약침, 온열치료 가운데 지금 필요한 것을 정합니다. 월경 중에도 검사할 수 있습니다.',
+    photo: gynPhoto,
+    photoAlt:
+      '시호한의원에서 복부 초음파로 자궁을 확인하는 모습. 화면에 초음파 영상이 보입니다',
+    photoW: 1600,
+    photoH: 1200,
   },
   {
     href: '/pain/',
-    t: '관절 · 근육 통증',
-    d: '어깨, 목·허리, 무릎, 손목, 발. 초음파로 부위를 확인하고 침·약침·도침·추나로 진료합니다.',
-  },
-  {
-    href: '/pediatrics/',
-    t: '소아 진료',
-    d: '아이의 비염, 잦은 감기, 소화와 식욕, 수면, 키 성장. 성장판은 초음파로 확인합니다.',
-  },
-  {
-    href: '/autonomic/',
-    t: '자율신경 · 번아웃',
-    d: '불면, 어지럼, 두근거림, 이명, 공황·불안. 검사에서 이상이 없는데 불편이 이어지는 경우.',
-  },
-  {
-    href: '/digestion/',
-    t: '속편안 클리닉',
-    d: '기능성 소화불량, 역류 증상, 잘 체함, 과민한 장. 온열순환치료와 첩약 건강보험.',
-  },
-  {
-    href: '/posture/',
-    t: '체형교정',
-    d: '거북목, 골반 불균형, 턱관절. 아이밸런스로 체형을 측정하고 추나로 접근합니다.',
-  },
-  {
-    href: '/menopause/',
-    t: '갱년기 클리닉',
-    d: '안면홍조, 불면, 감정 기복. 요실금 등 비뇨생식기 증상과 남성 갱년기도 함께.',
-  },
-  {
-    href: '/car-accident/',
-    t: '교통사고 한방치료',
-    d: '자동차보험 접수부터 진단서 발급까지. 평일 야간까지 통원하실 수 있습니다.',
-  },
-  {
-    href: '/skin-care/',
-    t: '피부미용',
-    d: '리프팅, 색소 치료, 스킨부스터, 필링과 안면매선. 원내 장비를 정리해 두었습니다.',
+    kicker: '관절 · 근육 통증',
+    t: '아픈 자리를 직접 보고 치료합니다',
+    body: '어깨, 목, 허리, 무릎, 손목, 발. 필요한 경우 초음파로 해당 부위를 확인한 뒤 침·약침·도침·추나 가운데 무엇이 필요한지 정합니다.',
+    photo: acuPhoto,
+    photoAlt: '시호한의원에서 복부에 침을 놓는 모습',
+    photoW: 2000,
+    photoH: 1500,
   },
 ];
 ---
 
 <Base title={clinic.homeTitle} description={clinic.metaDescription}>
   <PromoBanner />
-  <section class={`hero home-hero${heroPhoto ? ' has-photo' : ''}`}>
-    <div class="hero-text">
-      <p class="eyebrow">경기 화성시 동탄구 목동 · 통증과 내과질환을 함께 보는 한의원</p>
-      <h1>몸이 보내는 신호를 읽고, <br class="br-wide" />회복의 방향을 찾습니다.</h1>
-      <p class="lead">
-        한방내과 전문의를 포함한 두 한의사가 통증부터 자율신경, 비염과 소화
-        문제까지 함께 살핍니다.
-      </p>
-      <p class="lead lead-soft">
-        증상이 가라앉은 뒤에도 <br />같은 문제가 반복되는지를 함께 봅니다.
-      </p>
-      <p class="cta-row">
-        <a class="cta" href={clinic.links.naverBooking}>네이버 예약</a>
-        <a class="cta ghost" href={`tel:${clinic.phone}`}>전화 {clinic.phone}</a>
-      </p>
-      <p class="cta-sub">
-        <a href={clinic.links.kakaoChannel}>카카오톡 문의</a> · <a href="/contact/">오시는 길</a> · <a href="/doctors/">의료진 소개</a>
-      </p>
-    </div>
-    {heroPhoto && (
-      <img
-        class="hero-photo"
-        src={heroPhoto}
-        alt="시호한의원 박종규 진료원장과 김은미 대표원장 — 한의사 2인 진료"
-        loading="eager"
-      />
-    )}
-  </section>
 
-  <section class="sec">
-    <h2>어떤 진료를 찾으시나요?</h2>
-    <div class="cards home-cards">
-      {clinics.map((c) => (
-        <a class="card link-card" href={c.href}>
-          <strong>{c.t}</strong>
-          <span>{c.d}</span>
-        </a>
-      ))}
-    </div>
-  </section>
-
-  <section class="sec band">
-    <h2>진료시간은 어떻게 되나요?</h2>
-    <ul class="hours">
-      {clinic.hours.map((h) => (
-        <li>
-          <strong>{h.days}</strong>
-          <span>
-            {h.open}–{h.close}
-            {h.lunch && ` · 점심 ${h.lunch}`}
-            {h.note && ` · ${h.note}`}
-          </span>
-        </li>
-      ))}
-      <li><strong>일요일</strong><span>휴진</span></li>
-    </ul>
-    <p class="note">
-      {clinic.closedDays}. {clinic.lastReception} 원장별 진료 요일은{' '}
-      <a href="/doctors/#schedule">의료진 소개</a>에서 확인하실 수 있습니다.
+  {/* ── 1. 첫 화면 ─────────────────────────────────────── */}
+  <section class="opener">
+    <p class="kicker">경기 화성시 동탄구 목동</p>
+    <h1>진료실에서 무엇을 확인하는지 <br />먼저 말씀드립니다.</h1>
+    <p class="opener-lead">
+      한방내과 전문의를 포함한 두 한의사가 통증부터 자율신경, 비염과 소화 문제까지
+      함께 살핍니다.
+    </p>
+    <p class="opener-cta">
+      <a class="cta" href={clinic.links.naverBooking}>네이버 예약</a>
+      <a class="cta ghost" href={`tel:${clinic.phone}`}>전화 {clinic.phone}</a>
     </p>
   </section>
 
-  <section class="sec">
-    <h2>치료 항목은 무엇이 있나요?</h2>
+  {heroPhoto && (
+    <figure class="bleed">
+      <img src={heroPhoto} alt="시호한의원 진료실에서 상담하는 모습" width="2000" height="1500" loading="eager" />
+    </figure>
+  )}
+
+  {/* ── 2. 주요 진료 네 분야 — 좌우 교차 ───────────────── */}
+  <section class="fields">
+    <p class="sec-label">주요 진료</p>
+    <h2 class="sec-h">어떤 진료를 찾으시나요?</h2>
+    {fields.map((f, i) => (
+      <article class={`field${f.photo ? (i % 2 ? ' flip' : '') : ' text-only'}`}>
+        {f.photo && (
+          <div class="field-media">
+            <img
+              src={f.photo}
+              alt={f.photoAlt}
+              width={f.photoW}
+              height={f.photoH}
+              loading="lazy"
+            />
+          </div>
+        )}
+        <div class="field-text">
+          <p class="kicker">{f.kicker}</p>
+          <h3>{f.t}</h3>
+          <p>{f.body}</p>
+          <p class="more"><a href={f.href}>자세히 보기</a></p>
+        </div>
+      </article>
+    ))}
+    {/* 카드로 깔지 않되 링크는 하나도 줄이지 않습니다. 지금 홈의 11개 카드
+        가운데 위 네 개를 제외한 일곱 개가 여기 그대로 들어 있습니다. */}
+    <p class="rest">
+      이 밖에{' '}
+      {rest.map((r, i) => (
+        <>
+          {i > 0 && ', '}
+          <a href={r.href}>{r.t}</a>
+        </>
+      ))}
+      도 진료합니다. <a href="/treatments/">전체 진료 안내</a>에 정리해
+      두었습니다.
+    </p>
+  </section>
+
+  {/* ── 3. 의료진 — 두 원장을 같은 무게로 ────────────── */}
+  <section class="band-soft">
+    <p class="sec-label">의료진</p>
+    <h2 class="sec-h">어떤 한의사가 진료하나요?</h2>
+    <p class="wide-lead">
+      한 분의 환자를 두 의료진이 함께 살펴보는 협진 방식으로 진료의 연속성을
+      유지합니다.
+    </p>
+    {doctors.map((d, i) => (
+      <article class={`doctor${i % 2 ? ' flip' : ''}`}>
+        <div class="doctor-media">
+          {d.photo && (
+            <img
+              src={d.photo}
+              alt={`시호한의원 ${d.name} ${d.role}`}
+              loading="lazy"
+            />
+          )}
+        </div>
+        <div class="doctor-text">
+          <h3>
+            {d.name} {d.role}
+            {d.credential && <em>{d.credential}</em>}
+          </h3>
+          <p>{d.body}</p>
+          <ul class="points">
+            {d.points.map((t) => <li>{t}</li>)}
+          </ul>
+          {d.note && <p class="papers">{d.note}</p>}
+        </div>
+      </article>
+    ))}
+    <p class="more center">
+      <a href="/doctors/">두 원장의 이력과 학회 활동, 진료 요일</a>
+    </p>
+  </section>
+
+  {/* ── 4. 원내에서 직접 확인합니다 ─────────────────────── */}
+  <section class="sec-wide">
+    <p class="sec-label">원내 확인</p>
+    <h2 class="sec-h">원내에서 무엇을 직접 확인하나요?</h2>
+    <p class="wide-lead">
+      말로만 설명하기보다 화면을 함께 보면서 이야기하는 편이 서로 이해가
+      빠릅니다. 초음파로 확인한 부위를 환자분과 같이 봅니다.
+    </p>
+    <p class="rest">
+      비염은 비내시경으로, 아이의 키는 초음파 성장판과 인바디로 확인합니다.
+      간기능, 신기능, 당화혈색소, 혈색소, 염증 수치 같은 기본 항목은 원내
+      혈액검사로 확인할 수 있습니다.{' '}
+      <a href="/rhinitis/endoscopy/">비내시경 안내</a> ·{' '}
+      <a href="/pediatrics/">소아 진료 안내</a> ·{' '}
+      <a href="/autonomic/">자율신경 클리닉</a>
+    </p>
+    {bloodPhoto && (
+      <figure class="wide-fig">
+        <img
+          src={bloodPhoto}
+          alt="시호한의원 원내 혈액검사 장비와 측정 항목 안내판"
+          width="1500"
+          height="2000"
+          loading="lazy"
+        />
+        <figcaption>원내에서 진행하는 기본 혈액검사 장비입니다.</figcaption>
+      </figure>
+    )}
+  </section>
+
+  {/* ── 4-2. 원내 둘러보기 — 참고 사이트의 썸네일 줄 ───── */}
+  <section class="sec-wide">
+    <p class="sec-label">원내 둘러보기</p>
+    <h2 class="sec-h">한의원은 어떻게 생겼나요?</h2>
+    <p class="wide-lead">
+      처음 오시는 분이 어디에서 접수하고 어디에서 치료받는지 미리 보실 수
+      있도록 올려 둡니다.
+    </p>
+    <div class="thumbs">
+      {rooms.filter((r) => r.src).map((r) => (
+          <figure class="thumb">
+            <img src={r.src} alt={`시호한의원 ${r.what}`} loading="lazy" />
+            <figcaption>{r.what}</figcaption>
+          </figure>
+      ))}
+    </div>
+  </section>
+
+  {/* ── 4-3. 원내 탕전실 ───────────────────────────────── */}
+  <section class="sec-wide">
+    <p class="sec-label">원내 탕전실</p>
+    <h2 class="sec-h">한약은 어디에서 조제하나요?</h2>
+    <p class="wide-lead">
+      맞춤 한약은 원내 조제탕전실에서 한의사가 직접 조제합니다. 아래 띠에
+      최근 조제 현황이 매일 아침 올라옵니다.
+    </p>
+    <div class="thumbs four-up">
+      {decoctions.filter((r) => r.src).map((r) => (
+          <figure class="thumb">
+            <img src={r.src} alt={`시호한의원 원내 탕전실 — ${r.what}`} loading="lazy" />
+            <figcaption>{r.what}</figcaption>
+          </figure>
+      ))}
+    </div>
+  </section>
+
+  {/* ── 5. 진료시간 · 오시는 길 ────────────────────────── */}
+  <section class="sec-wide visit">
+    <div class="visit-col">
+      <p class="sec-label">진료시간</p>
+      <h2 class="sec-h">진료시간은 어떻게 되나요?</h2>
+      <ul class="hours-plain">
+        {clinic.hours.map((h) => (
+          <li>
+            <span class="d">{h.days}</span>
+            <span class="t">
+              {h.open}–{h.close}
+              {h.lunch && <em>점심 {h.lunch}</em>}
+              {h.note && <em>{h.note}</em>}
+            </span>
+          </li>
+        ))}
+        <li><span class="d">일요일</span><span class="t">휴진</span></li>
+      </ul>
+      <p class="fine">{clinic.closedDays}. {clinic.lastReception}</p>
+    </div>
+    <div class="visit-col">
+      <p class="sec-label">오시는 길</p>
+      <h2 class="sec-h">한의원은 어디에 있나요?</h2>
+      <p>{clinic.address.body}</p>
+      <p class="fine">
+        리더스타워 지하 주차장과 맞은편 공영주차장을 이용하실 수 있습니다.
+        2층에 올라오시면 한의원이 바로 보입니다.
+      </p>
+      <p class="fine">{clinic.firstVisitNote}</p>
+      <p class="more"><a href="/contact/">주차 · 길 안내 자세히</a></p>
+      <p class="opener-cta">
+        <a class="cta" href={clinic.links.naverBooking}>네이버 예약</a>
+        <a class="cta ghost" href={`tel:${clinic.phone}`}>전화 {clinic.phone}</a>
+      </p>
+    </div>
+  </section>
+
+  {/* ── 6. 한약 두 가지 ────────────────────────────────
+      공진단과 보폐고는 클리닉이 아니라 한약이라 지금 홈과 같이 따로 둡니다.
+      전용 페이지로 가는 유일한 홈 링크라 시안에서도 빠뜨리지 않습니다. */}
+  <section class="sec-wide herbs">
+    <p class="sec-label">원내 조제 한약</p>
+    <div class="herb-grid">
+      <div class="herb">
+        <h2 class="sec-h">기력이 떨어졌을 때 — 공진단</h2>
+        <p>
+          쉬어도 피로가 풀리지 않거나 과로 뒤 회복이 더딜 때 상담하는 한약입니다.{' '}
+          <strong>사향원방공진단</strong>과 녹용을 두 배로 담은{' '}
+          <strong>녹용두배공진단</strong>을 원내에서 한의사가 직접 조제합니다.
+          완성품을 그대로 판매하지 않고 진찰을 통해 지금 필요한 처방인지부터
+          확인합니다.
+        </p>
+        <p class="more"><a href="/gongjindan/">동탄 목동 공진단 안내</a></p>
+      </div>
+      <div class="herb">
+        <h2 class="sec-h">환절기 비염·기침이 반복된다면 — 보폐고</h2>
+        <p>
+          감기는 지나갔는데 기침이 남거나, 계절이 바뀔 때마다 콧물과 코막힘이 다시
+          시작되는 경우가 있습니다. 비내시경으로 코 안을 확인한 뒤{' '}
+          <strong>보폐고</strong>, 보험한약, 맞춤 한약 가운데 지금 필요한 것을
+          정합니다. 모든 호흡기 증상에 같은 약을 쓰지 않습니다.
+        </p>
+        <p class="more"><a href="/bopyego/">동탄 보폐고 안내</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec-wide">
+    <p class="sec-label">치료 항목</p>
+    <h2 class="sec-h">치료 항목은 무엇이 있나요?</h2>
     <ul class="plain">
       {treatments.map((t) => (
         <li>
@@ -146,111 +404,175 @@ const clinics = [
         </li>
       ))}
     </ul>
-    <p class="note">
+    <p class="rest">
       건강보험이 적용되는 한약은 <a href="/insurance-herbs/">보험한약 안내</a>에,
       학생의 한약은 <a href="/student-care/herbal-medicine/">수험생 보약 안내</a>에,
       자주 받는 질문은 <a href="/faq/">자주 묻는 질문</a>에 정리해 두었습니다.
     </p>
   </section>
 
-  <!-- 공진단은 클리닉 카드가 아니라 한약이라 별도 블록으로 둡니다.
-       홈에서 전용 페이지로 가는 텍스트 링크 역할도 합니다. -->
-  <section class="sec">
-    <h2>기력이 떨어졌을 때 — 공진단</h2>
-    <p>
-      쉬어도 피로가 풀리지 않거나 과로 뒤 회복이 더딜 때 상담하는 한약입니다.
-      시호한의원은 경기 화성시 동탄구 목동에서 <strong>사향원방공진단</strong>과
-      녹용을 두 배로 담은 <strong>녹용두배공진단</strong>을 운영하며, 두 종류 모두
-      원내에서 한의사가 직접 조제합니다. 완성품을 그대로 판매하지 않고 진찰을 통해
-      지금 필요한 처방인지부터 확인합니다.
-    </p>
-    <p class="note">
-      두 종류의 구성과 선택 기준, 복용법은{' '}
-      <a href="/gongjindan/">동탄 목동 공진단 안내</a>에 정리해 두었습니다.
-    </p>
-  </section>
-
-  <!-- 보폐고도 클리닉이 아니라 한약이라 공진단과 같은 형태의 블록으로 둡니다.
-       메인 히어로의 메시지는 건드리지 않습니다. -->
-  <section class="sec">
-    <h2>환절기 비염·기침이 반복된다면 — 보폐고</h2>
-    <p>
-      감기는 지나갔는데 기침이 남거나, 계절이 바뀔 때마다 콧물과 코막힘이 다시
-      시작되는 경우가 있습니다. 시호한의원은 비내시경으로 코 안을 확인한 뒤{' '}
-      <strong>보폐고</strong>, 보험한약, 맞춤 한약 가운데 지금 필요한 것을
-      정합니다. 모든 호흡기 증상에 같은 약을 쓰지 않습니다.
-    </p>
-    <p class="note">
-      보폐고가 어떤 한약이고 어떤 경우에 처방하는지는{' '}
-      <a href="/bopyego/">동탄 보폐고 안내</a>에, 비염 진료 전반은{' '}
-      <a href="/rhinitis/">코편안 클리닉</a>에 정리해 두었습니다.
-    </p>
-  </section>
-
-  <section class="sec band closing">
-    <h2>예약과 문의</h2>
-    <p>
-      {clinic.address.full}에 있습니다. {clinic.firstVisitNote}
-    </p>
-    <p class="cta-row">
-      <a class="cta" href={clinic.links.naverBooking}>네이버 예약</a>
-      <a class="cta ghost" href={`tel:${clinic.phone}`}>전화 {clinic.phone}</a>
-    </p>
-    <p class="cta-sub">
-      휴진 일정은 <a href={clinic.links.naverBooking}>네이버 예약창</a>에서 확인하실
-      수 있습니다.
-    </p>
-  </section>
-
   <style>
-    .home-hero { padding-bottom: 0.5rem; }
-    .home-hero h1 { font-size: 2.15rem; }
-    .home-hero .lead { max-width: 32rem; }
-    /* 두 문단이 이어지므로 뒤 문단은 한 톤 낮춰 읽는 리듬을 만듭니다. */
-    .home-hero .lead-soft { color: var(--ink-soft); }
-
-    /* 2열로 갈라지는 폭에서는 글 칸이 좁아 제목이 네 줄로 흩어집니다.
-       강제 줄바꿈을 풀고 글자를 한 단계 줄여 두 줄로 앉힙니다. */
-    @media (max-width: 58rem) {
-      .home-hero .br-wide { display: none; }
-      .home-hero h1 { text-wrap: balance; }
+    /* 1. 첫 화면 — 가운데 정렬, 넓은 여백, 카드 없음 */
+    .opener { max-width: 40rem; margin: 2.5rem auto 3rem; text-align: center; }
+    .opener h1 {
+      font-size: clamp(1.9rem, 4.6vw, 3rem);
+      line-height: 1.38; letter-spacing: -0.03em; font-weight: 700;
+      margin: 0 0 1.5rem;
     }
-    @media (min-width: 46rem) and (max-width: 58rem) {
-      .home-hero h1 { font-size: 1.8rem; }
+    .opener-lead {
+      font-size: 1.08rem; line-height: 1.85; color: var(--ink-soft);
+      margin: 0 auto 2rem; max-width: 30rem;
     }
-
-    /* 사진이 있으면 2열, 없으면 텍스트만 그대로 */
-    .home-hero.has-photo { display: grid; gap: 1.75rem; align-items: center; }
-    .hero-photo {
-      display: block; width: 100%; height: auto;
-      border-radius: 10px; background: var(--sunk);
-    }
-    @media (min-width: 46rem) {
-      .home-hero.has-photo { grid-template-columns: 1.05fr 0.95fr; gap: 2.25rem; }
-      .home-hero.has-photo .hero-text { padding-bottom: 0.5rem; }
+    .opener-cta { display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap; margin: 0; }
+    .kicker {
+      margin: 0 0 0.9rem; font-size: 0.76rem; font-weight: 700;
+      letter-spacing: 0.18em; color: var(--accent);
     }
 
-    /* 카드 전체를 링크로 */
-    .link-card { display: block; text-decoration: none; }
-    .link-card strong { text-decoration: none; }
-    .link-card span { color: var(--ink-soft); }
-    .link-card:hover strong { color: var(--accent-ink); }
+    /* 전면 사진 */
+    .bleed {
+      margin: 0 calc(50% - 50vw) 4.5rem; padding: 0;
+      overflow: hidden;
+    }
+    /* 넓게 자르면 사진 오른쪽 끝의 책상 위 물건까지 들어옵니다. 양쪽을 8%씩
+       덜어내 두 사람 쪽으로 화면을 모읍니다. 제대로 찍은 가로 사진이 들어오면
+       이 보정은 지웁니다. */
+    .bleed img {
+      display: block; width: 116%; margin-left: -8%;
+      height: clamp(14rem, 42vh, 30rem); object-fit: cover;
+    }
 
-    /* 진료시간 목록 — clinic.ts에서 생성 */
-    .hours { list-style: none; margin: 1.25rem 0; padding: 0; max-width: var(--read); }
-    .hours li {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0 0.75rem;
-      align-items: baseline;
-      padding: 0.6rem 0;
+    /* 2. 주요 진료 — 좌우 교차 */
+    .sec-label {
+      font-size: 0.8rem; font-weight: 700; letter-spacing: 0.18em;
+      color: var(--accent); margin: 0 0 0.85rem;
+      padding-bottom: 0.7rem; border-bottom: 1px solid var(--line);
+    }
+    /* 작은 라벨은 리듬용이고, 검색엔진이 읽는 제목은 그 아래 질문형 H2 입니다.
+       지금 홈의 「어떤 진료를 찾으시나요?」 같은 제목을 그대로 살립니다. */
+    .sec-h {
+      font-size: clamp(1.25rem, 2.6vw, 1.55rem); font-weight: 700;
+      letter-spacing: -0.02em; margin: 0 0 1.5rem;
+    }
+    .herbs { margin-bottom: 4rem; }
+    .herb-grid { display: grid; gap: 2.5rem; }
+    .herb p { color: var(--ink-soft); line-height: 1.9; margin: 0 0 0.9rem; }
+    .fields { margin: 0 0 4.5rem; }
+    .field { display: grid; gap: 1.5rem; margin: 0 0 3.5rem; align-items: center; }
+    /* 아직 사진이 없는 분야. 빈 자리를 두지 않고 글만 한 칸으로 둡니다. */
+    .field.text-only {
+      max-width: var(--read);
+      padding-left: 1.1rem;
+      border-left: 2px solid var(--accent);
+    }
+    /* height:auto 가 없으면 width/height 속성의 1200·800 이 그대로 고정 높이가
+       됩니다. Base.astro 에 전역 img 규칙이 없어 페이지마다 적어 줘야 합니다. */
+    /* height:auto 가 빠지면 width/height 속성값이 그대로 고정 높이가 되고
+       aspect-ratio 는 무시됩니다. Base.astro 에 전역 img 규칙이 없습니다. */
+    .field-media img {
+      width: 100%; height: auto; display: block;
+      aspect-ratio: 3 / 2; object-fit: cover;
+    }
+    .field h3 {
+      font-size: clamp(1.25rem, 2.6vw, 1.6rem); line-height: 1.45;
+      letter-spacing: -0.02em; margin: 0 0 0.8rem;
+    }
+    .field-text p { color: var(--ink-soft); line-height: 1.9; margin: 0 0 0.9rem; }
+    .more { margin: 0; font-size: 0.95rem; }
+    .more a { font-weight: 600; }
+    .rest { color: var(--ink-soft); line-height: 1.9; max-width: var(--read); }
+
+    /* 3. 의료진 */
+    .band-soft {
+      margin: 0 calc(50% - 50vw) 4.5rem;
+      padding: 3.5rem calc(50vw - 50% + var(--pad));
+      background: #faf7f0;
+    }
+    .doctor {
+      /* 약력이 열 줄이라 글이 사진보다 깁니다. 가운데 정렬하면 사진 위에
+         빈 칸이 생겨서 위를 맞춥니다. */
+      display: grid; gap: 1.5rem; align-items: start;
+      margin: 0 0 3rem; padding: 0 0 3rem;
       border-bottom: 1px solid var(--line-soft);
     }
-    .hours strong { min-width: 5rem; }
-    .hours span { color: var(--ink-soft); font-size: 0.96rem; }
+    .doctor:last-of-type { margin-bottom: 1.5rem; padding-bottom: 0; border-bottom: 0; }
+    .doctor-media img {
+      width: 100%; height: auto; display: block;
+      aspect-ratio: 3 / 4; object-fit: cover; object-position: 50% 20%;
+    }
+    .doctor h3 { font-size: clamp(1.25rem, 2.8vw, 1.5rem); margin: 0 0 0.9rem; }
+    /* 자격은 이름보다 한 톤 작게, 줄을 바꿔서 */
+    .doctor h3 em {
+      display: block; margin-top: 0.35rem;
+      font-size: 0.88rem; font-weight: 600; font-style: normal;
+      letter-spacing: 0.02em; color: var(--accent);
+    }
+    .doctor-text p { color: var(--ink-soft); line-height: 1.9; margin: 0 0 1rem; }
+    .points { margin: 0; padding: 0; list-style: none; }
+    .points li {
+      position: relative; padding-left: 0.85rem;
+      font-size: 0.94rem; line-height: 1.95; color: var(--ink-soft);
+    }
+    .points li::before {
+      content: ''; position: absolute; left: 0; top: 0.9em;
+      width: 4px; height: 4px; border-radius: 50%; background: var(--accent);
+    }
+    .papers { margin: 1rem 0 0; font-size: 0.9rem; color: var(--ink-soft); }
+    .more.center { text-align: center; margin: 0; }
 
-    @media (max-width: 34rem) {
-      .home-hero h1 { font-size: 1.75rem; }
+    /* 원내 사진 썸네일 줄 — 참고 사이트처럼 작게 여러 장 */
+    /* 1fr 은 칸 안의 가장 긴 낱말보다 좁아지지 않습니다. 촬영 안내에 적힌
+       room-consult-entry 같은 파일 이름이 길어 430px 화면에서 22px 가로
+       스크롤이 생겼습니다. minmax(0,1fr) 로 눌러 둡니다. */
+    .thumbs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.7rem; }
+    .thumb { margin: 0; }
+    .thumb img {
+      width: 100%; height: auto; display: block;
+      aspect-ratio: 4 / 3; object-fit: cover;
+    }
+    .thumb figcaption {
+      margin-top: 0.45rem;
+      font-size: 0.84rem; color: var(--ink-soft);
+    }
+    /* 4. 원내 확인 */
+    .sec-wide { margin: 0 0 4.5rem; }
+    .wide-lead { color: var(--ink-soft); line-height: 1.9; max-width: var(--read); margin: 0 0 1.5rem; }
+    /* 세로 사진 한 장을 본문 폭 안에서 적당한 크기로 */
+    .wide-fig { margin: 1.5rem 0 0; }
+    .wide-fig img {
+      display: block; width: 100%; max-width: 22rem; height: auto;
+      aspect-ratio: 4 / 5; object-fit: cover;
+    }
+    .wide-fig figcaption {
+      margin-top: 0.45rem; font-size: 0.84rem; color: var(--ink-soft);
+    }
+
+    /* 5. 진료시간 · 오시는 길 */
+    .visit { display: grid; gap: 2.5rem; }
+    .visit-col p { color: var(--ink-soft); line-height: 1.9; margin: 0 0 0.8rem; }
+    .hours-plain { list-style: none; margin: 0 0 1rem; padding: 0; }
+    .hours-plain li {
+      display: flex; gap: 1rem; padding: 0.65rem 0;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .hours-plain .d { min-width: 4.5rem; font-weight: 600; }
+    .hours-plain .t { color: var(--ink-soft); }
+    .hours-plain em { display: block; font-style: normal; font-size: 0.88rem; }
+    .fine { font-size: 0.92rem; color: var(--ink-soft); }
+
+    @media (min-width: 46rem) {
+      .field { grid-template-columns: 1fr 1fr; gap: 3rem; }
+      .field.text-only { grid-template-columns: 1fr; }
+      .field.flip .field-media { order: 2; }
+      .doctor { grid-template-columns: 0.72fr 1.28fr; gap: 3rem; }
+      /* order 만 바꾸면 사진이 넓은 칸으로 가 두 원장 사진 크기가 달라집니다
+         (269px 대 479px 이었습니다). 칸 너비도 같이 뒤집습니다. */
+      .doctor.flip { grid-template-columns: 1.28fr 0.72fr; }
+      .doctor.flip .doctor-media { order: 2; }
+      .thumbs { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+      .visit { grid-template-columns: 1fr 1fr; gap: 4rem; }
+      .herb-grid { grid-template-columns: 1fr 1fr; gap: 3rem; }
+      .opener { margin: 4rem auto 3.5rem; }
     }
   </style>
 </Base>
