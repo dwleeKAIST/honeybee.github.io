@@ -123,6 +123,17 @@ export const photos = {
   careMegayakchim: 'care-megayakchim',
   /** 복부에 침을 놓는 장면. 얼굴도, 알아볼 만한 신체 특징도 없습니다 */
   careAcupuncture: 'care-acupuncture',
+  /*
+   * 아래 세 장은 환자분이 뒤에서 알아볼 수 있게 찍혔습니다.
+   * 본인 공개 동의를 받았습니다(원장 확인, 2026-10).
+   * 새 사진을 올릴 때도 같은 확인이 필요합니다.
+   */
+  /** 등에 부항을 붙인 모습 — 통증 */
+  careCupping: 'care-cupping',
+  /** 저주파와 적외선 온열치료 장면 — 소화 · 통증 */
+  careTens: 'care-tens',
+  /** 한의사가 환자의 등에 침을 놓는 장면 — 통증 · 초음파 진료 */
+  careAcupunctureBack: 'care-acupuncture-back',
   /** 원내 혈액검사 장비와 측정항목 안내 — 자율신경 · 갱년기 */
   careBloodtest: 'care-bloodtest',
   /** 복부 초음파로 자궁을 확인하는 장면 — 월경통 */
