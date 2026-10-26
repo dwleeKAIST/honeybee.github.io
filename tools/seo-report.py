@@ -59,15 +59,15 @@ def place_rank(html):
 
 
 def site_rank(keyword):
-    """웹문서 탭에서 thesiho.kr 순위와 페이지."""
+    """웹문서 탭에서 thesiho.kr 순위와 페이지.
+
+    조회가 막히면 예외를 그대로 올립니다. 삼키면 '미노출'로 기록돼
+    실제로 순위가 떨어진 것처럼 보입니다."""
     for page in range(1, MAX_PAGES + 1):
         start = (page - 1) * PER_PAGE + 1
         url = ('https://search.naver.com/search.naver?where=web'
                f'&query={urllib.parse.quote(keyword)}&start={start}')
-        try:
-            _, html = get(url)
-        except Exception:
-            return None, None
+        _, html = get(url)
         hosts, seen = [], set()
         for h in re.findall(r'https?://([a-z0-9.-]+)', html):
             if h.endswith(('naver.com', 'pstatic.net', 'w3.org', 'naver.net')):
@@ -118,9 +118,13 @@ def main():
         except Exception as e:
             rows.append({'keyword': kw, 'error': str(e)[:60]}); continue
         pr, seq = place_rank(html)
-        sr, sp = site_rank(kw)
-        rows.append({'keyword': kw, 'place_rank': pr, 'place_listed': len(seq),
-                     'top3': seq[:3], 'site_rank': sr, 'site_page': sp})
+        row = {'keyword': kw, 'place_rank': pr, 'place_listed': len(seq),
+               'top3': seq[:3]}
+        try:
+            row['site_rank'], row['site_page'] = site_rank(kw)
+        except Exception as e:
+            row['site_error'] = str(e)[:60]
+        rows.append(row)
         time.sleep(1.5)
 
     result = {'date': kst.strftime('%Y-%m-%d'), 'time': kst.strftime('%H:%M KST'),
@@ -136,7 +140,10 @@ def main():
         if 'error' in r:
             print(f'{r["keyword"]:24} {"조회실패":>9}'); continue
         p = f'{r["place_rank"]}위' if r['place_rank'] else '미노출'
-        s = f'{r["site_rank"]}위 ({r["site_page"]}p)' if r['site_rank'] else '미노출'
+        if 'site_error' in r:
+            s = '조회실패'
+        else:
+            s = f'{r["site_rank"]}위 ({r["site_page"]}p)' if r['site_rank'] else '미노출'
         print(f'{r["keyword"]:24} {p:>9} {s:>12}  {", ".join(r["top3"])}')
     ai = result['ai']
     print(f'\nAI 크롤러 접근: ' + ', '.join(f'{k} {v}' for k, v in ai['bots'].items()))
