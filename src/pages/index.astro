@@ -35,6 +35,17 @@ const windowPhoto = img(photos.decoctionWindow);
 // SECTION 03 — 네 영역. 지시서의 분류를 따르되 각 영역이 실제 진료
 // 페이지로 이어지게 묶었습니다. 이 묶음 덕분에 갱년기·소화·자율신경처럼
 // 예전 홈에서 카드로만 걸려 있던 페이지가 본문 링크로 들어옵니다.
+// 증상으로 찾는 진입. 진료명을 모르고 오시는 분을 위한 자리라
+// 환자분이 실제로 쓰는 말로 적습니다. 링크는 모두 기존 진료 페이지입니다.
+const symptoms = [
+  { href: '/rhinitis/', t: '코막힘 · 재채기' },
+  { href: '/digestion/', t: '더부룩함 · 소화불량' },
+  { href: '/pain/', t: '목 · 허리 · 관절 통증' },
+  { href: '/autonomic/', t: '잠들기 어려움 · 피로' },
+  { href: '/menstrual-pain/', t: '월경통 · 월경 전 불편' },
+  { href: '/student-care/', t: '수험생 컨디션' },
+];
+
 const care = [
   {
     no: '01',
@@ -144,6 +155,16 @@ const spanText =
       </figure>
     )}
   </section>
+
+  {/* ══ SECTION 01-2 · 증상으로 찾기 ════════════════════ */}
+  <nav class="symptoms" aria-label="증상으로 진료 찾기">
+    <p class="symptoms-label">어떤 점이 불편하신가요?</p>
+    <ul>
+      {symptoms.map((x) => (
+        <li><a href={x.href}>{x.t}</a></li>
+      ))}
+    </ul>
+  </nav>
 
   {/* ══ SECTION 02 · PHILOSOPHY ═════════════════════════ */}
   <section class="philo">
@@ -482,6 +503,27 @@ const spanText =
       display: block; width: 116%; margin-left: -8%; height: auto;
       aspect-ratio: 16 / 9; object-fit: cover; object-position: 50% 42%;
     }
+
+    /* ── 01-2 증상으로 찾기 — 카드가 아니라 글줄에 가깝게 ─── */
+    .symptoms { margin: 0 0 5rem; }
+    .symptoms-label {
+      margin: 0 0 1rem; font-family: var(--sans);
+      font-size: 0.86rem; font-weight: 700; letter-spacing: 0.02em;
+      color: var(--ink-soft);
+    }
+    .symptoms ul {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+      margin: 0; padding: 0; list-style: none;
+    }
+    .symptoms a {
+      display: block; padding: 0.7rem 1.1rem;
+      border: 1px solid var(--line); border-radius: 999px;
+      font-family: var(--sans); font-size: 0.95rem;
+      text-decoration: none; color: var(--ink);
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .symptoms a:hover,
+    .symptoms a:focus-visible { border-color: var(--accent); color: var(--accent-ink); }
 
     /* ── 02 PHILOSOPHY — 아이콘도 카드도 없습니다 ───────── */
     .philo {
