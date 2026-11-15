@@ -194,6 +194,57 @@ const faqLd = [
     })),
   },
 ];
+
+// ── 스킨부스터 비급여 가격 (원장 제공 자료, 2026-11) ───────────────
+//
+// ⚠ 할인가를 함께 표시할지는 showDiscount 한 곳에서 켜고 끕니다.
+//    비급여 할인 안내는 환자 유인 행위로 다투어질 수 있다는 이유로
+//    이전에 /digestion/ 에서 '10회 선결제 할인 40만원'을 뺀 적이
+//    있습니다(그 파일 머리말 주석 참고). 원장 판단으로 이번에는
+//    표시하기로 했다면 true, 정가만 적으려면 false 로 두세요.
+//
+// ⚠ 금액을 고치면 원내 게시물과 심평원 보고 내용도 함께 맞추세요.
+//    고지한 금액을 넘겨 받으면 의료법 제45조 제3항 위반입니다.
+const showDiscount = true;
+
+const boosterUpdated = '2026년 11월';
+
+const boosters = [
+  {
+    name: '베이직 케어',
+    sub: '재생앰플, 키아라 레쥬(PDRN)',
+    rows: [
+      { n: '1회', list: '15만원', sale: null },
+      { n: '4회', list: '60만원', sale: '48만원' },
+    ],
+  },
+  {
+    name: '프리미엄 케어',
+    sub: '라디쥬, 엑소제, 알트코어',
+    rows: [
+      { n: '1회', list: '28만원', sale: null },
+      { n: '4회', list: '112만원', sale: '90만원' },
+      { n: '10회', list: '280만원', sale: '210만원' },
+    ],
+  },
+  {
+    name: '시그니처 케어',
+    sub: '진피재생약침',
+    rows: [
+      { n: '1회', list: '39만원', sale: null },
+      { n: '4회', list: '156만원', sale: '124만원' },
+      { n: '10회', list: '390만원', sale: '290만원' },
+    ],
+  },
+];
+
+const boosterPackage = {
+  name: '프리미엄 + 시그니처 케어 패키지',
+  n: '10회',
+  list: '335만원',
+  sale: '260만원',
+  note: '프리미엄 케어와 시그니처 케어를 번갈아 진행합니다.',
+};
 ---
 
 <Base title={title} description={description} jsonLd={faqLd}>
@@ -229,6 +280,73 @@ const faqLd = [
       </div>
     </section>
   ))}
+
+  {/* 비급여 가격 고지. 의료법 제45조에 따라 고지하는 금액이므로
+      「특가」 「이벤트」 같은 표현을 쓰지 않고 항목과 금액만 적습니다. */}
+  <section class="sec" id="booster-price">
+    <h2>스킨부스터 가격은 어떻게 되나요?</h2>
+    <p>
+      스킨부스터는 건강보험이 적용되지 않는 비급여 항목입니다. 아래는{' '}
+      {boosterUpdated} 기준 금액이며 <strong>부가세 10%가 별도</strong>로
+      붙습니다. 어떤 단계가 지금 맞는지는 피부 상태를 확인한 뒤 말씀드립니다.
+    </p>
+
+    {boosters.map((b) => (
+      <div class="price-block">
+        <h3>{b.name}</h3>
+        <p class="price-sub">{b.sub}</p>
+        <table class="price">
+          <thead>
+            <tr>
+              <th scope="col">횟수</th>
+              <th scope="col">금액</th>
+              {showDiscount && <th scope="col">할인 적용 시</th>}
+            </tr>
+          </thead>
+          <tbody>
+            {b.rows.map((r) => (
+              <tr>
+                <th scope="row">{r.n}</th>
+                <td>{r.list}</td>
+                {showDiscount && <td class="sale">{r.sale ?? '—'}</td>}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    ))}
+
+    <div class="price-block price-pack">
+      <h3>{boosterPackage.name}</h3>
+      <table class="price">
+        <thead>
+          <tr>
+            <th scope="col">횟수</th>
+            <th scope="col">금액</th>
+            {showDiscount && <th scope="col">할인 적용 시</th>}
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">{boosterPackage.n}</th>
+            <td>{boosterPackage.list}</td>
+            {showDiscount && <td class="sale">{boosterPackage.sale}</td>}
+          </tr>
+        </tbody>
+      </table>
+      <p class="price-sub">{boosterPackage.note}</p>
+    </div>
+
+    <h3>권장 시술 간격</h3>
+    <p>
+      초기 4회는 1~2주에 한 번씩, 이후에는 4주에 한 번씩 꾸준히 받으시는 것을
+      권장합니다. 피부 상태와 생활 여건에 따라 간격은 달라질 수 있습니다.
+    </p>
+    <p class="note">
+      금액은 변경될 수 있으며, 실제 비용은 상담 후 안내해 드립니다. 시술 전에
+      항목과 금액을 직접 설명드립니다.
+    </p>
+  </section>
 
   <section class="sec">
     <h2>한의원에서는 얼굴만 보지 않습니다</h2>
@@ -279,4 +397,31 @@ const faqLd = [
     </p>
   </section>
 
+  <style>
+    /* 비급여 가격표. 가로 스크롤이 생기지 않도록 폭을 글 칸 안에 둡니다. */
+    .price-block { margin: 2rem 0; max-width: 34rem; }
+    .price-block h3 { margin: 0 0 0.3rem; font-size: 1.15rem; }
+    .price-sub { margin: 0 0 0.9rem; font-size: 0.92rem; color: var(--ink-soft); }
+    table.price { width: 100%; border-collapse: collapse; font-family: var(--sans); }
+    table.price th,
+    table.price td {
+      padding: 0.65rem 0.5rem; text-align: right;
+      border-bottom: 1px solid var(--line-soft); font-size: 0.95rem;
+    }
+    table.price thead th {
+      font-size: 0.8rem; font-weight: 700; color: var(--ink-soft);
+      border-bottom-color: var(--line); white-space: nowrap;
+    }
+    table.price th:first-child,
+    table.price td:first-child { text-align: left; }
+    table.price tbody th { font-weight: 600; }
+    table.price .sale { font-weight: 700; white-space: nowrap; }
+    .price-pack {
+      padding: 1.25rem 1.25rem 0.5rem;
+      background: var(--sunk); border-radius: 4px;
+    }
+    .price-pack table.price th,
+    .price-pack table.price td { border-bottom-color: var(--line); }
+    .price-pack .price-sub { margin: 0.6rem 0 0; }
+  </style>
 </Base>
