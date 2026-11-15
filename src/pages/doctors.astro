@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { img, photos } from '../lib/img';
+import { clinic } from '../data/clinic';
 
 const photoTogether = img(photos.together);
 const photoSchedule = img(photos.schedule);
@@ -244,6 +245,24 @@ const jsonLd = [
       )}
     </section>
   ))}
+
+  {/* 이 페이지에만 예약 버튼이 없었습니다. 의료진을 보고 바로 예약하는
+      흐름이라 다른 페이지와 같은 모양으로 둡니다. */}
+  <section class="sec band">
+    <h2>진료 예약</h2>
+    <p>
+      {clinic.address.body}에 있습니다. {clinic.firstVisitNote}
+    </p>
+    <p class="cta-row">
+      <a class="cta" href={clinic.links.naverBooking}>진료 예약하기</a>
+      <a class="cta ghost" href={`tel:${clinic.phone}`}>전화 {clinic.phone}</a>
+    </p>
+    <p class="cta-sub">
+      <a href="/contact/#first-visit">처음 오시는 분 안내</a> ·{' '}
+      <a href={clinic.links.kakaoChannel}>카카오톡 문의</a> ·{' '}
+      <a href="/contact/">오시는 길</a>
+    </p>
+  </section>
 
   <style>
     .lead { max-width: 34rem; }

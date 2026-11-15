@@ -210,6 +210,15 @@ for (const f of files) {
     }
   }
 
+  // 문장부호 바로 뒤에 인라인 태그가 붙은 곳. Astro 가 compressHTML 로
+  // 줄바꿈을 지우기 때문에 소스에서 줄만 바꿔 두면 화면에서 붙습니다
+  // (「쉽습니다.대로변에는」). 줄 끝에 {' '} 를 붙이세요.
+  for (const m of stripCode(html).matchAll(
+    /([가-힣a-zA-Z0-9])([.,])(<(?:strong|em|b|i|a|span|code)\b[^>]*>)/g,
+  )) {
+    say(`문장부호 뒤 인라인 태그에 공백이 없습니다 — …${m[1]}${m[2]}${m[3].slice(0, 20)}…`);
+  }
+
   // 앞뒤로 공백이 없는 <br>. 화면은 멀쩡해도 글을 뽑으면 단어가 붙습니다.
   for (const m of stripCode(html).matchAll(/(.?)<br\b[^>]*>(.?)/g)) {
     if (/\S/.test(m[1]) && /\S/.test(m[2]) && m[1] !== '>' && m[2] !== '<') {
