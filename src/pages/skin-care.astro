@@ -326,6 +326,121 @@ const faqLd = [
 //    고지한 금액을 넘겨 받으면 의료법 제45조 제3항 위반입니다.
 const showDiscount = true;
 
+// ── 리프팅 · 색소 · 주름 비급여 가격 (원장 제공 자료, 2026-11) ──────
+//
+// 위 showDiscount 주석의 주의사항이 여기에도 그대로 적용됩니다.
+//
+// 원장 자료에서 아래 두 가지는 표현만 바꿨습니다.
+//   - '효과가 더욱 오래 유지됩니다' / '더욱 좋습니다' → 효과를 단정하는
+//     서술이라 '이어서 받으시는 것을 권해 드립니다'로 바꿨습니다
+//   - 카드 제목 '색소 · 미백 케어' → '색소 케어'. '미백'은 효능을 직접
+//     가리키는 말이라 원장 확인 전까지 넣지 않습니다
+const priceTables = [
+  {
+    name: '리프팅',
+    firstCol: '시술 구분',
+    cols: ['1회', '3회'],
+    blocks: [
+      {
+        name: 'K-온다 · 극초단파 리프팅',
+        rows: [
+          { label: '페이스', sub: '회당 90 kJ', vals: ['28만원', '68만원'] },
+          { label: '바디', sub: '회당 120 kJ', vals: ['35만원', '84만원'] },
+        ],
+      },
+      {
+        name: '슈링크 유니버스',
+        rows: [{ label: '300샷', sub: null, vals: ['15만원', '39만원'] }],
+      },
+    ],
+    notes: [
+      {
+        h: 'K-온다 권장 시술 간격',
+        body: '3주 간격으로 3회, 이후에는 4~8주에 한 번씩 이어서 받으시는 것을 권해 드립니다.',
+      },
+      { h: '슈링크 유니버스 권장 시술 간격', body: '4주 간격으로 3회 시술합니다.' },
+    ],
+  },
+  {
+    name: '색소 케어',
+    firstCol: '시술 부위',
+    cols: ['금액'],
+    blocks: [
+      {
+        name: '점 · 쥐젖',
+        rows: [
+          { label: '1개', sub: null, vals: ['5천원'] },
+          { label: '풀페이스', sub: null, vals: ['20만원'] },
+        ],
+      },
+      {
+        name: '흑자',
+        rows: [
+          { label: '1cm 이하', sub: null, vals: ['5만원'] },
+          { label: '2cm 이상', sub: null, vals: ['10~20만원'] },
+          { label: '풀페이스', sub: null, vals: ['50만원'] },
+        ],
+      },
+      {
+        name: '문신 제거 · 1회 기준',
+        rows: [
+          { label: '500원 동전 크기', sub: null, vals: ['5만원'] },
+          { label: '반명함 크기', sub: null, vals: ['8만원'] },
+          { label: '명함 크기', sub: null, vals: ['12만원'] },
+        ],
+      },
+      {
+        name: '피코토닝 + 제네시스 듀얼 토닝',
+        rows: [
+          { label: '1회', sub: null, vals: ['9만원'] },
+          { label: '10회 등록 시', sub: null, vals: ['회당 7만원'] },
+        ],
+      },
+    ],
+    notes: [
+      {
+        h: '시술 안내',
+        body: '색소 상태에 따라 추가 시술이 필요할 수 있습니다. 흑자 시술은 4주 후 리터치 1회 비용이 포함된 금액입니다. 문신 제거는 4~8주 간격으로 최소 5~10회의 시술이 필요합니다.',
+      },
+    ],
+  },
+  {
+    name: '주름 · 윤곽 케어',
+    firstCol: '시술 부위',
+    cols: ['1회', '3회', '10회'],
+    blocks: [
+      {
+        name: '채움매선',
+        rows: [
+          { label: '팔자 주름', sub: '양쪽 2줄', vals: ['12만원', null, null] },
+        ],
+      },
+      {
+        name: '채움약침',
+        rows: [
+          { label: '미간, 팔자', sub: null, vals: ['7만원', '18만원', '50만원'] },
+        ],
+      },
+      {
+        name: '동안약침',
+        rows: [
+          {
+            label: '이중턱, 불독살, 마리오네트, 주름',
+            sub: null,
+            vals: ['7만원', '18만원', '50만원'],
+          },
+        ],
+      },
+    ],
+    notes: [
+      {
+        h: '채움약침 · 동안약침 권장 시술 간격',
+        body: '1주 간격으로 3회, 이후 4주에 한 번씩 이어서 받으시는 것을 권해 드립니다.',
+      },
+    ],
+  },
+];
+
 const boosterUpdated = '2026년 11월';
 
 const boosters = [
@@ -470,6 +585,55 @@ const boosterPackage = {
         <span class="summary">재생크림을 아침·저녁으로 하루 두 번 발라주세요.</span>
       </li>
     </ul>
+  </section>
+
+  <section class="sec" id="price">
+    <h2>시술 가격은 어떻게 되나요?</h2>
+    <p>
+      아래는 {boosterUpdated} 기준 비급여 금액이며{' '}
+      <strong>부가세 10%가 별도</strong>로 붙습니다. 어떤 시술이 지금 맞는지는
+      피부 상태를 확인한 뒤 말씀드립니다.
+    </p>
+
+    {priceTables.map((t) => (
+      <div class="price-block">
+        <h3>{t.name}</h3>
+        <table class="price">
+          <thead>
+            <tr>
+              <th scope="col">{t.firstCol}</th>
+              {t.cols.map((c) => <th scope="col">{c}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {t.blocks.map((b) => (
+              <>
+                <tr class="grp">
+                  <th scope="colgroup" colspan={t.cols.length + 1}>{b.name}</th>
+                </tr>
+                {b.rows.map((r) => (
+                  <tr>
+                    <th scope="row">
+                      {r.label}
+                      {r.sub && <span class="row-sub">{r.sub}</span>}
+                    </th>
+                    {r.vals.map((v) => <td>{v ?? '—'}</td>)}
+                  </tr>
+                ))}
+              </>
+            ))}
+          </tbody>
+        </table>
+        {t.notes.map((n) => (
+          <p class="price-sub"><b>{n.h}</b> {n.body}</p>
+        ))}
+      </div>
+    ))}
+
+    <p class="note">
+      금액은 변경될 수 있으며, 실제 비용은 상담 후 안내해 드립니다. 시술 전에
+      항목과 금액을 직접 설명드립니다.
+    </p>
   </section>
 
   {/* 비급여 가격 고지. 의료법 제45조에 따라 고지하는 금액이므로
@@ -639,6 +803,17 @@ const boosterPackage = {
     table.price td:first-child { text-align: left; }
     table.price tbody th { font-weight: 600; }
     table.price .sale { font-weight: 700; white-space: nowrap; }
+    table.price tr.grp th {
+      text-align: left; padding-top: 1.1rem;
+      font-family: var(--head); font-size: 0.98rem;
+      color: var(--accent); border-bottom-color: var(--line);
+    }
+    table.price tr.grp:first-child th { padding-top: 0.65rem; }
+    .row-sub {
+      display: block; font-weight: 400;
+      font-size: 0.83rem; color: var(--ink-soft);
+    }
+    .price-sub b { color: var(--ink); }
     .price-pack {
       padding: 1.25rem 1.25rem 0.5rem;
       background: var(--sunk); border-radius: 4px;
