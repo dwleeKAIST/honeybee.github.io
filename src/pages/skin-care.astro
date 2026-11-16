@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { clinic } from '../data/clinic';
+import SkinDiagram from '../components/SkinDiagram.astro';
 
 // 뒤에 '| 시호한의원'(8자)이 자동으로 붙습니다. 원래는 가운데에도
 // '시호한의원'이 들어가 검색결과에 두 번 보였습니다. 그 자리를
@@ -24,6 +25,10 @@ const description =
 // 시술 목록. 원장 제공 안내 자료(2026-11)에서 옮겼습니다.
 //   who — '이런 분께 추천드려요'
 //   how — 시술 원리. 효과를 단정하지 않고 '무엇을 하는지'만 적습니다
+// 피부 단면 모식도는 카드 폭을 꽉 채우고, 아이콘과 얼굴 그림은
+// 카드 오른쪽 위에 작게 둡니다
+const WIDE_DIA = ['hifu', 'onda', 'coil'];
+
 const groups = [
   {
     name: '처진 얼굴선, 어떤 시술로 보나요?',
@@ -38,6 +43,11 @@ const groups = [
           '턱선이 예전보다 흐릿해진 분',
           '얼굴선과 피부 탄력을 함께 관리하고 싶은 분',
         ],
+        dia: {
+          name: 'hifu',
+          caption: '초음파가 한 지점에 모이는 모습',
+          alt: '피부 단면 모식도. 초음파가 표피와 진피를 지나 근막층(SMAS) 깊이의 한 지점에 모여 작은 열점을 만드는 모습.',
+        },
         href: null,
       },
       {
@@ -49,6 +59,11 @@ const groups = [
           '옆모습이나 사진에서 이중턱이 고민인 분',
           '도톰한 턱밑 윤곽을 정리하고 싶은 분',
         ],
+        dia: {
+          name: 'onda',
+          caption: '극초단파가 조직에 열을 만드는 모습',
+          alt: '피부 단면 모식도. 극초단파가 피부 표면을 지나 피하지방층에 넓게 열을 전달하는 모습.',
+        },
         href: null,
       },
       {
@@ -59,6 +74,7 @@ const groups = [
         href: '/facial-maeseon/',
       },
     ],
+    note: '그림은 원리를 단순화한 모식도이며, 시술 효과에는 개인차가 있습니다.',
   },
   {
     name: '잡티와 점, 문신은 어떻게 다루나요?',
@@ -69,6 +85,7 @@ const groups = [
         sub: '엔디야그 레이저 · 헬리오스4',
         d: '색소의 모양을 확인하고, 눈에 띄는 반점 부위를 집중 관리합니다.',
         who: ['볼이나 광대에 경계가 뚜렷한 갈색 반점이 고민인 분'],
+        dia: { name: 'lentigo', alt: '경계가 뚜렷한 갈색 반점을 나타낸 그림.' },
         href: null,
       },
       {
@@ -76,6 +93,7 @@ const groups = [
         sub: 'Pico laser',
         d: '짧은 레이저 펄스로 잉크를 잘게 부숴 여러 차례에 걸쳐 옅어지도록 돕습니다.',
         who: ['오래된 문신이나 흐리게 하고 싶은 문신이 있는 분'],
+        dia: { name: 'tattoo', alt: '문신 잉크 선이 잘게 부숴지는 모습을 나타낸 그림.' },
         href: null,
       },
       {
@@ -83,6 +101,7 @@ const groups = [
         sub: 'CO2 · 어븀야그(Er:YAG) 레이저',
         d: '레이저 제거가 적합한 점을 확인한 뒤, 해당 부위를 정밀하게 시술합니다.',
         who: ['얼굴에서 유독 눈에 띄는 점을 정리하고 싶은 분'],
+        dia: { name: 'mole', alt: '피부 위로 도드라진 점을 나타낸 그림.' },
         href: null,
       },
       {
@@ -90,6 +109,7 @@ const groups = [
         sub: null,
         d: '짧은 레이저 펄스로 색소에 작용해 피부톤 개선을 돕습니다.',
         who: ['옅은 잡티가 넓게 퍼져 피부톤이 고르지 않아 보이는 분'],
+        dia: { name: 'toning', alt: '옅은 잡티가 넓게 퍼져 있는 모습을 나타낸 그림.' },
         href: null,
       },
     ],
@@ -104,6 +124,11 @@ const groups = [
         sub: '코일형 실',
         d: '팔자 주름의 꺼져 보이는 부분을 실로 받쳐 국소 볼륨을 보완하는 시술입니다.',
         who: ['가만히 있어도 팔자 골이 깊게 보이는 분'],
+        dia: {
+          name: 'coil',
+          caption: '코일형 실이 피부 아래를 받치는 모습',
+          alt: '피부 단면 모식도. 코일 모양의 실이 진피 아래에 놓여 꺼진 부분을 받치는 모습.',
+        },
         href: '/facial-maeseon/',
       },
       {
@@ -111,6 +136,7 @@ const groups = [
         sub: null,
         d: '미간과 팔자 주름을 중심으로 고민 부위에 약침을 놓는 시술입니다.',
         who: ['미간에 잡힌 선이나 입가의 팔자 주름이 신경 쓰이는 분'],
+        dia: { name: 'face-upper', alt: '미간과 팔자 주름 위치를 표시한 얼굴 그림.' },
         href: '/treatments/yakchim/',
       },
       {
@@ -118,10 +144,11 @@ const groups = [
         sub: null,
         d: '이중턱과 불독살, 입꼬리 아래 마리오네트 주름 등 하안부 윤곽이 고민인 부위에 약침을 놓는 시술입니다.',
         who: ['턱밑이나 입가 옆이 도톰해 얼굴선이 흐려 보이는 분'],
+        dia: { name: 'face-lower', alt: '이중턱과 마리오네트 주름 등 하안부 윤곽을 표시한 얼굴 그림.' },
         href: '/treatments/yakchim/',
       },
     ],
-    note: '시술 부위와 반응은 개인마다 다를 수 있습니다.',
+    note: '그림은 이해를 돕기 위한 모식도이며, 시술 부위와 반응은 개인마다 다를 수 있습니다.',
   },
   {
     name: '스킨부스터는 어떤 종류가 있나요?',
@@ -370,10 +397,22 @@ const boosterPackage = {
       {g.lead && <p class="lead">{g.lead}</p>}
       <div class="cards">
         {g.items.map((it) => (
-          <div class="card">
+          <div class:list={['card', it.dia && !WIDE_DIA.includes(it.dia.name) && 'has-ico']}>
+            {it.dia && !WIDE_DIA.includes(it.dia.name) && (
+              <div class="card-ico">
+                <SkinDiagram name={it.dia.name} alt={it.dia.alt} />
+              </div>
+            )}
             <strong>{it.t}</strong>
             {it.sub && <em>{it.sub}</em>}
             <span>{it.d}</span>
+            {it.dia && WIDE_DIA.includes(it.dia.name) && (
+              <SkinDiagram
+                name={it.dia.name}
+                caption={it.dia.caption}
+                alt={it.dia.alt}
+              />
+            )}
             {it.who && (
               <>
                 <b class="who-h">이런 분께</b>
@@ -400,6 +439,13 @@ const boosterPackage = {
       어븀야그 레이저로 피부 표면에 미세 통로를 만든 뒤, 피부 고민에 맞는
       앰플을 도포해 성분 전달을 돕습니다.
     </p>
+    <div class="ladd-dia">
+      <SkinDiagram
+        name="ladd"
+        caption="레이저 미세 통로와 앰플 도포 모식도"
+        alt="피부 단면 모식도. 레이저가 피부 표면에 만든 다섯 개의 미세 통로를 따라 앰플이 스며드는 모습."
+      />
+    </div>
     <ul class="ladd-points">
       <li><strong>약 20~30분</strong><span>짧은 시술 시간으로 일정 사이에도 받으실 수 있습니다.</span></li>
       <li><strong>주사 바늘 없이</strong><span>피부에 앰플을 도포하는 LADD 방식입니다.</span></li>
@@ -551,6 +597,12 @@ const boosterPackage = {
 
   <style>
     /* 「이런 분께」 — 카드 안의 작은 목록 */
+    /* 모식도. 단면도는 카드 폭을 채우고, 아이콘은 오른쪽 위에 둡니다 */
+    .card.has-ico { position: relative; padding-right: 5.4rem; }
+    .card-ico { position: absolute; top: 1rem; right: 1rem; line-height: 0; }
+    .card :global(.dia) { margin-top: 0.85rem; }
+    .ladd-dia { max-width: 30rem; margin: 1.5rem 0 0.4rem; }
+
     .who-h {
       display: block; margin: 0.7rem 0 0.3rem;
       font-family: var(--sans); font-size: 0.8rem; font-weight: 700;

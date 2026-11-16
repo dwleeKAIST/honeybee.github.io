@@ -1,0 +1,248 @@
+---
+// 원장님이 주신 피부클리닉 안내 카드(2026-11) 안의 모식도를 SVG 로 다시
+// 그린 것입니다. 카드 이미지를 그대로 올리면 글자가 박혀 있어 작은 화면에서
+// 읽히지 않고 검색에도 잡히지 않아, 그림만 옮기고 글자는 본문으로 뺐습니다.
+//
+// ⚠ 모두 원리를 단순화한 모식도입니다. 실제 시술 사진이나 치료 전후 사진이
+//   아니며 (의료법 제56조 제2항), 효과를 나타내는 그림으로 쓰지 마세요.
+interface Props {
+  name:
+    | 'hifu'
+    | 'onda'
+    | 'coil'
+    | 'ladd'
+    | 'lentigo'
+    | 'tattoo'
+    | 'mole'
+    | 'toning'
+    | 'face-upper'
+    | 'face-lower';
+  caption?: string;
+  alt: string;
+}
+const { name, caption, alt } = Astro.props;
+
+// 피부 단면 색. 사이트 팔레트(Warm Ivory)에 맞춰 조금 낮췄습니다
+const EPI = '#e3a295'; // 표피
+const DER = '#f2cac1'; // 진피
+const FAT = '#efe3b9'; // 피하지방층
+const SMAS = '#d9958a'; // 근막층
+const HEAT = '#d2762f';
+const LINE = '#8c7f6a';
+const TEAL = '#6f8f8c';
+const icon = ['lentigo', 'tattoo', 'mole', 'toning'].includes(name);
+const face = name === 'face-upper' || name === 'face-lower';
+---
+
+<figure class:list={['dia', icon && 'ico', face && 'face']}>
+  {name === 'hifu' && (
+    <svg viewBox="0 0 320 172" role="img" aria-label={alt}>
+      <text x="74" y="56" class="l">표피</text>
+      <text x="74" y="76" class="l">진피</text>
+      <text x="74" y="106" class="l">피하지방층</text>
+      <text x="74" y="134" class="l">근막층(SMAS)</text>
+      <g class="tick">
+        <line x1="78" y1="52" x2="86" y2="52" /><line x1="78" y1="72" x2="86" y2="72" />
+        <line x1="78" y1="102" x2="86" y2="102" /><line x1="78" y1="130" x2="86" y2="130" />
+      </g>
+      <rect x="86" y="46" width="224" height="13" fill={EPI} />
+      <rect x="86" y="59" width="224" height="26" fill={DER} />
+      <rect x="86" y="85" width="224" height="34" fill={FAT} />
+      <g fill="#fdf6df">
+        {[100, 122, 144, 166, 188, 210, 232, 254, 276, 298].map((cx, i) => (
+          <circle cx={cx} cy={i % 2 ? 96 : 108} r="4.6" />
+        ))}
+      </g>
+      <rect x="86" y="119" width="224" height="15" fill={SMAS} />
+      <rect x="172" y="12" width="48" height="26" rx="7" fill="#fff" stroke="#cfc6b4" />
+      <rect x="176" y="34" width="40" height="7" rx="2.5" fill="#9b958a" />
+      <g stroke={LINE} stroke-width="1" opacity=".75">
+        <line x1="180" y1="41" x2="196" y2="126" /><line x1="187" y1="41" x2="196" y2="126" />
+        <line x1="196" y1="41" x2="196" y2="126" /><line x1="205" y1="41" x2="196" y2="126" />
+        <line x1="212" y1="41" x2="196" y2="126" />
+      </g>
+      <circle cx="196" cy="126" r="4.4" fill={HEAT} />
+      <line x1="200" y1="126" x2="238" y2="146" stroke={LINE} stroke-width="1" />
+      <text x="240" y="150" class="l s" text-anchor="start">작은 열점</text>
+      {caption && <text x="160" y="168" class="cap">{caption}</text>}
+    </svg>
+  )}
+
+  {name === 'onda' && (
+    <svg viewBox="0 0 320 172" role="img" aria-label={alt}>
+      <text x="74" y="56" class="l">표피</text>
+      <text x="74" y="76" class="l">진피</text>
+      <text x="74" y="106" class="l">피하지방층</text>
+      <text x="74" y="134" class="l">근막층(SMAS)</text>
+      <g class="tick">
+        <line x1="78" y1="52" x2="86" y2="52" /><line x1="78" y1="72" x2="86" y2="72" />
+        <line x1="78" y1="102" x2="86" y2="102" /><line x1="78" y1="130" x2="86" y2="130" />
+      </g>
+      <rect x="86" y="46" width="224" height="13" fill={EPI} />
+      <rect x="86" y="59" width="224" height="26" fill={DER} />
+      <rect x="86" y="85" width="224" height="34" fill={FAT} />
+      <g fill="#fdf6df">
+        {[100, 122, 144, 166, 254, 276, 298].map((cx, i) => (
+          <circle cx={cx} cy={i % 2 ? 96 : 108} r="4.6" />
+        ))}
+      </g>
+      <ellipse cx="196" cy="99" rx="40" ry="19" fill={HEAT} opacity=".4" />
+      <ellipse cx="196" cy="99" rx="25" ry="12" fill={HEAT} opacity=".45" />
+      <rect x="86" y="119" width="224" height="15" fill={SMAS} />
+      <rect x="172" y="12" width="48" height="26" rx="7" fill="#fff" stroke="#cfc6b4" />
+      <rect x="176" y="34" width="40" height="7" rx="2.5" fill="#9b958a" />
+      <g stroke={HEAT} stroke-width="1.3" fill="none" opacity=".8">
+        <path d="M178 50 Q196 60 214 50" /><path d="M174 58 Q196 72 218 58" />
+        <path d="M170 66 Q196 84 222 66" />
+      </g>
+      <line x1="232" y1="99" x2="252" y2="140" stroke={LINE} stroke-width="1" />
+      <text x="254" y="144" class="l s" text-anchor="start">열이 전달되는 영역</text>
+      <line x1="94" y1="46" x2="78" y2="32" stroke={LINE} stroke-width="1" />
+      <text x="76" y="29" class="l s">피부 표면</text>
+      {caption && <text x="160" y="168" class="cap">{caption}</text>}
+    </svg>
+  )}
+
+  {name === 'coil' && (
+    <svg viewBox="0 0 320 104" role="img" aria-label={alt}>
+      <rect x="20" y="14" width="280" height="15" fill={EPI} />
+      <rect x="20" y="29" width="280" height="34" fill={DER} />
+      <rect x="20" y="63" width="280" height="14" fill={FAT} />
+      <path
+        d="M44 48 c0-11 17-11 17 0 s17 11 17 0 s17-11 17 0 s17 11 17 0 s17-11 17 0 s17 11 17 0 s17-11 17 0 s17 11 17 0 s17-11 17 0 s17 11 17 0 s17-11 17 0 s17 11 17 0"
+        fill="none"
+        stroke="#4e463a"
+        stroke-width="2.2"
+        stroke-linecap="round"
+      />
+      {caption && <text x="160" y="98" class="cap">{caption}</text>}
+    </svg>
+  )}
+
+  {name === 'ladd' && (
+    <svg viewBox="0 0 320 140" role="img" aria-label={alt}>
+      <rect x="20" y="42" width="280" height="16" fill={EPI} />
+      <rect x="20" y="58" width="280" height="40" fill={DER} />
+      {[62, 118, 174, 230, 286].map((x) => (
+        <>
+          <rect x={x - 4} y="42" width="8" height="52" rx="3" fill="#fdf7f2" />
+          <circle cx={x} cy="30" r="8" fill={TEAL} />
+          <rect x={x - 1.6} y="30" width="3.2" height="14" fill={TEAL} />
+          <circle cx={x} cy="76" r="3.6" fill={TEAL} />
+        </>
+      ))}
+      {caption && <text x="160" y="126" class="cap">{caption}</text>}
+    </svg>
+  )}
+
+  {name === 'lentigo' && (
+    <svg viewBox="0 0 56 56" role="img" aria-label={alt}>
+      <circle cx="28" cy="28" r="28" fill="#f7ece5" />
+      <path
+        d="M27 12c6-1 11 2 13 7s5 7 3 12-7 6-12 7-11-1-14-6-4-9-1-13 5-6 11-7z"
+        fill="#9c6342"
+      />
+    </svg>
+  )}
+
+  {name === 'tattoo' && (
+    <svg viewBox="0 0 56 56" role="img" aria-label={alt}>
+      <circle cx="28" cy="28" r="28" fill="#f7ece5" />
+      <polyline
+        points="12,34 18,22 24,32 30,18 35,27"
+        fill="none"
+        stroke="#3f3f55"
+        stroke-width="2.6"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <g fill="#3f3f55">
+        <circle cx="40" cy="24" r="2.2" /><circle cx="45" cy="31" r="1.7" />
+        <circle cx="38" cy="33" r="1.4" />
+      </g>
+    </svg>
+  )}
+
+  {name === 'mole' && (
+    <svg viewBox="0 0 56 56" role="img" aria-label={alt}>
+      <circle cx="28" cy="28" r="28" fill="#f7ece5" />
+      <line x1="11" y1="37" x2="45" y2="37" stroke="#cda98a" stroke-width="2.4" stroke-linecap="round" />
+      <path d="M20 37a8 7.5 0 0 1 16 0z" fill="#6b4328" />
+    </svg>
+  )}
+
+  {name === 'toning' && (
+    <svg viewBox="0 0 56 56" role="img" aria-label={alt}>
+      <circle cx="28" cy="28" r="28" fill="#f7ece5" />
+      <g fill="#b98a63">
+        <circle cx="17" cy="20" r="2.1" /><circle cx="27" cy="16" r="1.5" />
+        <circle cx="37" cy="21" r="2.4" /><circle cx="44" cy="29" r="1.6" />
+        <circle cx="22" cy="30" r="1.7" /><circle cx="32" cy="31" r="2.2" />
+        <circle cx="15" cy="37" r="1.5" /><circle cx="26" cy="41" r="2" />
+        <circle cx="38" cy="38" r="1.6" />
+      </g>
+    </svg>
+  )}
+
+  {face && (
+    <svg viewBox="0 0 76 88" role="img" aria-label={alt}>
+      <ellipse cx="38" cy="44" rx="27" ry="33" fill="#f5d2bd" />
+      {name === 'face-upper' ? (
+        <g fill="none" stroke="#8d6a52" stroke-width="1.6" stroke-linecap="round">
+          <path d="M22 30 Q27 26 32 30" /><path d="M44 30 Q49 26 54 30" />
+          <path d="M35 24 v7" /><path d="M38 23 v8" /><path d="M41 24 v7" />
+          <path d="M26 55 Q29 63 33 66" /><path d="M50 55 Q47 63 43 66" />
+          <path d="M31 60 Q38 66 45 60" />
+        </g>
+      ) : (
+        <g fill="none" stroke="#8d6a52" stroke-width="1.6" stroke-linecap="round">
+          <path d="M23 33 Q28 29 33 33" /><path d="M43 33 Q48 29 53 33" />
+          <path d="M31 51 Q38 57 45 51" />
+          <path d="M28 58 Q31 66 35 69" /><path d="M48 58 Q45 66 41 69" />
+          <path d="M20 62 Q38 82 56 62" stroke="#a4593a" />
+        </g>
+      )}
+    </svg>
+  )}
+
+  {caption && (icon || face) && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .dia {
+    margin: 0;
+  }
+  .dia svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .dia :global(.l) {
+    font-size: 8.5px;
+    fill: #5c564a;
+    text-anchor: end;
+  }
+  .dia :global(.l.s) {
+    font-size: 8px;
+  }
+  .dia :global(.cap) {
+    font-size: 8.5px;
+    fill: #7b7467;
+    text-anchor: middle;
+  }
+  .dia :global(.tick) line {
+    stroke: #b7ae9b;
+    stroke-width: 1;
+  }
+  .ico svg {
+    width: 56px;
+  }
+  .face svg {
+    width: 68px;
+  }
+  figcaption {
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    margin-top: 0.3rem;
+  }
+</style>
