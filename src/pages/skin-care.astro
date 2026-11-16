@@ -21,109 +21,208 @@ const description =
 // 미용 시술이 아니라 피부질환 치료라 색소 레이저와 묶지 않고 따로 두었습니다.
 // 효과를 단정하지 않고 '~에 사용합니다'까지만 씁니다.
 
+// 시술 목록. 원장 제공 안내 자료(2026-11)에서 옮겼습니다.
+//   who — '이런 분께 추천드려요'
+//   how — 시술 원리. 효과를 단정하지 않고 '무엇을 하는지'만 적습니다
 const groups = [
   {
-    name: '리프팅',
+    name: '처진 얼굴선, 어떤 시술로 보나요?',
+    lead: '처진 볼살과 흐려진 턱선, 불독살과 이중턱을 다룹니다.',
     items: [
       {
         t: '슈링크 유니버스',
-        sub: 'HIFU · 고강도 집속 초음파',
-        d: '초음파 에너지를 피부의 특정 층에 집속하는 방식의 장비입니다.',
+        sub: '고강도 집속초음파 (HIFU)',
+        d: '초음파가 피부 속 목표 깊이에 모여 작은 열점을 만듭니다.',
+        who: [
+          '볼살이 처져 입가가 무거워 보이는 분',
+          '턱선이 예전보다 흐릿해진 분',
+          '얼굴선과 피부 탄력을 함께 관리하고 싶은 분',
+        ],
         href: null,
       },
       {
-        t: '극초단파 리프팅',
-        sub: null,
-        d: '고주파 에너지를 이용하는 시술입니다.',
+        t: 'K-온다 리프팅',
+        sub: '극초단파 (마이크로웨이브)',
+        d: '극초단파 에너지가 피부 아래 조직에 열을 전달합니다.',
+        who: [
+          '입가 옆 불독살이 신경 쓰이는 분',
+          '옆모습이나 사진에서 이중턱이 고민인 분',
+          '도톰한 턱밑 윤곽을 정리하고 싶은 분',
+        ],
         href: null,
       },
       {
         t: '매선 (녹는 실)',
         sub: null,
         d: '인체에 자연 흡수되는 의료용 실을 피부 아래층에 삽입합니다.',
+        who: null,
         href: '/facial-maeseon/',
       },
     ],
   },
   {
-    name: '색소 치료 · 레이저',
+    name: '잡티와 점, 문신은 어떻게 다루나요?',
+    lead: '선명한 갈색 반점부터 고르지 않은 피부톤까지.',
     items: [
       {
-        t: '엔디야그 레이저',
-        sub: '헬리오스4 (레이저옵텍)',
-        d: '흑자, 문신, 피코 토닝, 제네시스 토닝에 사용합니다. 피코 모드를 포함해 여러 모드로 운용할 수 있는 장비입니다.',
+        t: '흑자 케어',
+        sub: '엔디야그 레이저 · 헬리오스4',
+        d: '색소의 모양을 확인하고, 눈에 띄는 반점 부위를 집중 관리합니다.',
+        who: ['볼이나 광대에 경계가 뚜렷한 갈색 반점이 고민인 분'],
         href: null,
       },
       {
-        t: '어븀야그 레이저',
-        sub: '로투스2 (레이저옵텍)',
-        d: '사마귀와 점, 모공 관련 시술에 사용합니다.',
+        t: '문신 제거',
+        sub: 'Pico laser',
+        d: '짧은 레이저 펄스로 잉크를 잘게 부숴 여러 차례에 걸쳐 옅어지도록 돕습니다.',
+        who: ['오래된 문신이나 흐리게 하고 싶은 문신이 있는 분'],
         href: null,
       },
       {
-        t: 'CO2 레이저',
+        t: '점 제거',
+        sub: 'CO2 · 어븀야그(Er:YAG) 레이저',
+        d: '레이저 제거가 적합한 점을 확인한 뒤, 해당 부위를 정밀하게 시술합니다.',
+        who: ['얼굴에서 유독 눈에 띄는 점을 정리하고 싶은 분'],
+        href: null,
+      },
+      {
+        t: '피코토닝',
         sub: null,
-        d: '점 시술에 사용합니다.',
+        d: '짧은 레이저 펄스로 색소에 작용해 피부톤 개선을 돕습니다.',
+        who: ['옅은 잡티가 넓게 퍼져 피부톤이 고르지 않아 보이는 분'],
         href: null,
       },
     ],
+    note: '색소의 종류와 피부 상태에 따라 적합한 시술과 필요한 횟수가 달라질 수 있습니다.',
   },
   {
-    name: '피부질환 치료',
+    name: '주름과 얼굴 윤곽은 어떻게 관리하나요?',
+    lead: '깊게 패인 팔자부터 흐려진 턱선까지.',
+    items: [
+      {
+        t: '채움매선',
+        sub: '코일형 실',
+        d: '팔자 주름의 꺼져 보이는 부분을 실로 받쳐 국소 볼륨을 보완하는 시술입니다.',
+        who: ['가만히 있어도 팔자 골이 깊게 보이는 분'],
+        href: '/facial-maeseon/',
+      },
+      {
+        t: '채움약침',
+        sub: null,
+        d: '미간과 팔자 주름을 중심으로 고민 부위에 약침을 놓는 시술입니다.',
+        who: ['미간에 잡힌 선이나 입가의 팔자 주름이 신경 쓰이는 분'],
+        href: '/treatments/yakchim/',
+      },
+      {
+        t: '동안약침',
+        sub: null,
+        d: '이중턱과 불독살, 입꼬리 아래 마리오네트 주름 등 하안부 윤곽이 고민인 부위에 약침을 놓는 시술입니다.',
+        who: ['턱밑이나 입가 옆이 도톰해 얼굴선이 흐려 보이는 분'],
+        href: '/treatments/yakchim/',
+      },
+    ],
+    note: '시술 부위와 반응은 개인마다 다를 수 있습니다.',
+  },
+  {
+    name: '스킨부스터는 어떤 종류가 있나요?',
+    lead: '여드름 진정부터 보습과 탄력까지, 피부 고민에 맞춘 케어입니다.',
+    items: [
+      {
+        t: '재생 앰플',
+        sub: '베이직 케어',
+        d: '염증으로 예민해진 피부의 진정과 조직 회복을 위한 케어입니다.',
+        who: null,
+        href: null,
+      },
+      {
+        t: '키아라 레쥬',
+        sub: '베이직 케어 · 연어 유래 PDRN + 히알루론산',
+        d: '재생과 보습을 목적으로 사용합니다.',
+        who: null,
+        href: null,
+      },
+      {
+        t: '라디쥬',
+        sub: '프리미엄 케어 · 철갑상어·연어 유래 PDRN + 엑소좀',
+        d: '캐비어 테라피라고도 부릅니다.',
+        who: null,
+        href: null,
+      },
+      {
+        t: '엑소제',
+        sub: '프리미엄 케어 · 양수 유래 줄기세포에서 추출한 엑소좀',
+        d: '프리미엄 케어에 사용하는 스킨부스터입니다.',
+        who: null,
+        href: null,
+      },
+      {
+        t: '알트코어',
+        sub: '프리미엄 케어 · ALT001 + 비타민 C + 히알루론산',
+        d: '피부결과 항산화를 목적으로 사용합니다.',
+        who: null,
+        href: null,
+      },
+      {
+        t: '진피재생약침',
+        sub: '시그니처 케어 · ECM(세포외기질) 기반',
+        d: '탄력이 떨어지고 잔주름이 신경 쓰이는 피부를 위한 케어입니다.',
+        who: null,
+        href: '/treatments/yakchim/',
+      },
+      {
+        t: '큐티셀',
+        sub: null,
+        d: '스킨부스터 시술에 사용합니다.',
+        who: null,
+        href: null,
+      },
+    ],
+    note: '시술 구성은 피부 상태에 따라 달라지며, 시술 반응에는 개인차가 있습니다. 금액은 아래 가격 안내를 참고하세요.',
+  },
+  {
+    name: '아토피나 발진도 보나요?',
+    lead: null,
     items: [
       {
         t: '엑시머 레이저',
         sub: '아토빛',
         d: '아토피와 발진이 있는 부위에 빛을 쬐는 방식의 장비입니다. 통증이 거의 없어 아이도 어려워하지 않고 받습니다.',
+        who: null,
         href: '/pediatrics/',
       },
     ],
   },
   {
-    name: '스킨부스터',
+    name: '필링은 어떤 것을 쓰나요?',
+    lead: null,
     items: [
-      {
-        t: '여드름 재생 앰플',
-        sub: null,
-        d: '여드름 이후의 피부 관리에 사용합니다.',
-        href: null,
-      },
-      {
-        t: '라디쥬',
-        sub: '연어 · 철갑상어 PDRN',
-        d: 'PDRN 성분을 사용하는 스킨부스터입니다.',
-        href: null,
-      },
-      { t: '큐티셀', sub: null, d: '스킨부스터 시술에 사용합니다.', href: null },
-      { t: '엑소제', sub: null, d: '스킨부스터 시술에 사용합니다.', href: null },
+      { t: '밀크필', sub: null, d: '피부 표면을 정돈하는 필링 시술입니다.', who: null, href: null },
+      { t: '라라필', sub: null, d: '피부 표면을 정돈하는 필링 시술입니다.', who: null, href: null },
     ],
   },
   {
-    name: '필링',
-    items: [
-      { t: '밀크필', sub: null, d: '피부 표면을 정돈하는 필링 시술입니다.', href: null },
-      { t: '라라필', sub: null, d: '피부 표면을 정돈하는 필링 시술입니다.', href: null },
-    ],
-  },
-  {
-    name: '한방 시술',
+    name: '한방 시술에는 무엇이 있나요?',
+    lead: null,
     items: [
       {
         t: '정안침',
         sub: null,
         d: '얼굴 부위의 경혈에 놓는 침 치료입니다.',
+        who: null,
         href: null,
       },
       {
         t: '안면매선',
         sub: null,
         d: '팔자주름 부위를 비롯한 얼굴 여러 부위에 시술합니다.',
+        who: null,
         href: '/facial-maeseon/',
       },
       {
         t: 'PDRN 손주사',
         sub: null,
         d: '한의사가 직접 부위를 잡아 주입하는 방식입니다.',
+        who: null,
         href: null,
       },
     ],
@@ -268,18 +367,71 @@ const boosterPackage = {
   {groups.map((g, i) => (
     <section class={i % 2 === 1 ? 'sec band' : 'sec'}>
       <h2>{g.name}</h2>
+      {g.lead && <p class="lead">{g.lead}</p>}
       <div class="cards">
         {g.items.map((it) => (
           <div class="card">
             <strong>{it.t}</strong>
             {it.sub && <em>{it.sub}</em>}
             <span>{it.d}</span>
+            {it.who && (
+              <>
+                <b class="who-h">이런 분께</b>
+                <ul class="who">{it.who.map((w) => <li>{w}</li>)}</ul>
+              </>
+            )}
             {it.href && <a href={it.href}>자세히 보기</a>}
           </div>
         ))}
       </div>
+      {g.note && <p class="note">{g.note}</p>}
     </section>
   ))}
+
+  {/* LADD 스킨부스터 — 시술 후 관리까지 있어 따로 둡니다 */}
+  <section class="sec" id="ladd">
+    <p class="eyebrow">시호의 피부 보약</p>
+    <h2>LADD 스킨부스터는 어떤 시술인가요?</h2>
+    <p class="lead">
+      어븀야그 레이저로 피부결을 정돈하고, 앰플의 유효성분은 고스란히
+      전달합니다.
+    </p>
+    <p>
+      어븀야그 레이저로 피부 표면에 미세 통로를 만든 뒤, 피부 고민에 맞는
+      앰플을 도포해 성분 전달을 돕습니다.
+    </p>
+    <ul class="ladd-points">
+      <li><strong>약 20~30분</strong><span>짧은 시술 시간으로 일정 사이에도 받으실 수 있습니다.</span></li>
+      <li><strong>주사 바늘 없이</strong><span>피부에 앰플을 도포하는 LADD 방식입니다.</span></li>
+      <li><strong>레이저 + 앰플</strong><span>피부결 관리와 맞춤 앰플을 한 번에 진행합니다.</span></li>
+    </ul>
+    <p class="statement">
+      피부 자극과 회복 부담을 고려한 시술입니다. 따가움이나 붉은기가 생길 수
+      있으며, 회복 기간에는 개인차가 있습니다.
+    </p>
+
+    <h3>피부 변화를 살펴보세요</h3>
+    <p>
+      시술 후 3~4일과 3주 무렵, 피부결과 촉촉함의 변화를 살펴보세요. 피부
+      반응을 보며 다음 시술 간격을 정해 꾸준히 관리할 수 있습니다.
+    </p>
+
+    <h3>시술 후 관리</h3>
+    <ul class="plain">
+      <li>
+        <strong>시술 당일</strong>
+        <span class="summary">화장과 세안은 다음 날까지 미뤄주세요.</span>
+      </li>
+      <li>
+        <strong>다음 날 아침</strong>
+        <span class="summary">가볍게 물세안한 뒤 보습해 주세요.</span>
+      </li>
+      <li>
+        <strong>회복 기간</strong>
+        <span class="summary">재생크림을 아침·저녁으로 하루 두 번 발라주세요.</span>
+      </li>
+    </ul>
+  </section>
 
   {/* 비급여 가격 고지. 의료법 제45조에 따라 고지하는 금액이므로
       「특가」 「이벤트」 같은 표현을 쓰지 않고 항목과 금액만 적습니다. */}
@@ -398,6 +550,32 @@ const boosterPackage = {
   </section>
 
   <style>
+    /* 「이런 분께」 — 카드 안의 작은 목록 */
+    .who-h {
+      display: block; margin: 0.7rem 0 0.3rem;
+      font-family: var(--sans); font-size: 0.8rem; font-weight: 700;
+      letter-spacing: 0.06em; color: var(--accent);
+    }
+    .who { margin: 0; padding: 0 0 0 0.9rem; }
+    .who li {
+      font-size: 0.92rem; line-height: 1.7; color: var(--ink-soft);
+      margin-bottom: 0.15rem;
+    }
+
+    /* LADD 세 가지 특징 */
+    .ladd-points {
+      list-style: none; margin: 1.75rem 0; padding: 0;
+      display: grid; gap: 0.9rem; max-width: 34rem;
+    }
+    .ladd-points li {
+      padding: 0.9rem 1rem; background: var(--sunk); border-radius: 4px;
+    }
+    .ladd-points strong { display: block; margin-bottom: 0.25rem; }
+    .ladd-points span { font-size: 0.93rem; color: var(--ink-soft); }
+    @media (min-width: 46rem) {
+      .ladd-points { grid-template-columns: repeat(3, 1fr); max-width: none; }
+    }
+
     /* 비급여 가격표. 가로 스크롤이 생기지 않도록 폭을 글 칸 안에 둡니다. */
     .price-block { margin: 2rem 0; max-width: 34rem; }
     .price-block h3 { margin: 0 0 0.3rem; font-size: 1.15rem; }
