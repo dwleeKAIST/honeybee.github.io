@@ -2,6 +2,10 @@
 import Base from '../layouts/Base.astro';
 import { clinic } from '../data/clinic';
 import SkinDiagram from '../components/SkinDiagram.astro';
+import { img, photos } from '../lib/img';
+
+const heroImg = img(photos.beautyHero);
+const heroImg640 = img(photos.beautyHero640);
 
 // 뒤에 '| 시호한의원'(8자)이 자동으로 붙습니다. 원래는 가운데에도
 // '시호한의원'이 들어가 검색결과에 두 번 보였습니다. 그 자리를
@@ -486,21 +490,43 @@ const boosterPackage = {
 ---
 
 <Base title={title} description={description} jsonLd={faqLd}>
-  <section class="hero">
-    <p class="eyebrow">피부미용</p>
-    <h1>시호한의원은 어떤 피부 시술과 장비를 갖추고 있나요?</h1>
-    <p class="lead">
-      리프팅, 색소 치료, 스킨부스터, 필링과 한방 시술을 함께 운영하고,
-      아토피와 발진에는 엑시머 레이저(아토빛)를 사용합니다. 원내에 갖추고 있는
-      장비와 시술을 아래에 정리했습니다.
-    </p>
-    <p>
-      어떤 시술이 지금 필요한지는 피부 상태와 전신 상태를 함께 확인한 뒤
-      말씀드립니다. 상담 과정에서 적합하지 않다고 판단되면 그렇게 말씀드립니다.
-    </p>
-    <p class="cta-row">
-      <a class="cta" href={clinic.links.naverBooking}>피부 상담하기</a>
-    </p>
+  <section class="hero beauty-hero">
+    <div class="bh-text">
+      <p class="eyebrow bh-eyebrow">SIHO BEAUTY CLINIC</p>
+      <h1>본연의 아름다움을 찾아가는 과정, <em>시호가 함께합니다</em></h1>
+      <p class="lead">
+        동탄 시호한의원 피부클리닉은 리프팅, 색소 치료, 스킨부스터, 필링과
+        한방 시술을 함께 운영하고, 아토피와 발진에는 엑시머 레이저(아토빛)를
+        사용합니다.
+      </p>
+      <p>
+        어떤 시술이 지금 필요한지는 피부 상태와 전신 상태를 함께 확인한 뒤
+        말씀드립니다. 상담 과정에서 적합하지 않다고 판단되면 그렇게
+        말씀드립니다.
+      </p>
+      <p class="cta-row">
+        <a class="cta" href={clinic.links.naverBooking}>피부 상담하기</a>
+      </p>
+    </div>
+
+    {heroImg && (
+      <figure class="bh-img">
+        <img
+          src={heroImg}
+          srcset={heroImg640 ? `${heroImg640} 640w, ${heroImg} 919w` : undefined}
+          sizes="(min-width: 56rem) 40vw, 100vw"
+          alt="창으로 든 부드러운 빛을 받으며 고개를 돌린 여성의 옆모습"
+          width="919"
+          height="935"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+        <figcaption>
+          이미지 컷입니다. 환자 사진이나 치료 전후 사진이 아닙니다.
+        </figcaption>
+      </figure>
+    )}
   </section>
 
   {groups.map((g, i) => (
@@ -538,6 +564,13 @@ const boosterPackage = {
       {g.note && <p class="note">{g.note}</p>}
     </section>
   ))}
+
+  <aside class="credo">
+    <p>덜어낼 것과 더할 것을 먼저 가립니다.</p>
+    <p class="credo-sub">
+      오늘의 피부를 보고, 오늘 필요한 것만 권해 드립니다.
+    </p>
+  </aside>
 
   {/* LADD 스킨부스터 — 시술 후 관리까지 있어 따로 둡니다 */}
   <section class="sec" id="ladd">
@@ -758,6 +791,63 @@ const boosterPackage = {
 
   <style>
     /* 「이런 분께」 — 카드 안의 작은 목록 */
+    /* ── 히어로. 글 왼쪽 · 이미지 오른쪽의 편집형 구성 ────────── */
+    .beauty-hero {
+      display: grid; gap: 1.9rem; align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    .bh-eyebrow {
+      font-family: var(--sans); font-size: 0.74rem; font-weight: 600;
+      letter-spacing: 0.22em; color: var(--olive); margin-bottom: 0.9rem;
+    }
+    .bh-text h1 {
+      font-size: clamp(1.85rem, 6vw, 2.7rem);
+      line-height: 1.34; letter-spacing: -0.015em;
+      word-break: keep-all; text-wrap: balance;
+      margin-bottom: 1.3rem;
+    }
+    .bh-text h1 em {
+      display: block; font-style: normal; color: var(--accent-ink);
+    }
+    .bh-text .lead { font-size: 1.06rem; }
+    .bh-text p { max-width: 34rem; }
+    /* 좁은 화면에서는 사진을 먼저 보여 줍니다 */
+    .bh-img { margin: 0; order: -1; }
+    .bh-img img {
+      display: block; width: 100%; height: auto;
+      aspect-ratio: 4 / 5; object-fit: cover; object-position: 48% 32%;
+      border-radius: 3px;
+    }
+    .bh-img figcaption {
+      margin-top: 0.55rem; font-size: 0.74rem;
+      color: var(--ink-soft); letter-spacing: 0.01em;
+    }
+    @media (min-width: 56rem) {
+      .beauty-hero {
+        grid-template-columns: 1fr 0.82fr; gap: 3.4rem;
+        margin-bottom: 2.5rem;
+      }
+      .bh-img { order: 0; }
+      .bh-img img { aspect-ratio: 1 / 1; object-position: 48% 34%; }
+    }
+
+    /* ── 한 줄 문장 띠 ───────────────────────────────────────── */
+    .credo {
+      margin-inline: calc(50% - 50vw);
+      padding: clamp(3.4rem, 9vw, 5.6rem) var(--pad);
+      background: var(--sunk); text-align: center;
+    }
+    .credo p {
+      margin: 0 auto; max-width: 30rem;
+      font-family: var(--head); font-size: clamp(1.3rem, 3.6vw, 1.75rem);
+      line-height: 1.6; color: var(--ink);
+      word-break: keep-all; text-wrap: balance;
+    }
+    .credo .credo-sub {
+      margin-top: 0.9rem; font-family: var(--sans);
+      font-size: 0.98rem; color: var(--ink-soft);
+    }
+
     /* 모식도. 단면도는 카드 폭을 채우고, 아이콘은 오른쪽 위에 둡니다 */
     .card.has-ico { position: relative; padding-right: 5.4rem; }
     .card-ico { position: absolute; top: 1rem; right: 1rem; line-height: 0; }

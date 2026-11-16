@@ -29,6 +29,16 @@ export function img(name: string): string | null {
  * (jpg · jpeg · png · webp 무엇이든 됩니다)
  */
 export const photos = {
+  /**
+   * 피부클리닉 히어로 이미지 컷 — /skin-care/
+   *
+   * ⚠ 환자 사진이 아니라 원장님이 주신 홍보물의 이미지 컷입니다.
+   *   환자나 치료 결과로 보이게 쓰지 마세요 (의료법 제56조 제2항 —
+   *   치료 전후 사진·치료경험담 금지). 화면에도 '이미지 컷'이라고
+   *   표시해 둡니다.
+   */
+  beautyHero: 'beauty-hero',
+  beautyHero640: 'beauty-hero-640',
   /** 의료진 2인 사진 — 홈 히어로, 의료진 소개 */
   together: 'doctors-together',
   /** 접수 데스크와 대기 공간 — 오시는 길 */
